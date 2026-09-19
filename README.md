@@ -7,7 +7,7 @@ SASEBook is a application for bringing SASE community and other like minded indi
 
 # Project Stack
 
-## SASEBook utilizes Typescript with the React framework, compiled using npm and vite
+## SASEBook frontend utilizes Typescript with the React framework, compiled using npm and vite
 
 ## Installation and development
 
@@ -30,12 +30,12 @@ cd SASEBook
 ```bash
 cd frontend
 npm install
-cd ..
 ```
 
 #### Run dev build for testing
 
 ```
+cd frontend
 npm install
 npm run dev
 ```
