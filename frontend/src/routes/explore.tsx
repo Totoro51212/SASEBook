@@ -13,7 +13,7 @@ import "./Explore.css";
 
 
 // =============================
-// FIX LEAFLET MARKER ICONS
+// LEAFLET MARKER ICON
 // =============================
 
 const markerIcon = new L.Icon({
@@ -58,26 +58,62 @@ type ExploreItem = {
   tags: string[];
 
   chapter?: string;
+  chapterId?: number;
+
   location?: string;
   date?: string;
   members?: number;
   industry?: string;
+};
 
-  latitude?: number;
-  longitude?: number;
+type ChapterLocation = {
+  id: number;
+  name: string;
+  shortName: string;
+  location: string;
+
+  latitude: number;
+  longitude: number;
 };
 
 
 // =============================
-// TEMPORARY DATA
+// CHAPTER LOCATIONS
+// =============================
+
+const chapterLocations: ChapterLocation[] = [
+  {
+    id: 1,
+    name: "Florida Polytechnic University SASE",
+    shortName: "Florida Poly",
+    location: "Lakeland, Florida",
+
+    latitude: 28.1489,
+    longitude: -81.8484,
+  },
+
+  {
+    id: 2,
+    name: "University of Central Florida SASE",
+    shortName: "UCF",
+    location: "Orlando, Florida",
+
+    latitude: 28.6024,
+    longitude: -81.2001,
+  },
+];
+
+
+// =============================
+// TEMPORARY EXPLORE DATA
 // Later this comes from PostgreSQL
 // =============================
 
 const exploreItems: ExploreItem[] = [
-
   {
     id: 1,
     type: "People",
+
     title: "Alex Chen",
     subtitle: "Computer Engineering",
 
@@ -93,17 +129,16 @@ const exploreItems: ExploreItem[] = [
     chapter:
       "Florida Polytechnic University SASE",
 
+    chapterId: 1,
+
     location:
       "Lakeland, Florida",
-
-    latitude: 28.1489,
-    longitude: -81.8484,
   },
-
 
   {
     id: 2,
     type: "People",
+
     title: "JJ Nguyen",
     subtitle: "Data Science",
 
@@ -119,13 +154,11 @@ const exploreItems: ExploreItem[] = [
     chapter:
       "Florida Polytechnic University SASE",
 
+    chapterId: 1,
+
     location:
       "Lakeland, Florida",
-
-    latitude: 28.1489,
-    longitude: -81.8484,
   },
-
 
   {
     id: 3,
@@ -145,15 +178,13 @@ const exploreItems: ExploreItem[] = [
       "Florida",
     ],
 
+    chapterId: 1,
+
     location:
       "Lakeland, Florida",
 
     members: 42,
-
-    latitude: 28.1489,
-    longitude: -81.8484,
   },
-
 
   {
     id: 4,
@@ -173,15 +204,13 @@ const exploreItems: ExploreItem[] = [
       "Florida",
     ],
 
+    chapterId: 2,
+
     location:
       "Orlando, Florida",
 
     members: 85,
-
-    latitude: 28.6024,
-    longitude: -81.2001,
   },
-
 
   {
     id: 5,
@@ -204,16 +233,14 @@ const exploreItems: ExploreItem[] = [
     chapter:
       "Florida Polytechnic University SASE",
 
+    chapterId: 1,
+
     location:
       "Innovation Science & Technology Building",
 
     date:
       "September 25, 2026 • 6:00 PM",
-
-    latitude: 28.1494,
-    longitude: -81.848,
   },
-
 
   {
     id: 6,
@@ -236,16 +263,14 @@ const exploreItems: ExploreItem[] = [
     chapter:
       "Florida Polytechnic University SASE",
 
+    chapterId: 1,
+
     location:
       "Student Development Center",
 
     date:
       "October 2, 2026 • 7:00 PM",
-
-    latitude: 28.1485,
-    longitude: -81.849,
   },
-
 
   {
     id: 7,
@@ -271,10 +296,8 @@ const exploreItems: ExploreItem[] = [
     location:
       "Orlando, Florida",
 
-    latitude: 28.5383,
-    longitude: -81.3792,
+    chapterId: 2,
   },
-
 ];
 
 
@@ -283,7 +306,6 @@ const exploreItems: ExploreItem[] = [
 // =============================
 
 export default function Explore() {
-
   const [search, setSearch] =
     useState("");
 
@@ -295,6 +317,13 @@ export default function Explore() {
 
   const [selectedItem, setSelectedItem] =
     useState<ExploreItem | null>(null);
+
+  const [
+    selectedChapter,
+    setSelectedChapter,
+  ] = useState<ChapterLocation | null>(
+    chapterLocations[0]
+  );
 
   const [
     connectedPeople,
@@ -322,7 +351,6 @@ export default function Explore() {
 
   const filteredItems =
     exploreItems.filter((item) => {
-
       const matchesCategory =
         category === "All" ||
         item.type === category;
@@ -354,6 +382,78 @@ export default function Explore() {
         matchesSearch
       );
     });
+
+
+  // =============================
+  // MAP CHAPTER FILTERING
+  // =============================
+  //
+  // A chapter marker only appears
+  // if that chapter has something
+  // matching the current filters.
+  //
+  // Example:
+  // Sponsors selected:
+  // Florida Poly = 0 sponsors
+  // UCF = 1 sponsor
+  //
+  // Result: only UCF appears.
+  // =============================
+
+  const visibleChapterLocations =
+    chapterLocations.filter(
+      (chapter) => {
+
+        return filteredItems.some(
+          (item) =>
+            item.chapterId ===
+            chapter.id
+        );
+
+      }
+    );
+
+
+  // =============================
+  // SELECTED CHAPTER DATA
+  // =============================
+
+  const selectedChapterItems =
+    selectedChapter
+      ? filteredItems.filter(
+          (item) =>
+            item.chapterId ===
+            selectedChapter.id
+        )
+      : [];
+
+
+  const selectedPeople =
+    selectedChapterItems.filter(
+      (item) =>
+        item.type === "People"
+    );
+
+
+  const selectedEvents =
+    selectedChapterItems.filter(
+      (item) =>
+        item.type === "Events"
+    );
+
+
+  const selectedChapters =
+    selectedChapterItems.filter(
+      (item) =>
+        item.type === "Chapters"
+    );
+
+
+  const selectedSponsors =
+    selectedChapterItems.filter(
+      (item) =>
+        item.type === "Sponsors"
+    );
 
 
   // =============================
@@ -393,9 +493,7 @@ export default function Explore() {
 
 
   return (
-
     <main className="explore-page">
-
 
       {/* ======================= */}
       {/* HEADER                  */}
@@ -415,8 +513,6 @@ export default function Explore() {
         </p>
 
 
-        {/* Search */}
-
         <input
           className="explore-search"
 
@@ -435,8 +531,6 @@ export default function Explore() {
         />
 
 
-        {/* Category filters */}
-
         <div className="explore-filters">
 
           {categories.map((item) => (
@@ -454,9 +548,7 @@ export default function Explore() {
                 setCategory(item)
               }
             >
-
               {item}
-
             </button>
 
           ))}
@@ -472,9 +564,6 @@ export default function Explore() {
 
       <section className="explore-results">
 
-
-        {/* Results heading */}
-
         <div className="results-heading">
 
           <div>
@@ -486,19 +575,15 @@ export default function Explore() {
             </h2>
 
             <span>
-
               {filteredItems.length}{" "}
 
               {filteredItems.length === 1
                 ? "result"
                 : "results"}
-
             </span>
 
           </div>
 
-
-          {/* Cards / Map toggle */}
 
           <div className="view-toggle">
 
@@ -569,8 +654,6 @@ export default function Explore() {
                   </p>
 
 
-                  {/* Tags */}
-
                   <div className="card-tags">
 
                     {item.tags.map(
@@ -623,60 +706,57 @@ export default function Explore() {
 
         {viewMode === "Map" && (
 
-          <div className="map-wrapper">
-
-            <MapContainer
-
-              center={[
-                28.4,
-                -81.6,
-              ]}
-
-              zoom={8}
-
-              scrollWheelZoom={true}
-
-              className="explore-map"
-            >
+          <div className="map-layout">
 
 
-              {/* ESRI MAP TILES */}
+            {/* LEFT: MAP */}
 
-              <TileLayer
-                attribution="Tiles &copy; Esri"
+            <div className="map-wrapper">
 
-                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
-              />
+              <MapContainer
+                center={[
+                  28.1,
+                  -81.7,
+                ]}
+
+                zoom={7}
+
+                scrollWheelZoom={true}
+
+                className="explore-map"
+              >
+
+                <TileLayer
+                  attribution=
+                    "Tiles &copy; Esri"
+
+                  url=
+                    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
+                />
 
 
-              {/* MAP MARKERS */}
+                {/* Only chapters with matching data */}
+                {/* receive a marker. */}
 
-              {filteredItems.map(
-                (item) => {
-
-                  if (
-                    item.latitude ===
-                      undefined ||
-                    item.longitude ===
-                      undefined
-                  ) {
-
-                    return null;
-
-                  }
-
-
-                  return (
+                {visibleChapterLocations.map(
+                  (chapter) => (
 
                     <Marker
-                      key={item.id}
+                      key={chapter.id}
 
                       position={[
-                        item.latitude,
-                        item.longitude,
+                        chapter.latitude,
+                        chapter.longitude,
                       ]}
 
                       icon={markerIcon}
+
+                      eventHandlers={{
+                        click: () =>
+                          setSelectedChapter(
+                            chapter
+                          ),
+                      }}
                     >
 
                       <Popup>
@@ -684,25 +764,21 @@ export default function Explore() {
                         <div className="map-popup">
 
                           <strong>
-                            {item.title}
+                            {chapter.shortName}
                           </strong>
 
                           <p>
-                            {item.subtitle}
+                            {chapter.location}
                           </p>
-
-                          <span>
-                            {item.type}
-                          </span>
 
                           <button
                             onClick={() =>
-                              setSelectedItem(
-                                item
+                              setSelectedChapter(
+                                chapter
                               )
                             }
                           >
-                            View Details
+                            View Chapter
                           </button>
 
                         </div>
@@ -711,12 +787,307 @@ export default function Explore() {
 
                     </Marker>
 
-                  );
+                  )
+                )}
 
-                }
+              </MapContainer>
+
+            </div>
+
+
+            {/* =================== */}
+            {/* RIGHT SIDE PANEL    */}
+            {/* =================== */}
+
+            <aside className="map-side-panel">
+
+              {selectedChapter &&
+              visibleChapterLocations.some(
+                (chapter) =>
+                  chapter.id ===
+                  selectedChapter.id
+              ) ? (
+
+                <>
+
+                  <div className="map-panel-header">
+
+                    <span className="map-panel-label">
+                      SELECTED CHAPTER
+                    </span>
+
+                    <h2>
+                      {selectedChapter.shortName}
+                    </h2>
+
+                    <p>
+                      {selectedChapter.location}
+                    </p>
+
+                  </div>
+
+
+                  {/* PEOPLE */}
+
+                  {(category === "All" ||
+                    category === "People") && (
+
+                    <div className="map-panel-section">
+
+                      <h3>
+                        People
+
+                        <span>
+                          {selectedPeople.length}
+                        </span>
+                      </h3>
+
+
+                      {selectedPeople.length > 0 ? (
+
+                        selectedPeople.map(
+                          (person) => (
+
+                            <button
+                              key={person.id}
+
+                              className=
+                                "map-result-item"
+
+                              onClick={() =>
+                                setSelectedItem(
+                                  person
+                                )
+                              }
+                            >
+
+                              <strong>
+                                {person.title}
+                              </strong>
+
+                              <span>
+                                {person.subtitle}
+                              </span>
+
+                            </button>
+
+                          )
+                        )
+
+                      ) : (
+
+                        <p className="map-empty">
+                          No people found.
+                        </p>
+
+                      )}
+
+                    </div>
+
+                  )}
+
+
+                  {/* EVENTS */}
+
+                  {(category === "All" ||
+                    category === "Events") && (
+
+                    <div className="map-panel-section">
+
+                      <h3>
+                        Events
+
+                        <span>
+                          {selectedEvents.length}
+                        </span>
+                      </h3>
+
+
+                      {selectedEvents.length > 0 ? (
+
+                        selectedEvents.map(
+                          (event) => (
+
+                            <button
+                              key={event.id}
+
+                              className=
+                                "map-result-item"
+
+                              onClick={() =>
+                                setSelectedItem(
+                                  event
+                                )
+                              }
+                            >
+
+                              <strong>
+                                {event.title}
+                              </strong>
+
+                              <span>
+                                {event.subtitle}
+                              </span>
+
+                            </button>
+
+                          )
+                        )
+
+                      ) : (
+
+                        <p className="map-empty">
+                          No events found.
+                        </p>
+
+                      )}
+
+                    </div>
+
+                  )}
+
+
+                  {/* CHAPTER */}
+
+                  {(category === "All" ||
+                    category === "Chapters") && (
+
+                    <div className="map-panel-section">
+
+                      <h3>
+                        Chapter
+
+                        <span>
+                          {selectedChapters.length}
+                        </span>
+                      </h3>
+
+
+                      {selectedChapters.length > 0 ? (
+
+                        selectedChapters.map(
+                          (chapter) => (
+
+                            <button
+                              key={chapter.id}
+
+                              className=
+                                "map-result-item"
+
+                              onClick={() =>
+                                setSelectedItem(
+                                  chapter
+                                )
+                              }
+                            >
+
+                              <strong>
+                                {chapter.title}
+                              </strong>
+
+                              <span>
+                                {chapter.subtitle}
+                              </span>
+
+                            </button>
+
+                          )
+                        )
+
+                      ) : (
+
+                        <p className="map-empty">
+                          No chapter information found.
+                        </p>
+
+                      )}
+
+                    </div>
+
+                  )}
+
+
+                  {/* SPONSORS */}
+
+                  {(category === "All" ||
+                    category === "Sponsors") && (
+
+                    <div className="map-panel-section">
+
+                      <h3>
+                        Sponsors
+
+                        <span>
+                          {selectedSponsors.length}
+                        </span>
+                      </h3>
+
+
+                      {selectedSponsors.length > 0 ? (
+
+                        selectedSponsors.map(
+                          (sponsor) => (
+
+                            <button
+                              key={sponsor.id}
+
+                              className=
+                                "map-result-item"
+
+                              onClick={() =>
+                                setSelectedItem(
+                                  sponsor
+                                )
+                              }
+                            >
+
+                              <strong>
+                                {sponsor.title}
+                              </strong>
+
+                              <span>
+                                {sponsor.subtitle}
+                              </span>
+
+                            </button>
+
+                          )
+                        )
+
+                      ) : (
+
+                        <p className="map-empty">
+                          No sponsors found.
+                        </p>
+
+                      )}
+
+                    </div>
+
+                  )}
+
+                </>
+
+              ) : (
+
+                <div className="map-panel-placeholder">
+
+                  <h3>
+                    Select a chapter
+                  </h3>
+
+                  <p>
+                    Click a visible marker
+                    to view matching people,
+                    events, sponsors, and
+                    chapter information.
+                  </p>
+
+                </div>
+
               )}
 
-            </MapContainer>
+            </aside>
 
           </div>
 
@@ -769,8 +1140,6 @@ export default function Explore() {
             }
           >
 
-            {/* Close button */}
-
             <button
               className="close-button"
 
@@ -804,9 +1173,7 @@ export default function Explore() {
             </p>
 
 
-            {/* ======================= */}
-            {/* PERSON INFORMATION      */}
-            {/* ======================= */}
+            {/* PERSON */}
 
             {selectedItem.type ===
               "People" && (
@@ -839,9 +1206,7 @@ export default function Explore() {
             )}
 
 
-            {/* ======================= */}
-            {/* CHAPTER INFORMATION     */}
-            {/* ======================= */}
+            {/* CHAPTER */}
 
             {selectedItem.type ===
               "Chapters" && (
@@ -867,9 +1232,7 @@ export default function Explore() {
             )}
 
 
-            {/* ======================= */}
-            {/* EVENT INFORMATION       */}
-            {/* ======================= */}
+            {/* EVENT */}
 
             {selectedItem.type ===
               "Events" && (
@@ -902,9 +1265,7 @@ export default function Explore() {
             )}
 
 
-            {/* ======================= */}
-            {/* SPONSOR INFORMATION     */}
-            {/* ======================= */}
+            {/* SPONSOR */}
 
             {selectedItem.type ===
               "Sponsors" && (
@@ -930,9 +1291,7 @@ export default function Explore() {
             )}
 
 
-            {/* ======================= */}
-            {/* TAGS                    */}
-            {/* ======================= */}
+            {/* TAGS */}
 
             <div className="card-tags">
 
@@ -949,9 +1308,7 @@ export default function Explore() {
             </div>
 
 
-            {/* ======================= */}
-            {/* PERSON ACTION           */}
-            {/* ======================= */}
+            {/* PERSON ACTION */}
 
             {selectedItem.type ===
               "People" && (
@@ -983,9 +1340,7 @@ export default function Explore() {
             )}
 
 
-            {/* ======================= */}
-            {/* EVENT ACTION            */}
-            {/* ======================= */}
+            {/* EVENT ACTION */}
 
             {selectedItem.type ===
               "Events" && (
@@ -1017,9 +1372,7 @@ export default function Explore() {
             )}
 
 
-            {/* ======================= */}
-            {/* CHAPTER ACTION          */}
-            {/* ======================= */}
+            {/* CHAPTER ACTION */}
 
             {selectedItem.type ===
               "Chapters" && (
@@ -1040,9 +1393,7 @@ export default function Explore() {
             )}
 
 
-            {/* ======================= */}
-            {/* SPONSOR ACTION          */}
-            {/* ======================= */}
+            {/* SPONSOR ACTION */}
 
             {selectedItem.type ===
               "Sponsors" && (
@@ -1069,6 +1420,5 @@ export default function Explore() {
       )}
 
     </main>
-
   );
 }
