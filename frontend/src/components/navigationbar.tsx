@@ -14,6 +14,7 @@ export default function Navigationbar(){
           <Link to="/">Home</Link>
           <Link to="/people">People</Link>
           <Link to="/chapters">Chapters</Link>
+          <Link to="/sponsors">Sponsors</Link>
           <Link to="/explore">Explore</Link>
 
           
