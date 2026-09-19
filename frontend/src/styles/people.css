@@ -1,0 +1,929 @@
+:root {
+  --people-bg: #0b0b10;
+  --people-card: #121218;
+  --people-card-hover: #17171f;
+  --people-surface: #191920;
+  --people-border: #2c2c35;
+  --people-border-light: #3a3a45;
+
+  --people-text: #f5f5f7;
+  --people-secondary: #c2c2cd;
+  --people-muted: #9292a3;
+
+  --people-purple: #7c4dff;
+  --people-purple-light: #b69cff;
+  --people-purple-soft: rgba(124, 77, 255, 0.14);
+
+  --people-green: #63d69b;
+  --people-green-soft: rgba(99, 214, 155, 0.13);
+}
+
+
+/* PAGE */
+
+.people-page {
+  width: 100%;
+  min-height: 100vh;
+
+  box-sizing: border-box;
+
+  padding: 55px 40px 90px;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(124, 77, 255, 0.08),
+      transparent 28%
+    ),
+    var(--people-bg);
+
+  color: var(--people-text);
+}
+
+.people-hero,
+.people-stats,
+.people-directory {
+  width: 100%;
+  max-width: 1280px;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  box-sizing: border-box;
+}
+
+
+/* HERO */
+
+.people-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin-bottom: 45px;
+
+  text-align: center;
+}
+
+.people-eyebrow,
+.people-section-eyebrow,
+.person-small-label {
+  color: var(--people-purple-light);
+
+  font-size: 12px;
+  font-weight: 800;
+
+  letter-spacing: 2.3px;
+}
+
+.people-eyebrow {
+  margin-bottom: 20px;
+
+  font-size: 14px;
+  letter-spacing: 3px;
+}
+
+.people-hero h1 {
+  margin: 0;
+
+  color: var(--people-text);
+
+  font-size: clamp(48px, 6vw, 76px);
+  font-weight: 600;
+
+  line-height: 1.05;
+
+  letter-spacing: -2px;
+}
+
+.people-hero > p {
+  width: 100%;
+  max-width: 800px;
+
+  margin: 25px auto 0;
+
+  color: var(--people-secondary);
+
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+
+/* SEARCH */
+
+.people-search-wrapper {
+  position: relative;
+
+  width: 100%;
+  max-width: 1050px;
+
+  margin-top: 38px;
+}
+
+.people-search-icon {
+  position: absolute;
+
+  top: 50%;
+  left: 23px;
+
+  transform: translateY(-50%);
+
+  color: var(--people-muted);
+
+  font-size: 25px;
+
+  pointer-events: none;
+}
+
+.people-search {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 19px 22px 19px 63px;
+
+  border: 1px solid var(--people-border);
+  border-radius: 13px;
+
+  outline: none;
+
+  background: var(--people-card);
+
+  color: var(--people-text);
+
+  font-family: inherit;
+  font-size: 17px;
+}
+
+.people-search::placeholder {
+  color: var(--people-muted);
+}
+
+.people-search:focus {
+  border-color: var(--people-purple);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(124, 77, 255, 0.12);
+}
+
+
+/* STATS */
+
+.people-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 16px;
+
+  margin-bottom: 60px;
+}
+
+.people-stats > div {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  min-height: 105px;
+
+  padding: 18px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--people-border);
+  border-radius: 13px;
+
+  background: var(--people-card);
+}
+
+.people-stats strong {
+  color: var(--people-text);
+
+  font-size: 28px;
+}
+
+.people-stats span {
+  margin-top: 4px;
+
+  color: var(--people-muted);
+
+  font-size: 12px;
+}
+
+
+/* DIRECTORY */
+
+.people-directory-header {
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 22px;
+}
+
+.people-directory-header h2 {
+  margin: 7px 0 0;
+
+  color: var(--people-text);
+
+  font-size: 30px;
+}
+
+.people-result-count {
+  color: var(--people-muted);
+
+  font-size: 13px;
+}
+
+
+/* FILTERS */
+
+.people-controls {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin-bottom: 25px;
+}
+
+.people-filter-buttons {
+  display: flex;
+
+  gap: 8px;
+}
+
+.people-filter {
+  padding: 10px 17px;
+
+  border: 1px solid var(--people-border);
+  border-radius: 8px;
+
+  background: var(--people-card);
+
+  color: var(--people-muted);
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.people-filter:hover {
+  color: var(--people-text);
+
+  border-color: var(--people-border-light);
+}
+
+.people-filter.active {
+  border-color: var(--people-purple);
+
+  background: var(--people-purple-soft);
+
+  color: var(--people-purple-light);
+}
+
+.people-chapter-select {
+  min-width: 180px;
+
+  padding: 10px 13px;
+
+  border: 1px solid var(--people-border);
+  border-radius: 8px;
+
+  outline: none;
+
+  background: var(--people-card);
+
+  color: var(--people-text);
+
+  font-family: inherit;
+  font-size: 13px;
+}
+
+
+/* PEOPLE GRID */
+
+.people-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+/* PERSON CARD */
+
+.person-card {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  padding: 24px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--people-border);
+  border-radius: 15px;
+
+  background: var(--people-card);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.person-card:hover {
+  transform: translateY(-3px);
+
+  border-color:
+    rgba(124, 77, 255, 0.6);
+
+  background: var(--people-card-hover);
+}
+
+.person-card-top {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.person-avatar,
+.people-modal-avatar {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid
+    rgba(124, 77, 255, 0.4);
+
+  background: var(--people-purple-soft);
+
+  color: var(--people-purple-light);
+
+  font-weight: 800;
+}
+
+.person-avatar {
+  width: 62px;
+  height: 62px;
+
+  border-radius: 50%;
+
+  font-size: 17px;
+}
+
+.person-card-heading {
+  min-width: 0;
+}
+
+.person-card-heading h3 {
+  margin: 7px 0 3px;
+
+  color: var(--people-text);
+
+  font-size: 18px;
+}
+
+.person-card-heading > p {
+  margin: 0;
+
+  color: var(--people-secondary);
+
+  font-size: 12px;
+}
+
+.person-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.person-type-badge,
+.person-chapter-badge {
+  display: inline-block;
+
+  width: fit-content;
+
+  padding: 5px 8px;
+
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+.person-type-badge {
+  background: var(--people-purple-soft);
+
+  color: var(--people-purple-light);
+}
+
+.person-chapter-badge {
+  background: var(--people-green-soft);
+
+  color: var(--people-green);
+}
+
+
+/* INFO */
+
+.person-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  margin: 21px 0 17px;
+  padding: 14px;
+
+  border: 1px solid var(--people-border);
+  border-radius: 9px;
+
+  background: var(--people-surface);
+}
+
+.person-info > div {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: var(--people-muted);
+
+  font-size: 11px;
+}
+
+.person-info-icon {
+  width: 17px;
+
+  color: var(--people-purple-light);
+
+  text-align: center;
+}
+
+.person-bio {
+  margin: 0 0 20px;
+
+  color: var(--people-secondary);
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* TAGS */
+
+.person-skill-section {
+  margin-top: auto;
+}
+
+.person-small-label {
+  display: block;
+
+  margin-bottom: 9px;
+
+  font-size: 9px;
+}
+
+.person-tags {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+.person-tags span {
+  padding: 6px 9px;
+
+  border: 1px solid var(--people-border);
+  border-radius: 7px;
+
+  background: var(--people-surface);
+
+  color: var(--people-secondary);
+
+  font-size: 10px;
+}
+
+.person-tags.interests span {
+  border-color:
+    rgba(124, 77, 255, 0.25);
+
+  background: var(--people-purple-soft);
+
+  color: var(--people-purple-light);
+}
+
+
+/* CARD ACTIONS */
+
+.person-card-actions {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 9px;
+
+  margin-top: 22px;
+}
+
+.person-view-button,
+.person-connect-button,
+.people-modal-connect {
+  padding: 11px 14px;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.person-view-button {
+  border: 1px solid var(--people-border);
+
+  background: var(--people-surface);
+
+  color: var(--people-text);
+}
+
+.person-view-button:hover {
+  border-color: var(--people-purple);
+}
+
+.person-connect-button {
+  border: 1px solid var(--people-purple);
+
+  background: var(--people-purple);
+
+  color: white;
+}
+
+.person-connect-button.connected {
+  border-color:
+    rgba(99, 214, 155, 0.4);
+
+  background: var(--people-green-soft);
+
+  color: var(--people-green);
+}
+
+
+/* EMPTY */
+
+.people-empty {
+  padding: 70px 20px;
+
+  border: 1px solid var(--people-border);
+  border-radius: 14px;
+
+  background: var(--people-card);
+
+  text-align: center;
+}
+
+.people-empty-icon {
+  color: var(--people-purple-light);
+
+  font-size: 38px;
+}
+
+.people-empty h3 {
+  margin: 12px 0 7px;
+
+  color: var(--people-text);
+}
+
+.people-empty p {
+  margin: 0 0 18px;
+
+  color: var(--people-muted);
+}
+
+.people-empty button {
+  padding: 10px 16px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: var(--people-purple);
+
+  color: white;
+
+  font-family: inherit;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* MODAL */
+
+.people-modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 10000;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  padding: 25px;
+
+  overflow-y: auto;
+
+  background: rgba(5, 5, 9, 0.88);
+
+  backdrop-filter: blur(5px);
+}
+
+.people-modal {
+  position: relative;
+
+  width: 100%;
+  max-width: 650px;
+
+  max-height: 90vh;
+
+  box-sizing: border-box;
+
+  padding: 34px;
+
+  overflow-y: auto;
+
+  border: 1px solid var(--people-border-light);
+  border-radius: 18px;
+
+  background: var(--people-bg);
+
+  color: var(--people-text);
+
+  box-shadow:
+    0 25px 70px
+    rgba(0, 0, 0, 0.55);
+}
+
+.people-modal-close {
+  position: absolute;
+
+  top: 16px;
+  right: 16px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  border: 1px solid var(--people-border);
+  border-radius: 50%;
+
+  background: var(--people-card);
+
+  color: var(--people-text);
+
+  font-size: 25px;
+
+  cursor: pointer;
+}
+
+.people-modal-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+
+  padding-right: 45px;
+}
+
+.people-modal-avatar {
+  width: 85px;
+  height: 85px;
+
+  border-radius: 50%;
+
+  font-size: 22px;
+}
+
+.people-modal-header h2 {
+  margin: 9px 0 4px;
+
+  color: var(--people-text);
+
+  font-size: 28px;
+}
+
+.people-modal-header p {
+  margin: 0;
+
+  color: var(--people-muted);
+
+  font-size: 13px;
+}
+
+.people-modal-divider {
+  height: 1px;
+
+  margin: 25px 0;
+
+  background: var(--people-border);
+}
+
+.people-modal-info {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.people-modal-info > div {
+  display: flex;
+  flex-direction: column;
+
+  padding: 14px;
+
+  border: 1px solid var(--people-border);
+  border-radius: 9px;
+
+  background: var(--people-surface);
+}
+
+.people-modal-info span {
+  margin-bottom: 5px;
+
+  color: var(--people-muted);
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+.people-modal-info strong {
+  color: var(--people-text);
+
+  font-size: 12px;
+}
+
+.people-modal-section {
+  margin-top: 25px;
+}
+
+.people-modal-section > p {
+  margin: 0;
+
+  color: var(--people-secondary);
+
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.people-modal-connect {
+  width: 100%;
+
+  margin-top: 30px;
+
+  border: none;
+
+  background: var(--people-purple);
+
+  color: white;
+}
+
+.people-modal-connect.connected {
+  border: 1px solid
+    rgba(99, 214, 155, 0.4);
+
+  background: var(--people-green-soft);
+
+  color: var(--people-green);
+}
+
+
+/* TABLET */
+
+@media (max-width: 1050px) {
+  .people-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .people-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+  .people-page {
+    padding: 35px 20px 65px;
+  }
+
+  .people-hero h1 {
+    font-size: 42px;
+
+    letter-spacing: -1px;
+  }
+
+  .people-hero > p {
+    font-size: 16px;
+  }
+
+  .people-search {
+    padding:
+      16px 16px
+      16px 52px;
+
+    font-size: 14px;
+  }
+
+  .people-search-icon {
+    left: 18px;
+  }
+
+  .people-grid,
+  .people-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .people-directory-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .people-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .people-filter-buttons {
+    width: 100%;
+  }
+
+  .people-filter {
+    flex: 1;
+  }
+
+  .people-chapter-select {
+    width: 100%;
+  }
+
+  .person-card-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .people-modal {
+    padding: 28px 20px;
+  }
+
+  .people-modal-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .people-modal-info {
+    grid-template-columns: 1fr;
+  }
+}
