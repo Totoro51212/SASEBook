@@ -1,2 +1,2 @@
-# SaSeBok
-The Rice cookers project
+# SASEBook
+The Rice Cookers Project
