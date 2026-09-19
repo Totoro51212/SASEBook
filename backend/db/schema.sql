@@ -53,3 +53,19 @@ CREATE TABLE sponsors (
     website TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- 6. Create Posts Table
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    profile_id INT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 7. Create Event RSVPs Table (Replaces static attendance counts)
+CREATE TABLE event_rsvps (
+    profile_id INT REFERENCES profiles(id) ON DELETE CASCADE,
+    event_id INT REFERENCES events(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    PRIMARY KEY (profile_id, event_id)
+);
