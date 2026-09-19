@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import "../../styles/myprofile.css";
+import "../../styles/profile.css";
 import Aprofile from "./aprofile";
+import { Navigate } from "react-router-dom";
 
 type Profile = {
   fullName: string;
@@ -38,6 +38,7 @@ export default function Myprofile() {
       const parsed = JSON.parse(savedProfile) as Profile;
       setProfile(parsed);
       setHasProfile(true);
+      setChoice(3);
     }
   }, []);
 
@@ -45,6 +46,7 @@ export default function Myprofile() {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
+  //save, WIP
   const handleSave = () => {
     const trimmedProfile = {
       ...profile,
@@ -59,45 +61,61 @@ export default function Myprofile() {
     localStorage.setItem("sasebook-profile", JSON.stringify(trimmedProfile));
     setProfile(trimmedProfile);
     setHasProfile(true);
-
-
+    setChoice(3);
   };
 
+  //function called when finished with editg
   const handleEdit = () => {
     setHasProfile(false);
+    setChoice(1);
+  };
+
+  //render based on the choice
+  const renderChoice = () => {
+    if (choice === 0) {
+      return (
+        <div className="auth-choice">
+          <h2>Welcome</h2>
+          <button className="profile-primary-button" onClick={() => setChoice(1)}>Create profile</button>
+          <button className="profile-primary-button" onClick={() => setChoice(2)}>Login</button>
+        </div>
+      );
+    }
+
+    if (choice === 1) {
+      return (
+        <Aprofile
+          profile={profile}
+          hasProfile={hasProfile}
+          onEdit={handleEdit}
+          onChange={handleChange}
+          onSave={handleSave}
+        />
+      );
+    }
+
+    if (choice === 2) {
+      return (
+        <div className="auth-choice">
+          <h2>Login</h2>
+          <p>Login page coming soon.</p>
+          <button onClick={() => setChoice(0)}>Back</button>
+        </div>
+      );
+    }
+
+    if (choice === 3) {
+      return (
+        <Navigate to="/people"/>
+      );
+    }
+
+    return null;
   };
 
   return (
     <div className="profile-page">
-      <div className="profile-card">
-        {/*toggle. show login/register buttons iniitally, if login, show login page then navigate to their profile*/}
-        
-        {if(choice == 0){
-          <>bird</>
-        }
-        else(choice == 1){
-
-        }
-        else(choice == 2){
-          
-        }
-        else(choice == 3){
-          
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        }
-        
-      </div>
+      <div className="profile-card">{renderChoice()}</div>
     </div>
   );
 }
