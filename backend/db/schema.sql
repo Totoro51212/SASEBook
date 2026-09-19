@@ -1,4 +1,6 @@
 -- 1. Reset Tables (reverse dependency order to avoid foreign key errors)
+DROP TABLE IF EXISTS event_rsvps CASCADE;
+DROP TABLE IF EXISTS posts CASCADE;
 DROP TABLE IF EXISTS sponsors CASCADE;
 DROP TABLE IF EXISTS events CASCADE;
 DROP TABLE IF EXISTS profiles CASCADE;
