@@ -312,8 +312,9 @@ export default function Explore() {
   const [category, setCategory] =
     useState<Category>("All");
 
+  // Map is now the default view
   const [viewMode, setViewMode] =
-    useState<ViewMode>("Cards");
+    useState<ViewMode>("Map");
 
   const [selectedItem, setSelectedItem] =
     useState<ExploreItem | null>(null);
@@ -386,18 +387,6 @@ export default function Explore() {
 
   // =============================
   // MAP CHAPTER FILTERING
-  // =============================
-  //
-  // A chapter marker only appears
-  // if that chapter has something
-  // matching the current filters.
-  //
-  // Example:
-  // Sponsors selected:
-  // Florida Poly = 0 sponsors
-  // UCF = 1 sponsor
-  //
-  // Result: only UCF appears.
   // =============================
 
   const visibleChapterLocations =
@@ -585,22 +574,9 @@ export default function Explore() {
           </div>
 
 
+          {/* Map is now the left/default button */}
+
           <div className="view-toggle">
-
-            <button
-              className={
-                viewMode === "Cards"
-                  ? "view-toggle-button active"
-                  : "view-toggle-button"
-              }
-
-              onClick={() =>
-                setViewMode("Cards")
-              }
-            >
-              Cards
-            </button>
-
 
             <button
               className={
@@ -614,6 +590,21 @@ export default function Explore() {
               }
             >
               Map
+            </button>
+
+
+            <button
+              className={
+                viewMode === "Cards"
+                  ? "view-toggle-button active"
+                  : "view-toggle-button"
+              }
+
+              onClick={() =>
+                setViewMode("Cards")
+              }
+            >
+              Cards
             </button>
 
           </div>
