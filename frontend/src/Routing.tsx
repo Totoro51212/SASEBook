@@ -3,7 +3,7 @@ import Chapters from './routes/chapters'
 import Explore from './routes/explore'
 import Home from './routes/home'
 import People from './routes/people'
-import Myprofile from './routes/myprofile'
+import Myprofile from './routes/myprofile/myprofile'
 import Navigationbar from './components/navigationbar'
 import Sponsors from './routes/sponsors'
 import { Routes, Route } from 'react-router-dom';

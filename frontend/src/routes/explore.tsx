@@ -9,7 +9,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-import '../styles/Explore.css'
+import '../styles/explore.css'
 
 
 // =============================
