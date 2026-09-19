@@ -1,8 +1,8 @@
-import { useState } from 'react'
 import '../styles/navigationbar.css'
 import { Link } from 'react-router-dom'
 
 export default function Navigationbar(){
+
   return (
     <>
       <div className="nav-container">
@@ -14,8 +14,19 @@ export default function Navigationbar(){
           <Link to="/">Home</Link>
           <Link to="/people">People</Link>
           <Link to="/chapters">Chapters</Link>
+          <Link to="/sponsors">Sponsors</Link>
           <Link to="/explore">Explore</Link>
+
+          
+
         </div>
+
+        <Link to="/myprofile" className="profile-link">
+          <div className='Myprofile'>
+            My Profile
+          </div>
+        </Link>
+
       </div>
     </>
   )
