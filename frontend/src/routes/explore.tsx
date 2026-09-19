@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Explore.css";
+import '../styles/Explore.css'
 
 // The different filters available on the Explore page
 type Category = "All" | "People" | "Chapters" | "Events" | "Sponsors";
@@ -191,7 +191,7 @@ export default function Explore() {
               {/* Type of result */}
               <span className="card-type">
                 {item.type}
-              </span>
+              </span>   
 
               <h3>{item.title}</h3>
 

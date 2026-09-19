@@ -3,6 +3,7 @@ import Chapters from './routes/chapters'
 import Explore from './routes/explore'
 import Home from './routes/home'
 import People from './routes/people'
+import Myprofile from './routes/myprofile'
 import Navigationbar from './components/navigationbar'
 import { Routes, Route } from 'react-router-dom';
 
@@ -21,6 +22,7 @@ export default function Routing(){
         <Route path="/people" element={<People />} />
         <Route path="/chapters" element={<Chapters />} />
         <Route path="/explore" element={<Explore />} />
+        <Route path="/myprofile" element={<Myprofile />} />
       </Routes>
     </>
   )
