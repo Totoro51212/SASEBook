@@ -1,3 +1,6 @@
+import { useState, type ChangeEvent } from "react";
+
+
 type Profile = {
   fullName: string;
   username: string;
@@ -64,8 +67,9 @@ export default function Editprofile({
               <p className="profile-label">Welcome</p>
               <h1 className="profile-name">Create your profile</h1>
             </div>
+            <PfpButton />
           </div>
-
+          
           <div className="profile-form-grid">
             <label className="profile-field">
               <span>Full Name</span>
@@ -131,3 +135,27 @@ export default function Editprofile({
   );
 }
 
+
+
+export function PfpButton() {
+  const [file, setFile] = useState<string | null>(null);
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        console.log(e.target.files);
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(URL.createObjectURL(selectedFile));
+    }
+    }
+
+    return (
+        <label className="pfp-circle">
+          {file ? (
+              <img src={file} alt="Uploaded preview" />
+          ) : (
+              <span>+</span>
+          )}
+          <input type="file" onChange={handleChange} />
+        </label>
+    );
+}

@@ -237,3 +237,26 @@
     width: 100%;
   }
 }
+
+
+.pfp-circle {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.pfp-circle input {
+    display: none;
+}
+
+.pfp-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
