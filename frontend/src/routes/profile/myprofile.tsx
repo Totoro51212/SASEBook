@@ -3,30 +3,17 @@ import "../../styles/profile.css";
 import Editprofile from "./editprofile";
 import { Navigate } from "react-router-dom";
 import Login from "./login";
-
-//profile type declaration
-type Profile = {
-  fullName: string;
-  firstName: string;
-  lastName: string;
-  username: string;
-  password: string;
-  major: string;
-  bio: string;
-  affiliation: string;
-  interests: string;
-  position: string;
-  saseChapter: string;
-};
+import type { DatabaseProfile, Profile } from "../../types";
+export type { Profile } from "../../types";
 
 //credential type declaration
-type Credentials = {
+export type Credentials = {
   username: string;
   password: string;
 };
 
 //default
-const emptyProfile: Profile = {
+const emptyProfile: Profile<string> = {
   fullName: "",
   firstName: "",
   lastName: "",
@@ -38,17 +25,42 @@ const emptyProfile: Profile = {
   interests: "",
   position: "",
   saseChapter: "",
+  skills: [],
+};
+
+type EditableProfile = Profile<string> & Required<Pick<Profile<string>,
+  "fullName" | "firstName" | "lastName" | "username" | "password" |
+  "affiliation" | "position" | "saseChapter"
+>>;
+
+type MyprofileProps = {
+  profileData: DatabaseProfile[];
 };
 
 //conditional box component for different options
-export default function Myprofile() {
+export default function Myprofile({ profileData }: MyprofileProps) {
   const [choice, setChoice] = useState<number>(0);
   // 0 = login|register page
   // 1 = register
   // 2 = login page
   // 3 = navigate to profile
 
-  const [profile, setProfile] = useState<Profile>(emptyProfile);
+  const [profile, setProfile] = useState<EditableProfile>(() => {
+    const databaseProfile = profileData[0];
+
+    return {
+      ...emptyProfile,
+      ...(databaseProfile
+        ? {
+            fullName: databaseProfile.name,
+            firstName: databaseProfile.name.split(" ")[0] ?? "",
+            lastName: databaseProfile.name.split(" ").slice(1).join(" "),
+            major: databaseProfile.major ?? "",
+            interests: databaseProfile.interests ?? "",
+          }
+        : {}),
+    } as EditableProfile;
+  });
   const [hasProfile, setHasProfile] = useState(false);
 
   useEffect(() => {
@@ -67,7 +79,7 @@ export default function Myprofile() {
     }
   }, []);*/
 
-  const handleChange = (field: keyof Profile, value: string) => {
+  const handleChange = (field: keyof EditableProfile, value: string) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -79,7 +91,7 @@ export default function Myprofile() {
     }
 
     try {
-      const savedProfile = JSON.parse(savedProfileRaw) as Profile;
+      const savedProfile = JSON.parse(savedProfileRaw) as EditableProfile;
       const normalizedUsername = credentials.username.trim().toLowerCase();
       const savedUsername = (savedProfile.username ?? "").trim().toLowerCase();
       const matchesSavedProfile =
@@ -104,7 +116,7 @@ export default function Myprofile() {
     }
   };
 
-  const isProfileComplete = (currentProfile: Profile) => {
+  const isProfileComplete = (currentProfile: EditableProfile) => {
     const requiredFields = [
       currentProfile.firstName.trim(),
       currentProfile.lastName.trim(),

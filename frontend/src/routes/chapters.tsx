@@ -1,52 +1,16 @@
 import { type FormEvent, type RefObject, useMemo, useRef, useState } from "react";
-import type { FeedPost } from "./home";
+import type {
+  Chapter,
+  ChapterMember,
+  ChapterEvent,
+  ChapterTab,
+  EventType,
+  FeedPost,
+} from "../types";
 import "../styles/chapters.css";
-type ChapterTab = "Overview" | "Events" | "Members" | "Officers";
-type EventType =
-  | "Professional"
-  | "Social"
-  | "General Body Meeting"
-  | "Workshop"
-  | "Community";
-type ChapterEvent = {
-  id: number;
-  chapterId: number;
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  type: EventType;
-  description: string;
-};
-type MemberVisibility = "officers" | "members" | "everyone";
-type ChapterMember = {
-  id: number;
-  name: string;
-  major: string;
-  year: string;
-  visibility: MemberVisibility;
-};
-type Officer = {
-  id: number;
-  name: string;
-  position: string;
-  major: string;
-};
-type Chapter = {
-  id: number;
-  slug: string;
-  shortName: string;
-  university: string;
-  chapterName: string;
-  location: string;
-  region: string;
-  description: string;
-  memberCount: number;
-  founded: string;
-  members: ChapterMember[];
-  officers: Officer[];
-};
-const chapters: Chapter[] = [
+export type { Chapter } from "../types";
+
+const demoChapters: Chapter[] = [
   {
     id: 1,
     slug: "fpu",
@@ -243,10 +207,11 @@ const startingEvents: ChapterEvent[] = [
   },
 ];
 type ChaptersProps = {
+  chapterData: Chapter[];
   posts: FeedPost[];
   onDeletePost: (postId: number) => void;
 };
-export default function Chapters({ posts, onDeletePost }: ChaptersProps) {
+export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersProps) {
   const eventRailRef = useRef<HTMLDivElement>(null);
   const postRailRef = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState("");
@@ -268,6 +233,7 @@ export default function Chapters({ posts, onDeletePost }: ChaptersProps) {
     chapterId: 1,
     role: "officer",
   };
+  const chapters = chapterData.length > 0 ? chapterData : demoChapters;
   const filteredChapters = useMemo(() => {
     const query = search.toLowerCase().trim();
     if (!query) {
@@ -282,7 +248,7 @@ export default function Chapters({ posts, onDeletePost }: ChaptersProps) {
         chapter.region.toLowerCase().includes(query)
       );
     });
-  }, [search]);
+  }, [search, chapterData]);
   const getChapterEvents = (chapterId: number) => {
     return events.filter((event) => event.chapterId === chapterId);
   };

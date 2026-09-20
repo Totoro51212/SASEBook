@@ -12,58 +12,27 @@ import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
 import "../styles/explore.css";
+import type {
+  ChapterLocation,
+  ExploreFilter,
+  ExploreItem,
+  SponsorLocation,
+  ViewMode,
+} from "../types";
 
 
 /* =========================================================
    TYPES
    ========================================================= */
 
-type FilterType =
-  | "All"
-  | "People"
-  | "Chapters"
-  | "Events"
-  | "Sponsors";
-
-type ViewMode =
-  | "Map"
-  | "Cards";
-
-type ExploreItem = {
-  id: number;
-  type: Exclude<FilterType, "All">;
-  title: string;
-  subtitle: string;
-  description: string;
-  chapterId?: number;
-};
-
-type ChapterLocation = {
-  id: number;
-  name: string;
-  school: string;
-  lat: number;
-  lng: number;
-};
-
-type SponsorLocation = {
-  id: number;
-  sponsorName: string;
-  locationName: string;
-  locationType:
-    | "Headquarters"
-    | "Florida Office";
-  lat: number;
-  lng: number;
-  description: string;
-};
+type FilterType = ExploreFilter;
 
 
 /* =========================================================
    EXPLORE DATA
    ========================================================= */
 
-const exploreItems: ExploreItem[] = [
+const demoExploreItems: ExploreItem[] = [
   {
     id: 1,
     type: "People",
@@ -400,7 +369,12 @@ const sponsorIcon =
    MAIN COMPONENT
    ========================================================= */
 
-export default function Explore() {
+type ExploreProps = {
+  exploreData: ExploreItem[];
+};
+
+export default function Explore({ exploreData }: ExploreProps) {
+  const exploreItems = exploreData.length > 0 ? exploreData : demoExploreItems;
 
   /*
     React Router navigation.
