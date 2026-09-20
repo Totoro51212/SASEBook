@@ -10,7 +10,7 @@ import type {
 import "../styles/chapters.css";
 export type { Chapter } from "../types";
 
-const chapters: Chapter[] = [
+const demoChapters: Chapter[] = [
   {
     id: 1,
     slug: "fpu",
@@ -233,12 +233,13 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
     chapterId: 1,
     role: "officer",
   };
+  const chapters = chapterData.length > 0 ? chapterData : demoChapters;
   const filteredChapters = useMemo(() => {
     const query = search.toLowerCase().trim();
     if (!query) {
-      return chapterData;
+      return chapters;
     }
-    return chapterData.filter((chapter) => {
+    return chapters.filter((chapter) => {
       return (
         chapter.chapterName.toLowerCase().includes(query) ||
         chapter.university.toLowerCase().includes(query) ||
@@ -247,7 +248,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
         chapter.region.toLowerCase().includes(query)
       );
     });
-  }, [search]);
+  }, [search, chapterData]);
   const getChapterEvents = (chapterId: number) => {
     return events.filter((event) => event.chapterId === chapterId);
   };
