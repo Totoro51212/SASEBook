@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import "../styles/people.css";
-import type { DatabaseProfile, DirectoryProfile } from "../types";
+import type { DirectoryProfile, Profile } from "../types";
 
 type Person = DirectoryProfile;
 
 type PeopleProps = {
-  profileData: DatabaseProfile[];
+  profileData: Profile[];
 };
 
 const demoPeople: DirectoryProfile[] = [
@@ -146,8 +146,9 @@ const demoPeople: DirectoryProfile[] = [
   },
 ];
 
-function toDirectoryProfile(profile: DatabaseProfile): DirectoryProfile {
-  const nameParts = profile.name.trim().split(/\s+/);
+function toDirectoryProfile(profile: Profile): DirectoryProfile {
+  const name = profile.name?.trim() || "SASE Member";
+  const nameParts = name.split(/\s+/);
   const initials = nameParts
     .map((part) => part[0])
     .join("")
@@ -158,8 +159,8 @@ function toDirectoryProfile(profile: DatabaseProfile): DirectoryProfile {
     : [];
 
   return {
-    id: profile.id,
-    name: profile.name,
+    id: profile.id ?? 0,
+    name,
     initials,
     type: "Student",
     chapter: profile.chapter_id ? `Chapter ${profile.chapter_id}` : "SASE Chapter",

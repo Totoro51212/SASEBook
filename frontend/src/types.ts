@@ -3,6 +3,10 @@ export type MemberType = "Student" | "Alumni";
 export type ChapterVisibility = "officers" | "members" | "everyone";
 
 export type Profile<Interests = string> = {
+  email?: string;
+  graduation_year?: number | null;
+  chapter_id?: number | null;
+  created_at?: string;
   fullName?: string;
   firstName?: string;
   lastName?: string;
@@ -24,17 +28,6 @@ export type Profile<Interests = string> = {
   location?: string;
   skills: string[];
   chapterVisibility?: ChapterVisibility;
-};
-
-export type DatabaseProfile = {
-  id: number;
-  name: string;
-  email: string;
-  major: string | null;
-  graduation_year: number | null;
-  interests: string | null;
-  chapter_id: number | null;
-  created_at: string;
 };
 
 export type FeedPost = {

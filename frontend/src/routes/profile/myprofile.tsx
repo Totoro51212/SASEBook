@@ -3,7 +3,7 @@ import "../../styles/profile.css";
 import Editprofile from "./editprofile";
 import { Navigate } from "react-router-dom";
 import Login from "./login";
-import type { DatabaseProfile, Profile } from "../../types";
+import type { Profile } from "../../types";
 export type { Profile } from "../../types";
 
 //credential type declaration
@@ -34,7 +34,7 @@ type EditableProfile = Profile<string> & Required<Pick<Profile<string>,
 >>;
 
 type MyprofileProps = {
-  profileData: DatabaseProfile[];
+  profileData: Profile[];
 };
 
 //conditional box component for different options
@@ -46,17 +46,18 @@ export default function Myprofile({ profileData }: MyprofileProps) {
   // 3 = navigate to profile
 
   const [profile, setProfile] = useState<EditableProfile>(() => {
-    const databaseProfile = profileData[0];
+    const profileRecord = profileData[0];
+    const profileName = profileRecord?.name ?? "";
 
     return {
       ...emptyProfile,
-      ...(databaseProfile
+      ...(profileRecord
         ? {
-            fullName: databaseProfile.name,
-            firstName: databaseProfile.name.split(" ")[0] ?? "",
-            lastName: databaseProfile.name.split(" ").slice(1).join(" "),
-            major: databaseProfile.major ?? "",
-            interests: databaseProfile.interests ?? "",
+        fullName: profileName,
+        firstName: profileName.split(" ")[0] ?? "",
+        lastName: profileName.split(" ").slice(1).join(" "),
+        major: profileRecord.major ?? "",
+        interests: profileRecord.interests ?? "",
           }
         : {}),
     } as EditableProfile;

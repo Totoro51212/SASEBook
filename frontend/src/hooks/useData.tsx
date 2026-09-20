@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase-client'
-import type { Chapter, DatabaseProfile, Sponsor } from '../types'
+import type { Chapter, Profile, Sponsor } from '../types'
 
 export function useGeneralData() {
     //set variables
-    const [profiles, setProfiles] = useState<DatabaseProfile[]>([])
+    const [profiles, setProfiles] = useState<Profile[]>([])
     const [chapters, setChapters] = useState<Chapter[]>([])
     const [sponsors, setSponsors] = useState<Sponsor[]>([])
     const [loading, setLoading] = useState(true)
