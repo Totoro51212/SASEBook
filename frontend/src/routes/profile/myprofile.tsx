@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../styles/profile.css";
 import Editprofile from "./editprofile";
 import { Navigate } from "react-router-dom";
 import Login from "./login";
 import type { Profile } from "../../types";
 export type { Profile } from "../../types";
+import { supabase } from "../../lib/supabase-client";
 
 //credential type declaration
 export type Credentials = {
@@ -28,11 +29,6 @@ const emptyProfile: Profile<string> = {
   skills: [],
 };
 
-type EditableProfile = Profile<string> & Required<Pick<Profile<string>,
-  "fullName" | "firstName" | "lastName" | "username" | "password" |
-  "affiliation" | "position" | "saseChapter"
->>;
-
 type MyprofileProps = {
   profileData: Profile[];
 };
@@ -45,38 +41,45 @@ export default function Myprofile({ profileData }: MyprofileProps) {
   // 2 = login page
   // 3 = navigate to profile
 
-  const [profile, setProfile] = useState<EditableProfile>(() => {
-    const profileRecord = profileData[0];
-    const profileName = profileRecord?.name ?? "";
-
-    return {
-      ...emptyProfile,
-      ...(profileRecord
-        ? {
-        fullName: profileName,
-        firstName: profileName.split(" ")[0] ?? "",
-        lastName: profileName.split(" ").slice(1).join(" "),
-        major: profileRecord.major ?? "",
-        interests: profileRecord.interests ?? "",
-          }
-        : {}),
-    } as EditableProfile;
-  });
+  const [profile, setProfile] = useState<Profile<string>>(emptyProfile);
   const [hasProfile, setHasProfile] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
-  //if profile is save3d in browser, send them to their profile
-  /*useEffect(() => {
+  //if profile is saved in browser, send them to their profile
+  useEffect(() => {
     const savedProfile = localStorage.getItem("sasebook-profile");
 
-    if (savedProfile) {
-      const parsed = JSON.parse(savedProfile) as Profile;
-      setProfile(parsed);
-      setHasProfile(true);
-      setChoice(3);
+    if (!savedProfile || profileData.length === 0) {
+      return;
     }
-  }, []);*/
 
-  const handleChange = (field: keyof EditableProfile, value: string) => {
+    try {
+      const parsed = JSON.parse(savedProfile) as Profile<string>;
+      const localName = (parsed.fullName || `${parsed.firstName} ${parsed.lastName}`).trim().toLowerCase();
+      const localUsername = parsed.username?.trim().toLowerCase();
+      const localMajor = parsed.major.trim().toLowerCase();
+      const matchingProfile = profileData.find((candidate) => {
+        const sameUsername = candidate.username?.trim().toLowerCase() === localUsername;
+        const sameName = candidate.name?.trim().toLowerCase() === localName;
+        const sameMajor = candidate.major?.trim().toLowerCase() === localMajor;
+        return Boolean(sameUsername || (sameName && sameMajor));
+      });
+
+      if (matchingProfile) {
+        setProfile({
+          ...parsed,
+          id: matchingProfile.id,
+          username: matchingProfile.username ?? parsed.username,
+        });
+        setHasProfile(true);
+        setChoice(3);
+      }
+    } catch {
+      localStorage.removeItem("sasebook-profile");
+    }
+  }, [profileData]);
+
+  const handleChange = (field: keyof Profile<string>, value: string) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -88,7 +91,7 @@ export default function Myprofile({ profileData }: MyprofileProps) {
     }
 
     try {
-      const savedProfile = JSON.parse(savedProfileRaw) as EditableProfile;
+      const savedProfile = JSON.parse(savedProfileRaw) as Profile<string>;
       const normalizedUsername = credentials.username.trim().toLowerCase();
       const savedUsername = (savedProfile.username ?? "").trim().toLowerCase();
       const matchesSavedProfile =
@@ -113,56 +116,42 @@ export default function Myprofile({ profileData }: MyprofileProps) {
     }
   };
 
-  const isProfileComplete = (currentProfile: EditableProfile) => {
-    const requiredFields = [
-      currentProfile.firstName.trim(),
-      currentProfile.lastName.trim(),
-      currentProfile.username.trim(),
-      currentProfile.password.trim(),
-      currentProfile.major.trim(),
-      currentProfile.bio.trim(),
-      currentProfile.affiliation.trim(),
-      currentProfile.interests.trim(),
-    ];
+  const handleSave = async (trimmedProfile: Profile<string>) => {
+    setSaveError("");
 
-    if (!requiredFields.every(Boolean)) {
-      return false;
-    }
+    const existingProfile = profileData.find((candidate) => {
+      if (trimmedProfile.id && candidate.id === trimmedProfile.id) {
+        return true;
+      }
 
-    if (currentProfile.affiliation === "Officer") {
-      return Boolean(currentProfile.position.trim() && currentProfile.saseChapter.trim());
-    }
+      return candidate.username?.trim().toLowerCase() === trimmedProfile.username?.trim().toLowerCase();
+    });
 
-    if (currentProfile.affiliation === "Student" || currentProfile.affiliation === "Chapter") {
-      return Boolean(currentProfile.saseChapter.trim());
-    }
+    const profileRow = {
+      name: trimmedProfile.fullName ?? "",
+      username: trimmedProfile.username ?? "",
+      major: trimmedProfile.major,
+      graduation_year: trimmedProfile.graduation_year ?? null,
+      interests: trimmedProfile.interests,
+      chapter_id: trimmedProfile.chapter_id ?? null,
+    };
 
-    return true;
-  };
+    const result = existingProfile
+      ? await supabase.from("profiles").update(profileRow).eq("id", existingProfile.id).select().single()
+      : await supabase.from("profiles").insert(profileRow).select().single();
 
-  //save, WIP
-  const handleSave = () => {
-    if (!isProfileComplete(profile)) {
+    if (result.error) {
+      setSaveError(result.error.message);
       return;
     }
 
-    const trimmedProfile = {
-      ...profile,
-      fullName: `${profile.firstName} ${profile.lastName}`.trim(),
-      firstName: profile.firstName.trim(),
-      lastName: profile.lastName.trim(),
-      username: profile.username.trim(),
-      password: profile.password.trim(),
-      major: profile.major.trim(),
-      bio: profile.bio.trim(),
-      affiliation: profile.affiliation.trim(),
-      interests: profile.interests.trim(),
-      position: profile.position.trim(),
-      saseChapter: profile.saseChapter.trim(),
+    const savedProfile = {
+      ...trimmedProfile,
+      id: result.data.id,
+      username: result.data.username,
     };
-
-    localStorage.setItem("sasebook-profile", JSON.stringify(trimmedProfile));
-    setProfile(trimmedProfile);
+    localStorage.setItem("sasebook-profile", JSON.stringify(savedProfile));
+    setProfile(savedProfile);
     setHasProfile(true);
     setChoice(3);
   };
@@ -220,6 +209,7 @@ export default function Myprofile({ profileData }: MyprofileProps) {
   return (
     <div className="profile-page">
       <div className="profile-card">{renderChoice()}</div>
+      {saveError && <p className="profile-info-label">{saveError}</p>}
     </div>
   );
 }
