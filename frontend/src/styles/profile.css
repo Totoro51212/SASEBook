@@ -223,6 +223,44 @@
   border-color: var(--sase-primary);
 }
 
+.profile-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--sase-text-secondary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.profile-back-button:hover {
+  color: var(--sase-primary);
+  transform: translateX(-3px);
+}
+
+.profile-button-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.profile-button-row .profile-primary-button,
+.profile-button-row .profile-secondary-button {
+  margin-top: 0;
+  padding: 0.9rem 1.25rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
 .profile-info-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -312,6 +350,13 @@
     align-items: flex-start;
   }
 
+  .profile-button-row {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .profile-button-row .profile-secondary-button,
+  .profile-button-row .profile-primary-button,
   .profile-secondary-button,
   .profile-primary-button {
     width: 100%;
