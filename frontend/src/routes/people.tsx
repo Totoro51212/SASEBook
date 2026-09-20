@@ -3,7 +3,7 @@ import { useMemo, useState, type CSSProperties } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import "../styles/people.css";
-import type { Profile } from "../types";
+import type { Chapter, Profile } from "../types";
 
 
 
@@ -267,7 +267,10 @@ const demoPeople: Profile<string[]>[] = [
 
 ];
 
-function toProfileRecord(profile: Profile): Profile<string[]> {
+function toProfileRecord(
+  profile: Profile,
+  chapterData: Chapter[],
+): Profile<string[]> {
   const name = profile.name?.trim() || "SASE Member";
   const nameParts = name.split(/\s+/);
   const initials = nameParts
@@ -293,8 +296,11 @@ function toProfileRecord(profile: Profile): Profile<string[]> {
     name,
     initials,
     type: "Student",
-    saseChapter: profile.saseChapter ?? (profile.chapter_id ? `Chapter ${profile.chapter_id}` : "SASE Chapter"),
-    chapterShort: profile.chapter_id ? `CH${profile.chapter_id}` : "SASE",
+    saseChapter:
+      profile.saseChapter ??
+      chapter?.chapterName ??
+      (profile.chapter_id ? `Chapter ${profile.chapter_id}` : "SASE Chapter"),
+    chapterShort: chapter?.shortName ?? (profile.chapter_id ? `CH${profile.chapter_id}` : "SASE"),
     major: profile.major ?? "Undeclared",
     year: profile.graduation_year
       ? `Class of ${profile.graduation_year}`
@@ -343,7 +349,9 @@ export default function People({
     : profileData;
 
   const people = availableProfiles.length > 0
-    ? availableProfiles.map(toProfileRecord)
+    ? availableProfiles.map((profile) =>
+        toProfileRecord(profile, chapterData)
+      )
     : demoPeople;
 
   const navigate = useNavigate();
