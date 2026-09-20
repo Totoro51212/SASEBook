@@ -1,716 +1,274 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import {
   MapContainer,
   Marker,
   Popup,
   TileLayer,
 } from "react-leaflet";
-
 import L from "leaflet";
 
 import "leaflet/dist/leaflet.css";
 import "../styles/explore.css";
+
 import type {
-  ChapterLocation,
+  Chapter,
+  DatabaseProfile,
   ExploreFilter,
   ExploreItem,
-  SponsorLocation,
+  Sponsor,
   ViewMode,
 } from "../types";
 
-
-/* =========================================================
-   TYPES
-   ========================================================= */
-
-type FilterType = ExploreFilter;
-
-
-/* =========================================================
-   EXPLORE DATA
-   ========================================================= */
-
-const demoExploreItems: ExploreItem[] = [
-  {
-    id: 1,
-    type: "People",
-    title: "Alex Chen",
-    subtitle:
-      "Computer Engineering • Florida Polytechnic University",
-    description:
-      "Interested in embedded systems, robotics, and hardware engineering.",
-    chapterId: 1,
-  },
-
-  {
-    id: 2,
-    type: "People",
-    title: "JJ Nguyen",
-    subtitle:
-      "Data Science • Florida Polytechnic University",
-    description:
-      "Interested in data science, computer engineering, and technology.",
-    chapterId: 1,
-  },
-
-  {
-    id: 3,
-    type: "Chapters",
-    title:
-      "Florida Polytechnic University SASE",
-    subtitle:
-      "Lakeland, Florida",
-    description:
-      "SASE chapter at Florida Polytechnic University.",
-    chapterId: 1,
-  },
-
-  {
-    id: 4,
-    type: "Chapters",
-    title:
-      "University of Central Florida SASE",
-    subtitle:
-      "Orlando, Florida",
-    description:
-      "SASE chapter at the University of Central Florida.",
-    chapterId: 2,
-  },
-
-  {
-    id: 5,
-    type: "Events",
-    title: "Resume Workshop",
-    subtitle:
-      "Florida Polytechnic University",
-    description:
-      "Resume preparation workshop for students preparing for career fairs and internships.",
-    chapterId: 1,
-  },
-
-  {
-    id: 6,
-    type: "Events",
-    title:
-      "SASE Networking Night",
-    subtitle:
-      "Florida Polytechnic University",
-    description:
-      "Meet other SASE members and build professional connections.",
-    chapterId: 1,
-  },
-
-  {
-    id: 7,
-    type: "Sponsors",
-    title: "NVIDIA",
-    subtitle:
-      "Technology • Santa Clara, California",
-    description:
-      "Accelerated computing, AI, graphics, robotics, and hardware engineering.",
-  },
-
-  {
-    id: 8,
-    type: "Sponsors",
-    title: "AMD",
-    subtitle:
-      "Technology • Santa Clara, California",
-    description:
-      "Semiconductors, processors, graphics, AI, and high-performance computing.",
-  },
-
-  {
-    id: 9,
-    type: "Sponsors",
-    title: "Lockheed Martin",
-    subtitle:
-      "Defense & Aerospace",
-    description:
-      "Aerospace, defense, software, electrical engineering, and advanced systems.",
-  },
-
-  {
-    id: 10,
-    type: "Sponsors",
-    title: "JPMorganChase",
-    subtitle:
-      "Finance & Technology",
-    description:
-      "Financial services, software engineering, cybersecurity, data, and analytics.",
-  },
-
-  {
-    id: 11,
-    type: "Sponsors",
-    title: "Siemens",
-    subtitle:
-      "Engineering & Technology",
-    description:
-      "Automation, infrastructure, electrification, manufacturing, and digital engineering.",
-  },
-];
-
-
-/* =========================================================
-   SASE CHAPTER LOCATIONS
-   ========================================================= */
-
-const chapterLocations: ChapterLocation[] = [
-  {
-    id: 1,
-    name:
-      "Florida Polytechnic University SASE",
-    school:
-      "Florida Polytechnic University",
-    lat: 28.1489,
-    lng: -81.8484,
-  },
-
-  {
-    id: 2,
-    name:
-      "University of Central Florida SASE",
-    school:
-      "University of Central Florida",
-    lat: 28.6024,
-    lng: -81.2001,
-  },
-];
-
-
-/* =========================================================
-   SPONSOR LOCATIONS
-   ========================================================= */
-
-const sponsorLocations: SponsorLocation[] = [
-
-  /* Lockheed Martin */
-
-  {
-    id: 101,
-    sponsorName:
-      "Lockheed Martin",
-    locationName:
-      "Orlando, Florida",
-    locationType:
-      "Florida Office",
-    lat: 28.4507,
-    lng: -81.4438,
-    description:
-      "Lockheed Martin has major engineering operations in the Orlando area.",
-  },
-
-  {
-    id: 102,
-    sponsorName:
-      "Lockheed Martin",
-    locationName:
-      "Bethesda, Maryland",
-    locationType:
-      "Headquarters",
-    lat: 39.0228,
-    lng: -77.138,
-    description:
-      "Corporate headquarters of Lockheed Martin.",
-  },
-
-
-  /* JPMorganChase */
-
-  {
-    id: 103,
-    sponsorName:
-      "JPMorganChase",
-    locationName:
-      "Tampa, Florida",
-    locationType:
-      "Florida Office",
-    lat: 28.0499,
-    lng: -82.3743,
-    description:
-      "JPMorganChase has a major employee and technology presence in Tampa.",
-  },
-
-  {
-    id: 104,
-    sponsorName:
-      "JPMorganChase",
-    locationName:
-      "New York, New York",
-    locationType:
-      "Headquarters",
-    lat: 40.7568,
-    lng: -73.9753,
-    description:
-      "Global headquarters of JPMorganChase.",
-  },
-
-
-  /* Siemens */
-
-  {
-    id: 105,
-    sponsorName:
-      "Siemens",
-    locationName:
-      "Orlando, Florida",
-    locationType:
-      "Florida Office",
-    lat: 28.5383,
-    lng: -81.3792,
-    description:
-      "Siemens has an established presence in the Orlando area.",
-  },
-
-  {
-    id: 106,
-    sponsorName:
-      "Siemens",
-    locationName:
-      "Munich, Germany",
-    locationType:
-      "Headquarters",
-    lat: 48.1351,
-    lng: 11.582,
-    description:
-      "Corporate headquarters of Siemens.",
-  },
-
-
-  /* NVIDIA */
-
-  {
-    id: 107,
-    sponsorName:
-      "NVIDIA",
-    locationName:
-      "Santa Clara, California",
-    locationType:
-      "Headquarters",
-    lat: 37.3708,
-    lng: -121.9675,
-    description:
-      "Corporate headquarters of NVIDIA.",
-  },
-
-
-  /* AMD */
-
-  {
-    id: 108,
-    sponsorName:
-      "AMD",
-    locationName:
-      "Santa Clara, California",
-    locationType:
-      "Headquarters",
-    lat: 37.3825,
-    lng: -121.9777,
-    description:
-      "Corporate headquarters of AMD.",
-  },
-];
-
-
-/* =========================================================
-   MAP ICONS
-   ========================================================= */
-
-const chapterIcon = new L.Icon({
-  iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
-
-
-const sponsorIcon =
-  L.divIcon({
-    className:
-      "sponsor-map-marker-wrapper",
-
-    html: `
-      <div
-        style="
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background: #7c3aed;
-          border: 3px solid white;
-          color: white;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 800;
-          font-size: 14px;
-          box-shadow: 0 3px 10px rgba(0,0,0,.35);
-        "
-      >
-        S
-      </div>
-    `,
-
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
-    popupAnchor: [0, -18],
-  });
-
-
-/* =========================================================
-   MAIN COMPONENT
-   ========================================================= */
-
 type ExploreProps = {
-  exploreData: ExploreItem[];
+  profiles: DatabaseProfile[];
+  chapters: Chapter[];
+  sponsors: Sponsor[];
 };
 
-export default function Explore({ exploreData }: ExploreProps) {
-  const exploreItems = exploreData.length > 0 ? exploreData : demoExploreItems;
+const chapterIcon = L.divIcon({
+  className: "",
+  html: `
+    <div style="
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:#4f6fe8;
+      border:3px solid white;
+      box-shadow:0 2px 8px rgba(0,0,0,.30);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-size:16px;
+      font-weight:700;
+    ">S</div>
+  `,
+  iconSize: [34, 34],
+  iconAnchor: [17, 17],
+  popupAnchor: [0, -18],
+});
 
-  /*
-    React Router navigation.
+const sponsorIcon = L.divIcon({
+  className: "",
+  html: `
+    <div style="
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:#7548e8;
+      border:3px solid white;
+      box-shadow:0 2px 8px rgba(0,0,0,.30);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-size:15px;
+      font-weight:700;
+    ">★</div>
+  `,
+  iconSize: [34, 34],
+  iconAnchor: [17, 17],
+  popupAnchor: [0, -18],
+});
 
-    This lets Explore send the user directly to a sponsor
-    on the Sponsors page.
-  */
+const filters: ExploreFilter[] = [
+  "All",
+  "People",
+  "Chapters",
+  "Events",
+  "Sponsors",
+];
 
+export default function Explore({
+  profiles,
+  chapters,
+  sponsors,
+}: ExploreProps) {
   const navigate = useNavigate();
 
-
-  const [search, setSearch] =
-    useState("");
-
-  const [filter, setFilter] =
-    useState<FilterType>("All");
-
-  const [viewMode, setViewMode] =
-    useState<ViewMode>("Map");
-
-  const [
-    selectedItem,
-    setSelectedItem,
-  ] =
-    useState<ExploreItem | null>(
-      null
-    );
-
-  const [
-    selectedChapterId,
-    setSelectedChapterId,
-  ] =
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<ExploreFilter>("All");
+  const [viewMode, setViewMode] = useState<ViewMode>("Map");
+  const [selectedChapterId, setSelectedChapterId] =
     useState<number | null>(null);
+  const [selectedItem, setSelectedItem] =
+    useState<ExploreItem | null>(null);
 
+  const exploreItems = useMemo<ExploreItem[]>(() => {
+    const peopleItems: ExploreItem[] = profiles.map((profile) => ({
+      id: profile.id,
+      type: "People",
+      title: profile.name,
+      subtitle: [
+        profile.major,
+        profile.graduation_year
+          ? `Class of ${profile.graduation_year}`
+          : null,
+      ]
+        .filter(Boolean)
+        .join(" • "),
+      description: profile.bio ?? profile.interests ?? "SASE member",
+      chapterId: profile.chapter_id ?? undefined,
+    }));
 
-  /* =======================================================
-     FILTERING
-     ======================================================= */
+    const chapterItems: ExploreItem[] = chapters.map((chapter) => ({
+      id: chapter.id,
+      type: "Chapters",
+      title: chapter.chapterName,
+      subtitle: `${chapter.university} • ${chapter.location}`,
+      description:
+        chapter.description || `${chapter.chapterName} chapter`,
+      chapterId: chapter.id,
+    }));
 
-  const filteredItems =
-    useMemo(() => {
+    const sponsorItems: ExploreItem[] = sponsors.map((sponsor) => ({
+      id: sponsor.id,
+      type: "Sponsors",
+      title: sponsor.name,
+      subtitle: `${sponsor.industry} • ${sponsor.location}`,
+      description:
+        sponsor.description || `${sponsor.name} is a SASE sponsor.`,
+    }));
 
-      const query =
-        search
-          .trim()
-          .toLowerCase();
+    return [...peopleItems, ...chapterItems, ...sponsorItems];
+  }, [profiles, chapters, sponsors]);
 
-      return exploreItems.filter(
-        (item) => {
+  const filteredItems = useMemo(() => {
+    const query = search.trim().toLowerCase();
 
-          const matchesFilter =
-            filter === "All" ||
-            item.type === filter;
+    return exploreItems.filter((item) => {
+      const matchesFilter =
+        filter === "All" || item.type === filter;
 
-          const matchesSearch =
-            query === "" ||
-            item.title
-              .toLowerCase()
-              .includes(query) ||
-            item.subtitle
-              .toLowerCase()
-              .includes(query) ||
-            item.description
-              .toLowerCase()
-              .includes(query);
+      const matchesSearch =
+        query === "" ||
+        item.title.toLowerCase().includes(query) ||
+        item.subtitle.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query);
 
-          return (
-            matchesFilter &&
-            matchesSearch
-          );
-        }
+      return matchesFilter && matchesSearch;
+    });
+  }, [exploreItems, search, filter]);
+
+  const visibleChapters = useMemo(() => {
+    if (
+      filter !== "All" &&
+      filter !== "Chapters"
+    ) {
+      return [];
+    }
+
+    const query = search.trim().toLowerCase();
+
+    return chapters.filter((chapter) => {
+      const hasCoordinates =
+        typeof chapter.latitude === "number" &&
+        typeof chapter.longitude === "number";
+
+      if (!hasCoordinates) return false;
+      if (!query) return true;
+
+      return [
+        chapter.chapterName,
+        chapter.university,
+        chapter.shortName,
+        chapter.location,
+        chapter.region,
+        chapter.description,
+      ].some((value) =>
+        value?.toLowerCase().includes(query)
       );
+    });
+  }, [chapters, search, filter]);
 
-    }, [search, filter]);
+  const visibleSponsors = useMemo(() => {
+    if (
+      filter !== "All" &&
+      filter !== "Sponsors"
+    ) {
+      return [];
+    }
 
+    const query = search.trim().toLowerCase();
 
-  const visibleSponsorLocations =
-    useMemo(() => {
+    return sponsors.filter((sponsor) => {
+      const hasCoordinates =
+        typeof sponsor.latitude === "number" &&
+        typeof sponsor.longitude === "number";
 
-      if (
-        filter !== "All" &&
-        filter !== "Sponsors"
-      ) {
-        return [];
-      }
+      if (!hasCoordinates) return false;
+      if (!query) return true;
 
-      const query =
-        search
-          .trim()
-          .toLowerCase();
-
-      if (query === "") {
-        return sponsorLocations;
-      }
-
-      return sponsorLocations.filter(
-        (location) =>
-          location.sponsorName
-            .toLowerCase()
-            .includes(query) ||
-          location.locationName
-            .toLowerCase()
-            .includes(query) ||
-          location.locationType
-            .toLowerCase()
-            .includes(query) ||
-          location.description
-            .toLowerCase()
-            .includes(query)
+      return [
+        sponsor.name,
+        sponsor.industry,
+        sponsor.location,
+        sponsor.description,
+      ].some((value) =>
+        value?.toLowerCase().includes(query)
       );
-
-    }, [search, filter]);
-
-
-  const visibleChapterLocations =
-    useMemo(() => {
-
-      if (filter === "Sponsors") {
-        return [];
-      }
-
-      return chapterLocations.filter(
-        (chapter) =>
-          filteredItems.some(
-            (item) =>
-              item.chapterId ===
-              chapter.id
-          )
-      );
-
-    }, [filteredItems, filter]);
-
-
-  /* =======================================================
-     SELECTED CHAPTER DATA
-     ======================================================= */
+    });
+  }, [sponsors, search, filter]);
 
   const selectedChapter =
-    chapterLocations.find(
-      (chapter) =>
-        chapter.id ===
-        selectedChapterId
-    );
-
-
-  const selectedChapterItems =
     selectedChapterId === null
-      ? []
-      : exploreItems.filter(
-          (item) =>
-            item.chapterId ===
-            selectedChapterId
-        );
-
+      ? null
+      : chapters.find(
+          (chapter) =>
+            chapter.id === selectedChapterId
+        ) ?? null;
 
   const selectedChapterPeople =
-    selectedChapterItems.filter(
-      (item) =>
-        item.type === "People"
-    );
+    selectedChapterId === null
+      ? []
+      : profiles.filter(
+          (profile) =>
+            profile.chapter_id === selectedChapterId
+        );
 
-
-  const selectedChapterEvents =
-    selectedChapterItems.filter(
-      (item) =>
-        item.type === "Events"
-    );
-
-
-  const selectedChapterInfo =
-    selectedChapterItems.filter(
-      (item) =>
-        item.type === "Chapters"
-    );
-
-
-  /* =======================================================
-     HELPERS
-     ======================================================= */
-
-  const filters: FilterType[] = [
-    "All",
-    "People",
-    "Chapters",
-    "Events",
-    "Sponsors",
-  ];
-
-
-  const handleConnect = (
-    personName: string
-  ) => {
-
-    alert(
-      `Connection request sent to ${personName}!`
-    );
-
-  };
-
-
-  const handleRSVP = (
-    eventName: string
-  ) => {
-
-    alert(
-      `You're registered for ${eventName}!`
-    );
-
-  };
-
-
-  /*
-    IMPORTANT CHANGE:
-
-    Instead of showing an alert, this sends the user to:
-
-    /sponsors?company=AMD
-
-    or
-
-    /sponsors?company=Lockheed%20Martin
-
-    The Sponsors page will read that company name and open
-    the correct sponsor automatically.
-  */
-
-  const handleViewSponsor = (
-    sponsorName: string
-  ) => {
-
+  function openChapterPage(chapter: Chapter) {
+    /*
+     * Chapters currently lives at /chapters.
+     * We also include the chapter slug in the URL so the
+     * destination can use it later for direct chapter opening.
+     */
     navigate(
-      `/sponsors?company=${encodeURIComponent(
-        sponsorName
+      `/chapters?chapter=${encodeURIComponent(
+        chapter.slug
       )}`
     );
+  }
 
-  };
-
-
-  /* =======================================================
-     CARD RENDERER
-     ======================================================= */
-
-  const renderCard = (
-    item: ExploreItem
-  ) => {
-
-    return (
-      <article
-        className="explore-card"
-        key={item.id}
-        onClick={() =>
-          setSelectedItem(item)
-        }
-      >
-
-        <div className="explore-card-header">
-
-          <span
-            className={`explore-type-badge ${item.type.toLowerCase()}`}
-          >
-            {item.type}
-          </span>
-
-        </div>
-
-        <h3>
-          {item.title}
-        </h3>
-
-        <p className="explore-card-subtitle">
-          {item.subtitle}
-        </p>
-
-        <p className="explore-card-description">
-          {item.description}
-        </p>
-
-        <button
-          className="explore-card-button"
-          onClick={(event) => {
-            event.stopPropagation();
-
-            setSelectedItem(item);
-          }}
-        >
-          View Details
-        </button>
-
-      </article>
+  function openSponsorPage(sponsor: Sponsor) {
+    navigate(
+      `/sponsors?company=${encodeURIComponent(
+        sponsor.name
+      )}`
     );
-
-  };
-
-
-  /* =========================================================
-     PAGE
-     ========================================================= */
+  }
 
   return (
-
     <main className="explore-page">
-
-
       {/* HEADER */}
-
       <section className="explore-header">
-
         <div>
-
           <span className="explore-eyebrow">
             SASE NETWORK
           </span>
 
-          <h1>
-            Explore
-          </h1>
+          <h1>Explore</h1>
 
           <p>
-            Discover SASE members,
-            chapters, events, sponsors,
-            and opportunities across
-            the network.
+            Discover SASE members, chapters, events,
+            sponsors, and opportunities across the network.
           </p>
-
         </div>
-
       </section>
 
-
       {/* SEARCH + FILTERS */}
-
       <section className="explore-controls">
-
         <div className="explore-search-wrapper">
-
           <span className="explore-search-icon">
             ⌕
           </span>
@@ -721,637 +279,533 @@ export default function Explore({ exploreData }: ExploreProps) {
             placeholder="Search people, chapters, events, sponsors..."
             value={search}
             onChange={(event) =>
-              setSearch(
-                event.target.value
-              )
+              setSearch(event.target.value)
             }
           />
-
         </div>
-
 
         <div className="explore-filter-row">
-
           <div className="explore-filters">
-
-            {filters.map(
-              (filterOption) => (
-
-                <button
-                  key={filterOption}
-                  className={
-                    filter ===
-                    filterOption
-                      ? "explore-filter active"
-                      : "explore-filter"
-                  }
-                  onClick={() => {
-
-                    setFilter(
-                      filterOption
-                    );
-
-                    setSelectedChapterId(
-                      null
-                    );
-
-                  }}
-                >
-                  {filterOption}
-                </button>
-
-              )
-            )}
-
+            {filters.map((filterOption) => (
+              <button
+                key={filterOption}
+                className={
+                  filter === filterOption
+                    ? "explore-filter active"
+                    : "explore-filter"
+                }
+                onClick={() => {
+                  setFilter(filterOption);
+                  setSelectedChapterId(null);
+                }}
+              >
+                {filterOption}
+              </button>
+            ))}
           </div>
-
 
           <div className="explore-view-toggle">
-
-            <button
-              className={
-                viewMode === "Map"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                setViewMode("Map")
-              }
-            >
-              Map
-            </button>
-
-            <button
-              className={
-                viewMode === "Cards"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                setViewMode("Cards")
-              }
-            >
-              Cards
-            </button>
-
+            {(["Map", "Cards"] as ViewMode[]).map(
+              (mode) => (
+                <button
+                  key={mode}
+                  className={
+                    viewMode === mode
+                      ? "active"
+                      : ""
+                  }
+                  onClick={() =>
+                    setViewMode(mode)
+                  }
+                >
+                  {mode}
+                </button>
+              )
+            )}
           </div>
-
         </div>
-
       </section>
 
-
-      {/* ===================================================
-          MAP
-          =================================================== */}
-
+      {/* MAP VIEW */}
       {viewMode === "Map" && (
-
-        <section className="explore-map-layout">
-
-
-          <div className="explore-map-container">
-
+        <section className="explore-map-section">
+          <div className="explore-map-wrapper">
             <MapContainer
-              center={[
-                28.1,
-                -81.7,
-              ]}
-              zoom={7}
+              center={[32.1, -81.7]}
+              zoom={5}
               scrollWheelZoom={true}
               className="explore-map"
             >
-
               <TileLayer
-                attribution="&copy; Esri"
-                url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
+                attribution='&copy; OpenStreetMap contributors'
+                url="https://tile.openstreetmap.de/{z}/{x}/{y}.png"
+                maxZoom={18}
               />
 
-
               {/* CHAPTER MARKERS */}
+              {visibleChapters.map((chapter) => (
+                <Marker
+                  key={`chapter-${chapter.id}`}
+                  position={[
+                    chapter.latitude!,
+                    chapter.longitude!,
+                  ]}
+                  icon={chapterIcon}
+                  eventHandlers={{
+                    click: () =>
+                      setSelectedChapterId(
+                        chapter.id
+                      ),
+                  }}
+                >
+                  <Popup>
+                    <div style={{ minWidth: 200 }}>
+                      <strong>
+                        {chapter.chapterName}
+                      </strong>
 
-              {visibleChapterLocations.map(
-                (chapter) => (
+                      <br />
 
-                  <Marker
-                    key={`chapter-${chapter.id}`}
-                    position={[
-                      chapter.lat,
-                      chapter.lng,
-                    ]}
-                    icon={chapterIcon}
-                    eventHandlers={{
-                      click: () =>
-                        setSelectedChapterId(
-                          chapter.id
-                        ),
-                    }}
-                  >
+                      <span>SASE Chapter</span>
 
-                    <Popup>
+                      <br />
 
-                      <div>
+                      <span>
+                        {chapter.university}
+                      </span>
 
-                        <strong>
-                          {chapter.name}
-                        </strong>
+                      <br />
 
-                        <br />
-
-                        <span>
-                          SASE Chapter
-                        </span>
-
-                        <br />
-
-                        <span>
-                          {chapter.school}
-                        </span>
-
-                      </div>
-
-                    </Popup>
-
-                  </Marker>
-
-                )
-              )}
-
+                      <button
+                        style={{
+                          marginTop: 10,
+                          cursor: "pointer",
+                        }}
+                        onClick={() =>
+                          openChapterPage(chapter)
+                        }
+                      >
+                        View Chapter
+                      </button>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
 
               {/* SPONSOR MARKERS */}
+              {visibleSponsors.map((sponsor) => (
+                <Marker
+                  key={`sponsor-${sponsor.id}`}
+                  position={[
+                    sponsor.latitude!,
+                    sponsor.longitude!,
+                  ]}
+                  icon={sponsorIcon}
+                >
+                  <Popup>
+                    <div style={{ minWidth: 190 }}>
+                      <strong>{sponsor.name}</strong>
 
-              {visibleSponsorLocations.map(
-                (location) => (
+                      <br />
 
-                  <Marker
-                    key={`sponsor-${location.id}`}
-                    position={[
-                      location.lat,
-                      location.lng,
-                    ]}
-                    icon={sponsorIcon}
-                  >
+                      <span>{sponsor.industry}</span>
 
-                    <Popup>
+                      <br />
 
-                      <div
-                        style={{
-                          minWidth:
-                            "190px",
-                        }}
+                      <span>{sponsor.location}</span>
+
+                      <p style={{ margin: "8px 0" }}>
+                        {sponsor.description}
+                      </p>
+
+                      <button
+                        onClick={() =>
+                          openSponsorPage(sponsor)
+                        }
                       >
-
-                        <strong>
-                          {
-                            location.sponsorName
-                          }
-                        </strong>
-
-                        <br />
-
-                        <span>
-                          {
-                            location.locationType
-                          }
-                        </span>
-
-                        <br />
-
-                        <span>
-                          {
-                            location.locationName
-                          }
-                        </span>
-
-                        <p
-                          style={{
-                            margin:
-                              "8px 0",
-                          }}
-                        >
-                          {
-                            location.description
-                          }
-                        </p>
-
-                        <button
-                          onClick={() =>
-                            handleViewSponsor(
-                              location.sponsorName
-                            )
-                          }
-                        >
-                          View Sponsor
-                        </button>
-
-                      </div>
-
-                    </Popup>
-
-                  </Marker>
-
-                )
-              )}
-
+                        View Sponsor
+                      </button>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
             </MapContainer>
 
-
-            {/* MAP LEGEND */}
-
+            {/* MAP LEGEND - matches the actual marker icons */}
             <div
               style={{
-                position:
-                  "absolute",
-
+                position: "absolute",
                 bottom: "18px",
                 left: "18px",
-
                 zIndex: 500,
-
-                padding:
-                  "10px 13px",
-
-                borderRadius:
-                  "10px",
-
-                background:
-                  "rgba(18, 18, 23, 0.92)",
-
+                padding: "14px 16px",
+                borderRadius: "12px",
+                background: "rgba(18, 18, 23, 0.92)",
                 color: "white",
-
-                fontSize:
-                  "12px",
-
-                boxShadow:
-                  "0 5px 18px rgba(0,0,0,.25)",
+                boxShadow: "0 5px 18px rgba(0,0,0,.25)",
               }}
             >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  marginBottom: "10px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "26px",
+                    height: "26px",
+                    borderRadius: "50%",
+                    background: "#4f6fe8",
+                    border: "2px solid white",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    boxSizing: "border-box",
+                  }}
+                >
+                  S
+                </div>
+                <span>SASE Chapter</span>
+              </div>
 
               <div
                 style={{
-                  marginBottom:
-                    "5px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
                 }}
               >
-                📍 SASE Chapter
+                <div
+                  style={{
+                    width: "26px",
+                    height: "26px",
+                    borderRadius: "50%",
+                    background: "#7548e8",
+                    border: "2px solid white",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    boxSizing: "border-box",
+                  }}
+                >
+                  ★
+                </div>
+                <span>Sponsor Location</span>
               </div>
-
-              <div>
-                🟣 Sponsor Location
-              </div>
-
             </div>
-
           </div>
 
-
           {/* MAP SIDE PANEL */}
-
           <aside className="explore-map-panel">
-
             {selectedChapter ? (
-
               <>
-
                 <span className="explore-panel-label">
                   SASE CHAPTER
                 </span>
 
                 <h2>
-                  {
-                    selectedChapter.name
-                  }
+                  {selectedChapter.chapterName}
                 </h2>
 
                 <p>
-                  {
-                    selectedChapter.school
-                  }
+                  {selectedChapter.university}
                 </p>
 
+                <div className="explore-panel-item">
+                  <strong>Location</strong>
+                  <span>
+                    {selectedChapter.location}
+                  </span>
+                </div>
 
-                {selectedChapterInfo.map(
-                  (chapterItem) => (
-
-                    <div
-                      className="explore-panel-item"
-                      key={
-                        chapterItem.id
-                      }
-                    >
-
-                      <strong>
-                        Chapter
-                      </strong>
-
-                      <span>
-                        {
-                          chapterItem.description
-                        }
-                      </span>
-
-                    </div>
-
-                  )
+                {selectedChapter.region && (
+                  <div className="explore-panel-item">
+                    <strong>Region</strong>
+                    <span>
+                      {selectedChapter.region}
+                    </span>
+                  </div>
                 )}
 
+                <div className="explore-panel-item">
+                  <strong>About</strong>
+                  <span>
+                    {selectedChapter.description ||
+                      "No chapter description available."}
+                  </span>
+                </div>
 
-                <h3>
-                  Members
-                </h3>
+                <div className="explore-panel-summary">
+                  <div>
+                    <strong>
+                      {selectedChapter.memberCount}
+                    </strong>
+                    <span>Members</span>
+                  </div>
 
-                {selectedChapterPeople.length >
-                0 ? (
+                  <div>
+                    <strong>
+                      {selectedChapterPeople.length}
+                    </strong>
+                    <span>Profiles</span>
+                  </div>
+                </div>
 
-                  selectedChapterPeople.map(
-                    (person) => (
+                {selectedChapter.founded && (
+                  <div className="explore-panel-item">
+                    <strong>Founded</strong>
+                    <span>
+                      {selectedChapter.founded}
+                    </span>
+                  </div>
+                )}
 
+                <h3>Members</h3>
+
+                {selectedChapterPeople.length > 0 ? (
+                  selectedChapterPeople
+                    .slice(0, 5)
+                    .map((person) => (
                       <button
                         className="explore-panel-card"
-                        key={
-                          person.id
-                        }
+                        key={person.id}
                         onClick={() =>
-                          setSelectedItem(
-                            person
-                          )
+                          setSelectedItem({
+                            id: person.id,
+                            type: "People",
+                            title: person.name,
+                            subtitle: [
+                              person.major,
+                              person.graduation_year
+                                ? `Class of ${person.graduation_year}`
+                                : null,
+                            ]
+                              .filter(Boolean)
+                              .join(" • "),
+                            description:
+                              person.bio ??
+                              person.interests ??
+                              "SASE member",
+                            chapterId:
+                              person.chapter_id ??
+                              undefined,
+                          })
                         }
                       >
-
                         <strong>
-                          {
-                            person.title
-                          }
+                          {person.name}
                         </strong>
 
                         <span>
-                          {
-                            person.subtitle
-                          }
+                          {[
+                            person.major,
+                            person.graduation_year
+                              ? `Class of ${person.graduation_year}`
+                              : null,
+                          ]
+                            .filter(Boolean)
+                            .join(" • ")}
                         </span>
-
                       </button>
-
-                    )
-                  )
-
+                    ))
                 ) : (
-
                   <p className="explore-muted">
                     No members listed.
                   </p>
-
                 )}
 
-
-                <h3>
-                  Events
-                </h3>
-
-                {selectedChapterEvents.length >
-                0 ? (
-
-                  selectedChapterEvents.map(
-                    (eventItem) => (
-
-                      <button
-                        className="explore-panel-card"
-                        key={
-                          eventItem.id
-                        }
-                        onClick={() =>
-                          setSelectedItem(
-                            eventItem
-                          )
-                        }
-                      >
-
-                        <strong>
-                          {
-                            eventItem.title
-                          }
-                        </strong>
-
-                        <span>
-                          {
-                            eventItem.description
-                          }
-                        </span>
-
-                      </button>
-
+                <button
+                  className="explore-modal-action"
+                  style={{
+                    width: "100%",
+                    marginTop: 18,
+                  }}
+                  onClick={() =>
+                    openChapterPage(
+                      selectedChapter
                     )
-                  )
-
-                ) : (
-
-                  <p className="explore-muted">
-                    No upcoming events.
-                  </p>
-
-                )}
-
+                  }
+                >
+                  View Chapter
+                </button>
               </>
-
             ) : (
-
               <>
-
                 <span className="explore-panel-label">
                   EXPLORE THE NETWORK
                 </span>
 
-                <h2>
-                  Select a location
-                </h2>
+                <h2>Select a location</h2>
 
                 <p>
-                  Click a SASE chapter
-                  or sponsor marker to
-                  explore the network.
+                  Click a SASE chapter marker to see
+                  chapter details, members, and a link
+                  to the chapter page.
                 </p>
 
-
                 <div className="explore-panel-summary">
-
                   <div>
-
                     <strong>
-                      {
-                        visibleChapterLocations.length
-                      }
+                      {visibleChapters.length}
                     </strong>
-
-                    <span>
-                      Chapters
-                    </span>
-
+                    <span>Chapters</span>
                   </div>
 
                   <div>
-
                     <strong>
-                      {
-                        visibleSponsorLocations.length
-                      }
+                      {visibleSponsors.length}
                     </strong>
-
                     <span>
                       Sponsor Locations
                     </span>
-
                   </div>
-
                 </div>
 
+                <div style={{ marginTop: "24px" }}>
+                  <h3>Chapter Locations</h3>
 
-                <div
-                  style={{
-                    marginTop:
-                      "24px",
-                  }}
-                >
+                  {visibleChapters
+                    .slice(0, 6)
+                    .map((chapter) => (
+                      <button
+                        className="explore-panel-card"
+                        key={chapter.id}
+                        onClick={() =>
+                          setSelectedChapterId(
+                            chapter.id
+                          )
+                        }
+                      >
+                        <strong>
+                          {chapter.chapterName}
+                        </strong>
 
-                  <h3>
-                    Florida Sponsor
-                    Locations
-                  </h3>
-
-                  {visibleSponsorLocations
-                    .filter(
-                      (location) =>
-                        location.locationType ===
-                        "Florida Office"
-                    )
-                    .map(
-                      (location) => (
-
-                        <div
-                          className="explore-panel-item"
-                          key={
-                            location.id
-                          }
-                        >
-
-                          <strong>
-                            {
-                              location.sponsorName
-                            }
-                          </strong>
-
-                          <span>
-                            {
-                              location.locationName
-                            }
-                          </span>
-
-                        </div>
-
-                      )
-                    )}
-
+                        <span>
+                          {chapter.location}
+                        </span>
+                      </button>
+                    ))}
                 </div>
-
               </>
-
             )}
-
           </aside>
-
         </section>
-
       )}
 
-
-      {/* ===================================================
-          CARDS
-          =================================================== */}
-
+      {/* CARDS VIEW */}
       {viewMode === "Cards" && (
-
         <section className="explore-results">
+          <div className="explore-results-heading">
+            <div>
+              <span className="explore-eyebrow">
+                DIRECTORY
+              </span>
 
-          <div className="explore-results-header">
-
-            <h2>
-              Discover
-            </h2>
+              <h2>Explore the SASE Network</h2>
+            </div>
 
             <span>
-              {filteredItems.length}{" "}
-              results
+              {filteredItems.length} result
+              {filteredItems.length === 1
+                ? ""
+                : "s"}
             </span>
-
           </div>
 
-
-          {filteredItems.length >
-          0 ? (
-
-            <div className="explore-grid">
-
-              {filteredItems.map(
-                renderCard
-              )}
-
-            </div>
-
-          ) : (
-
-            <div className="explore-empty">
-
-              <h3>
-                No results found
-              </h3>
-
-              <p>
-                Try another search
-                or filter.
-              </p>
-
-              <button
-                onClick={() => {
-
-                  setSearch("");
-
-                  setFilter(
-                    "All"
-                  );
-
-                }}
+          <div className="explore-grid">
+            {filteredItems.map((item) => (
+              <article
+                className="explore-card"
+                key={`${item.type}-${item.id}`}
               >
-                Clear Filters
-              </button>
+                <span className="explore-card-type">
+                  {item.type}
+                </span>
 
+                <h3>{item.title}</h3>
+
+                <p className="explore-card-subtitle">
+                  {item.subtitle}
+                </p>
+
+                <p>{item.description}</p>
+
+                {item.type === "Chapters" ? (
+                  <button
+                    onClick={() => {
+                      const chapter =
+                        chapters.find(
+                          (entry) =>
+                            entry.id === item.id
+                        );
+
+                      if (chapter) {
+                        openChapterPage(chapter);
+                      }
+                    }}
+                  >
+                    View Chapter
+                  </button>
+                ) : item.type === "Sponsors" ? (
+                  <button
+                    onClick={() => {
+                      const sponsor =
+                        sponsors.find(
+                          (entry) =>
+                            entry.id === item.id
+                        );
+
+                      if (sponsor) {
+                        openSponsorPage(sponsor);
+                      }
+                    }}
+                  >
+                    View Sponsor
+                  </button>
+                ) : (
+                  <button
+                    onClick={() =>
+                      setSelectedItem(item)
+                    }
+                  >
+                    View Details
+                  </button>
+                )}
+              </article>
+            ))}
+          </div>
+
+          {filteredItems.length === 0 && (
+            <div className="explore-empty">
+              No results found.
             </div>
-
           )}
-
         </section>
-
       )}
 
-
-      {/* ===================================================
-          DETAILS MODAL
-          =================================================== */}
-
+      {/* DETAIL MODAL */}
       {selectedItem && (
-
         <div
-          className="explore-modal-overlay"
+          className="explore-modal-backdrop"
           onClick={() =>
             setSelectedItem(null)
           }
         >
-
           <div
             className="explore-modal"
             onClick={(event) =>
               event.stopPropagation()
             }
           >
-
             <button
               className="explore-modal-close"
               onClick={() =>
@@ -1361,127 +815,22 @@ export default function Explore({ exploreData }: ExploreProps) {
               ×
             </button>
 
-
-            <span
-              className={`explore-type-badge ${selectedItem.type.toLowerCase()}`}
-            >
-              {
-                selectedItem.type
-              }
+            <span className="explore-panel-label">
+              {selectedItem.type}
             </span>
 
+            <h2>{selectedItem.title}</h2>
 
-            <h2>
-              {
-                selectedItem.title
-              }
-            </h2>
+            <p>{selectedItem.subtitle}</p>
 
-
-            <p className="explore-modal-subtitle">
-              {
-                selectedItem.subtitle
-              }
-            </p>
-
-
-            <p className="explore-modal-description">
-              {
-                selectedItem.description
-              }
-            </p>
-
-
-            {selectedItem.type ===
-              "People" && (
-
-              <button
-                className="explore-modal-action"
-                onClick={() =>
-                  handleConnect(
-                    selectedItem.title
-                  )
-                }
-              >
-                Connect
-              </button>
-
-            )}
-
-
-            {selectedItem.type ===
-              "Events" && (
-
-              <button
-                className="explore-modal-action"
-                onClick={() =>
-                  handleRSVP(
-                    selectedItem.title
-                  )
-                }
-              >
-                RSVP
-              </button>
-
-            )}
-
-
-            {selectedItem.type ===
-              "Chapters" && (
-
-              <button
-                className="explore-modal-action"
-                onClick={() => {
-
-                  if (
-                    selectedItem.chapterId
-                  ) {
-
-                    setSelectedChapterId(
-                      selectedItem.chapterId
-                    );
-
-                    setViewMode(
-                      "Map"
-                    );
-
-                    setSelectedItem(
-                      null
-                    );
-
-                  }
-
-                }}
-              >
-                View Chapter on Map
-              </button>
-
-            )}
-
-
-            {selectedItem.type ===
-              "Sponsors" && (
-
-              <button
-                className="explore-modal-action"
-                onClick={() =>
-                  handleViewSponsor(
-                    selectedItem.title
-                  )
-                }
-              >
-                View Sponsor
-              </button>
-
-            )}
-
+            <div className="explore-panel-item">
+              <span>
+                {selectedItem.description}
+              </span>
+            </div>
           </div>
-
         </div>
-
       )}
-
     </main>
-
   );
 }
