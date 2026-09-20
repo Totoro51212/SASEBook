@@ -335,7 +335,8 @@ export default function Routing() {
 
       {/* PAGE CONTENT */}
       <main className="main-content">
-        <Routes>
+        <div key={pathname} className="page-transition">
+          <Routes>
 
           {/* HOME */}
           <Route
@@ -391,7 +392,8 @@ export default function Routing() {
             element={<Sponsors />}
           />
 
-        </Routes>
+          </Routes>
+        </div>
       </main>
     </>
   )

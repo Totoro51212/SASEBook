@@ -23,16 +23,6 @@ export default function Login({ onLogin, onBack }: LoginProps) {
 
   return (
     <>
-      {onBack && (
-        <button
-          type="button"
-          className="profile-back-button"
-          onClick={onBack}
-        >
-          ← Back
-        </button>
-      )}
-
       <div className="profile-header-row">
         <div>
           <p className="profile-label">Welcome</p>
