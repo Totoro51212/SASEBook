@@ -7,21 +7,37 @@ import Login from "./login";
 //profile type declaration
 type Profile = {
   fullName: string;
+  firstName: string;
+  lastName: string;
   username: string;
   password: string;
   major: string;
   bio: string;
+  affiliation: string;
   interests: string;
+  position: string;
+  saseChapter: string;
+};
+
+//credential type declaration
+type Credentials = {
+  username: string;
+  password: string;
 };
 
 //default
 const emptyProfile: Profile = {
   fullName: "",
+  firstName: "",
+  lastName: "",
   username: "",
   password: "",
   major: "",
   bio: "",
+  affiliation: "",
   interests: "",
+  position: "",
+  saseChapter: "",
 };
 
 //conditional box component for different options
@@ -51,16 +67,85 @@ export default function Myprofile() {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleLogin = (credentials: Credentials) => {
+    const savedProfileRaw = localStorage.getItem("sasebook-profile");
+
+    if (!savedProfileRaw) {
+      return false;
+    }
+
+    try {
+      const savedProfile = JSON.parse(savedProfileRaw) as Profile;
+      const normalizedUsername = credentials.username.trim().toLowerCase();
+      const savedUsername = (savedProfile.username ?? "").trim().toLowerCase();
+      const matchesSavedProfile =
+        normalizedUsername === savedUsername &&
+        credentials.password === savedProfile.password;
+
+      // WIP: placeholder database verification
+      const matchesDatabase =
+        matchesSavedProfile &&
+        (savedUsername === "ricecooker123" || savedUsername === "saseleader");
+
+      if (matchesDatabase) {
+        setProfile(savedProfile);
+        setHasProfile(true);
+        setChoice(3);
+        return true;
+      }
+
+      return false;
+    } catch {
+      return false;
+    }
+  };
+
+  const isProfileComplete = (currentProfile: Profile) => {
+    const requiredFields = [
+      currentProfile.firstName.trim(),
+      currentProfile.lastName.trim(),
+      currentProfile.username.trim(),
+      currentProfile.password.trim(),
+      currentProfile.major.trim(),
+      currentProfile.bio.trim(),
+      currentProfile.affiliation.trim(),
+      currentProfile.interests.trim(),
+    ];
+
+    if (!requiredFields.every(Boolean)) {
+      return false;
+    }
+
+    if (currentProfile.affiliation === "Officer") {
+      return Boolean(currentProfile.position.trim() && currentProfile.saseChapter.trim());
+    }
+
+    if (currentProfile.affiliation === "Student" || currentProfile.affiliation === "Chapter") {
+      return Boolean(currentProfile.saseChapter.trim());
+    }
+
+    return true;
+  };
+
   //save, WIP
   const handleSave = () => {
+    if (!isProfileComplete(profile)) {
+      return;
+    }
+
     const trimmedProfile = {
       ...profile,
-      fullName: profile.fullName.trim(),
+      fullName: `${profile.firstName} ${profile.lastName}`.trim(),
+      firstName: profile.firstName.trim(),
+      lastName: profile.lastName.trim(),
       username: profile.username.trim(),
       password: profile.password.trim(),
       major: profile.major.trim(),
       bio: profile.bio.trim(),
+      affiliation: profile.affiliation.trim(),
       interests: profile.interests.trim(),
+      position: profile.position.trim(),
+      saseChapter: profile.saseChapter.trim(),
     };
 
     localStorage.setItem("sasebook-profile", JSON.stringify(trimmedProfile));
@@ -69,7 +154,7 @@ export default function Myprofile() {
     setChoice(3);
   };
 
-  //function called when finished with editg
+  //function called when finished with editing
   const handleEdit = () => {
     setHasProfile(false);
     setChoice(1);
@@ -106,7 +191,7 @@ export default function Myprofile() {
 
     if (choice === 2) {
       return (
-        <Login />
+        <Login onLogin={handleLogin} />
       );
     }
 
