@@ -23,7 +23,7 @@
   min-height: 100vh;
   box-sizing: border-box;
   margin: 0 auto;
-  padding: 55px 40px 90px;
+  padding: 56px 40px 90px;
   background:
     radial-gradient(
       circle at top left,
@@ -69,17 +69,17 @@
 .chapters-hero h1 {
   margin: 0;
   color: var(--chapter-text);
-  font-size: clamp(48px, 6vw, 76px);
-  font-weight: 600;
+  font-size: clamp(40px, 4.4vw, 68px);
+  font-weight: 700;
   line-height: 1.05;
-  letter-spacing: -2px;
+  letter-spacing: -0.035em;
 }
 .chapters-hero > p {
   width: 100%;
   max-width: 900px;
   margin: 25px auto 0;
   color: var(--chapter-text-secondary);
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.6;
 }
 /* =========================================================

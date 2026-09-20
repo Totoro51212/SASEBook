@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -120,7 +122,8 @@ code {
   --sase-border: #292D35;
   --sase-border-light: #363B45;
 
-  font-family: "Montserrat", system-ui, sans-serif;
+  --sase-font: "Montserrat", system-ui, sans-serif;
+  font-family: var(--sase-font);
 }
 
 html, body, #root {
@@ -129,7 +132,7 @@ html, body, #root {
 }
 
 button, input, textarea, select {
-  font-family: "Montserrat", system-ui, sans-serif;
+  font-family: var(--sase-font);
 }
 
 ::selection {
@@ -150,7 +153,7 @@ button, input, textarea, select {
 }
 
 h1, h2, h3, p {
-  font-family: "Montserrat", system-ui, sans-serif;
+  font-family: var(--sase-font);
 }
 
 /* Common hero titles */

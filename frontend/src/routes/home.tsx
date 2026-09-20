@@ -95,7 +95,7 @@ export default function Home({
           </p>
 
           <h1>
-            Welcome back, Kristian.
+            Welcome Back
           </h1>
 
           <p className="home-welcome-text">
