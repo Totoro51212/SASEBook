@@ -11,6 +11,7 @@ type Profile = {
   password: string;
   major: string;
   bio: string;
+  affiliation: string;
   interests: string;
 };
 
@@ -21,6 +22,7 @@ const emptyProfile: Profile = {
   password: "",
   major: "",
   bio: "",
+  affiliation: "",
   interests: "",
 };
 
@@ -60,6 +62,7 @@ export default function Myprofile() {
       password: profile.password.trim(),
       major: profile.major.trim(),
       bio: profile.bio.trim(),
+      affiliation: profile.affiliation.trim(),
       interests: profile.interests.trim(),
     };
 
