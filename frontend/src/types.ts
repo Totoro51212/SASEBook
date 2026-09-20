@@ -1,15 +1,42 @@
+
 // ============================================
+
 // Shared / Frontend Types
+
 // ============================================
+
+
 
 export type MemberType = "Student" | "Alumni";
 
-export type ChapterVisibility = "officers" | "members" | "everyone";
+
+
+
+export type ChapterVisibility =
+
+  | "officers"
+
+  | "members"
+
+  | "everyone";
+
+
+
+// ============================================================
+
+// PROFILE
+
+// ============================================================
+
+
 
 export type Profile<Interests = string> = {
   firstName?: string;
+
   lastName?: string;
+
   username?: string;
+
   password?: string;
   email?: string;
   graduation_year?: number | null;
@@ -20,8 +47,13 @@ export type Profile<Interests = string> = {
   linkedin_url?: string | null;
   
   major: string;
+
   bio: string;
+
+
+
   interests: Interests;
+
   skills: string[];
   
   affiliation?: string;
@@ -30,6 +62,7 @@ export type Profile<Interests = string> = {
   position?: string | null;
   
   id: number;
+
   name: string;
   initials: string;
   type: MemberType;
@@ -41,18 +74,36 @@ export type Profile<Interests = string> = {
 };
 
 
-// ============================================
-// Feed
+
+
+
 // ============================================
 
+// Feed
+
+// ============================================
+
+
+
+
 export type FeedPost = {
+
   id: number;
+
   author: string;
+
   chapter: string;
+
   content: string;
+
   createdAt: string;
+
   isOfficerPost: boolean;
+
+
+
   imageUrl?: string;
+
   canDelete?: boolean;
   profile_id?: number;
   created_at?: string | null;
@@ -62,33 +113,77 @@ export type FeedPost = {
 };
 
 
+
+
+
+
 // ============================================
+
 // Chapters / Events
+
 // ============================================
+
+
+
 
 export type ChapterTab =
+
   | "Overview"
+
   | "Events"
+
   | "Members"
+
   | "Officers";
 
+
+
 export type EventType =
+
   | "Professional"
+
   | "Social"
+
   | "General Body Meeting"
+
   | "Workshop"
+
   | "Community";
+
+
+
 
 export type MemberVisibility = ChapterVisibility;
 
+
+
+
 export type ChapterEvent = {
+
   id: number;
+
   chapterId: number;
+
+
+
   title: string;
+
+
+
   date: string;
+
   time: string;
+
+
+
   location: string;
+
+
+
   type: EventType;
+
+
+
   description: string;
   chapter_id?: number;
   name?: string;
@@ -102,34 +197,102 @@ export type ChapterEvent = {
   is_virtual?: boolean | null;
 };
 
+
+
 export type ChapterMember = {
+
   id: number;
+
   name: string;
+
+
+
   major: string;
+
   year: string;
+
+
+
   visibility: MemberVisibility;
+
 };
+
+
 
 export type Officer = {
+
   id: number;
+
   name: string;
+
+
+
   position: string;
+
   major: string;
+
 };
 
+
+
+// Frontend chapter model.
+
+//
+
+// useGeneralData() converts the raw Supabase chapter
+
+// rows into this shape.
+
 export type Chapter = {
+
   id: number;
+
+
+
   slug: string;
+
   shortName: string;
+
+
+
   university: string;
+
   chapterName: string;
+
+
+
   location: string;
+
+
+
+  // Used directly by the Explore Leaflet map.
+
+  latitude?: number | null;
+
+  longitude?: number | null;
+
+
+
   region: string;
+
+
+
   description: string;
+
+
+
   memberCount: number;
+
+
+
   founded: string;
 
+
+
   members: ChapterMember[];
+
+
+
   officers: Officer[];
   name?: string;
   city?: string | null;
@@ -142,38 +305,99 @@ export type Chapter = {
 };
 
 
+
+
+
+
 // ============================================
+
 // Sponsors
+
 // ============================================
+
+
+
 
 export type Industry =
+
   | "All"
+
   | "Technology"
+
   | "Engineering"
+
   | "Defense"
+
   | "Finance";
 
+
+
+// Frontend sponsor model.
+
+//
+
+// useGeneralData() converts the raw Supabase sponsor
+
+// rows into this shape.
+
 export type Sponsor = {
+
   id: number;
+
+
+
   name: string;
+
   shortName: string;
+
+
+
 
   industry: Exclude<Industry, "All">;
 
+
+
+
   description: string;
+
+
+
   location: string;
+
+
+
+  // Used directly by the Explore Leaflet map.
+
+  latitude?: number | null;
+
+  longitude?: number | null;
+
+
+
   featured: boolean;
+
+
 
   tags: string[];
 
+
+
   website: string;
+
   github: string;
+
   careersUrl: string;
 
+
+
   opportunities: {
+
     title: string;
+
     type: string;
+
     location: string;
+
   }[];
   city?: string | null;
   state?: string | null;
@@ -202,51 +426,123 @@ export type Notification = {
 };
 
 
-// ============================================
-// Explore
+
+
+
+
 // ============================================
 
+// Explore
+
+// ============================================
+
+
+
+
 export type ExploreFilter =
+
   | "All"
+
   | "People"
+
   | "Chapters"
+
   | "Events"
+
   | "Sponsors";
+
+
+
 
 export type ViewMode = "Map" | "Cards";
 
+
+
 export type ExploreItem = {
+
   id: number;
+
   type: Exclude<ExploreFilter, "All">;
 
+
+
+
   title: string;
+
+
+
   subtitle: string;
+
+
+
   description: string;
 
+
+
   chapterId?: number;
+
 };
 
 
+
+
+
+
 // ============================================
+
 // Map
+
 // ============================================
+
+
+
 
 export type ChapterLocation = {
+
   id: number;
+
+
+
   name: string;
+
   school: string;
+
+
+
   lat: number;
+
   lng: number;
+
 };
 
+
+
 export type SponsorLocation = {
+
   id: number;
+
+
+
   sponsorName: string;
+
+
+
   locationName: string;
+
+
+
 
   locationType: "Headquarters" | "Florida Office";
 
+
+
+
   lat: number;
+
   lng: number;
+
+
+
   description: string;
+
 };
