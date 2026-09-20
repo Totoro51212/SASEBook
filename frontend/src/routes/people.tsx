@@ -13,7 +13,7 @@ const demoPeople: Profile<string[]>[] = [
     name: "Kristian Nguyen",
     initials: "KN",
     type: "Student",
-    chapter: "Florida Polytechnic University",
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
     major: "Computer Engineering",
     year: "Junior",
@@ -28,7 +28,7 @@ const demoPeople: Profile<string[]>[] = [
     name: "Jamie Lee",
     initials: "JL",
     type: "Student",
-    chapter: "Florida Polytechnic University",
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
     major: "Computer Science",
     year: "Junior",
@@ -43,7 +43,7 @@ const demoPeople: Profile<string[]>[] = [
     name: "Jordan Park",
     initials: "JP",
     type: "Student",
-    chapter: "Florida Polytechnic University",
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
     major: "Mechanical Engineering",
     year: "Sophomore",
@@ -58,7 +58,7 @@ const demoPeople: Profile<string[]>[] = [
     name: "Morgan Chen",
     initials: "MC",
     type: "Student",
-    chapter: "Florida Polytechnic University",
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
     major: "Electrical Engineering",
     year: "Freshman",
@@ -73,7 +73,7 @@ const demoPeople: Profile<string[]>[] = [
     name: "Emily Tran",
     initials: "ET",
     type: "Student",
-    chapter: "University of Central Florida",
+    saseChapter: "University of Central Florida",
     chapterShort: "UCF",
     major: "Aerospace Engineering",
     year: "Senior",
@@ -88,7 +88,7 @@ const demoPeople: Profile<string[]>[] = [
     name: "Ryan Liu",
     initials: "RL",
     type: "Student",
-    chapter: "University of Central Florida",
+    saseChapter: "University of Central Florida",
     chapterShort: "UCF",
     major: "Computer Engineering",
     year: "Junior",
@@ -103,7 +103,7 @@ const demoPeople: Profile<string[]>[] = [
     name: "Kevin Huang",
     initials: "KH",
     type: "Student",
-    chapter: "University of South Florida",
+    saseChapter: "University of South Florida",
     chapterShort: "USF",
     major: "Biomedical Engineering",
     year: "Senior",
@@ -118,7 +118,7 @@ const demoPeople: Profile<string[]>[] = [
     name: "Sophia Nguyen",
     initials: "SN",
     type: "Student",
-    chapter: "University of South Florida",
+    saseChapter: "University of South Florida",
     chapterShort: "USF",
     major: "Computer Science",
     year: "Junior",
@@ -133,7 +133,7 @@ const demoPeople: Profile<string[]>[] = [
     name: "Daniel Kim",
     initials: "DK",
     type: "Alumni",
-    chapter: "Florida Polytechnic University",
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
     major: "Mechanical Engineering",
     year: "Class of 2025",
@@ -162,7 +162,7 @@ function toProfileRecord(profile: Profile): Profile<string[]> {
     name,
     initials,
     type: "Student",
-    chapter: profile.chapter_id ? `Chapter ${profile.chapter_id}` : "SASE Chapter",
+    saseChapter: profile.saseChapter ?? (profile.chapter_id ? `Chapter ${profile.chapter_id}` : "SASE Chapter"),
     chapterShort: profile.chapter_id ? `CH${profile.chapter_id}` : "SASE",
     major: profile.major ?? "Undeclared",
     year: profile.graduation_year ? `Class of ${profile.graduation_year}` : "Student",
@@ -218,7 +218,7 @@ export default function People({ profileData }: PeopleProps) {
     Later this will come from authentication/database data.
   */
   const currentUser = {
-    chapter: "Florida Polytechnic University",
+    saseChapter: "Florida Polytechnic University",
     role: "officer",
   };
 
@@ -227,7 +227,7 @@ export default function People({ profileData }: PeopleProps) {
       return true;
     }
 
-    const sameChapter = currentUser.chapter === person.chapter;
+    const sameChapter = currentUser.saseChapter === person.saseChapter;
 
     if (person.chapterVisibility === "members" && sameChapter) {
       return true;
@@ -257,7 +257,7 @@ export default function People({ profileData }: PeopleProps) {
         !query ||
         person.name.toLowerCase().includes(query) ||
         person.major.toLowerCase().includes(query) ||
-        person.chapter.toLowerCase().includes(query) ||
+        (person.saseChapter ?? "").toLowerCase().includes(query) ||
         person.chapterShort.toLowerCase().includes(query) ||
         person.location.toLowerCase().includes(query) ||
         person.skills.some((skill) =>

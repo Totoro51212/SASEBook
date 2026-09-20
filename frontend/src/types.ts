@@ -5,7 +5,7 @@
 
 // ============================================
 
-
+//this file has many conflicting type parameters, due to consolidating the types too late
 
 export type MemberType = "Student" | "Alumni";
 
@@ -58,7 +58,7 @@ export type Profile<Interests = string> = {
   
   affiliation?: string;
   chapter_id?: number | null;
-  saseChapter?: string;
+  saseChapter: string;
   position?: string | null;
   
   id: number;
@@ -66,7 +66,6 @@ export type Profile<Interests = string> = {
   name: string;
   initials: string;
   type: MemberType;
-  chapter: string;
   chapterShort: string;
   year: string;
   location: string;

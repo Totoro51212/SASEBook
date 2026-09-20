@@ -30,7 +30,6 @@ const emptyProfile: Profile<string> = {
   id: 0,
   initials: "",
   type: "Student",
-  chapter: "",
   chapterShort: "",
   year: "",
   location: "",
