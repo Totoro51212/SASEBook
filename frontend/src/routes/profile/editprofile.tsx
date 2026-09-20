@@ -5,6 +5,7 @@ type AprofileProps = {
   profile: Profile<string>;
   hasProfile: boolean;
   onEdit: () => void;
+  onBack?: () => void;
   onChange: (field: keyof Profile<string>, value: string) => void;
   onSave: (profile: Profile<string>) => void | Promise<void>;
 };
