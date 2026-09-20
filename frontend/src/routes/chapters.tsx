@@ -1,5 +1,7 @@
 import { type FormEvent, type RefObject, useMemo, useRef, useState } from "react";
 
+import { useNavigate, useParams } from "react-router-dom";
+
 import type {
 
   Chapter,
@@ -491,6 +493,8 @@ const getSchoolInitials = (chapter: Chapter) => {
 };
 
 export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersProps) {
+  const navigate = useNavigate();
+  const { slug } = useParams<{ slug?: string }>();
 
   const eventRailRef = useRef<HTMLDivElement>(null);
 
@@ -535,6 +539,14 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
   };
 
   const chapters = chapterData.length > 0 ? chapterData : demoChapters;
+
+  const routeChapter = slug
+    ? chapters.find(
+        (chapter) => chapter.slug.toLowerCase() === slug.toLowerCase()
+      ) ?? null
+    : null;
+
+  const activeChapter = routeChapter ?? selectedChapter;
 
   const filteredChapters = useMemo(() => {
 
@@ -657,6 +669,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
     setActiveTab("Overview");
 
     setNotificationSent(false);
+    navigate(`/chapters/${chapter.slug}`);
 
     window.scrollTo({
 
@@ -673,6 +686,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
     setSelectedChapter(null);
 
     setActiveTab("Overview");
+    navigate("/chapters");
 
   };
 
@@ -680,7 +694,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
     event.preventDefault();
 
-    if (!selectedChapter) {
+    if (!activeChapter) {
 
       return;
 
@@ -692,7 +706,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
       id: Date.now(),
 
-      chapterId: selectedChapter.id,
+      chapterId: activeChapter.id,
 
       title: String(form.get("title")),
 
@@ -754,19 +768,19 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
   };
 
-  if (selectedChapter) {
+  if (activeChapter) {
 
-    const chapterEvents = getChapterEvents(selectedChapter.id);
+    const chapterEvents = getChapterEvents(activeChapter.id);
 
-    const visibleMembers = selectedChapter.members.filter(
+    const visibleMembers = activeChapter.members.filter(
 
       (member) =>
 
-        canViewMember(member, selectedChapter.id)
+        canViewMember(member, activeChapter.id)
 
     );
 
-    const userIsOfficer = isOfficerOfChapter(selectedChapter.id);
+    const userIsOfficer = isOfficerOfChapter(activeChapter.id);
 
     return (
 
@@ -790,7 +804,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
             <div className="chapter-logo-large">
 
-              {selectedChapter.shortName}
+              {activeChapter.shortName}
 
             </div>
 
@@ -798,15 +812,15 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
               <span className="chapter-region-badge">
 
-                {selectedChapter.region} Region
+                {activeChapter.region} Region
 
               </span>
 
-              <h1>{selectedChapter.chapterName}</h1>
+              <h1>{activeChapter.chapterName}</h1>
 
               <p>
 
-                {selectedChapter.location}
+                {activeChapter.location}
 
               </p>
 
@@ -814,7 +828,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                 <span>
 
-                  <strong>{selectedChapter.memberCount}</strong>
+                  <strong>{activeChapter.memberCount}</strong>
 
                   Members
 
@@ -830,7 +844,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                 <span>
 
-                  <strong>{selectedChapter.founded}</strong>
+                  <strong>{activeChapter.founded}</strong>
 
                   Founded
 
@@ -972,7 +986,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                 <div className="chapter-about-card">
 
-                  <p>{selectedChapter.description}</p>
+                  <p>{activeChapter.description}</p>
 
                   <div className="chapter-info-grid">
 
@@ -982,7 +996,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                       <strong>
 
-                        {selectedChapter.university}
+                        {activeChapter.university}
 
                       </strong>
 
@@ -994,7 +1008,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                       <strong>
 
-                        {selectedChapter.location}
+                        {activeChapter.location}
 
                       </strong>
 
@@ -1006,7 +1020,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                       <strong>
 
-                        {selectedChapter.region}
+                        {activeChapter.region}
 
                       </strong>
 
@@ -1018,7 +1032,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                       <strong>
 
-                        {selectedChapter.founded}
+                        {activeChapter.founded}
 
                       </strong>
 
@@ -1120,7 +1134,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                     <h2>Latest Posts</h2>
 
-                    <p>News and announcements from {selectedChapter.shortName} SASE.</p>
+                    <p>News and announcements from {activeChapter.shortName} SASE.</p>
 
                   </div>
 
@@ -1170,7 +1184,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                       .toLowerCase()
 
-                      .startsWith(selectedChapter.shortName.toLowerCase())
+                      .startsWith(activeChapter.shortName.toLowerCase())
 
                   );
 
@@ -1184,7 +1198,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                         <h3>No posts yet</h3>
 
-                        <p>Updates from {selectedChapter.shortName} SASE will appear here.</p>
+                        <p>Updates from {activeChapter.shortName} SASE will appear here.</p>
 
                       </div>
 
@@ -1204,7 +1218,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                             <div className="chapter-social-avatar">
 
-                              {selectedChapter.shortName}
+                              {activeChapter.shortName}
 
                             </div>
 
@@ -1554,7 +1568,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                 <div className="officer-grid">
 
-                  {selectedChapter.officers.map((officer) => (
+                  {activeChapter.officers.map((officer) => (
 
                     <article
 
@@ -1836,7 +1850,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                 Send an announcement to members of{" "}
 
-                {selectedChapter.shortName} SASE.
+                {activeChapter.shortName} SASE.
 
               </p>
 
@@ -1884,7 +1898,7 @@ export default function Chapters({ chapterData, posts, onDeletePost }: ChaptersP
 
                     <strong>
 
-                      {selectedChapter.shortName} SASE
+                      {activeChapter.shortName} SASE
 
                     </strong>
 
