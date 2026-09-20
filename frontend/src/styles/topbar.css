@@ -1,201 +1,1064 @@
-/* ── SASEBook Top Bar ─────────────────────────────────────────────── */
+/* ==============================
+   SASEBOOK TOP BAR
+   ============================== */
 
-/*
- * Every design-pixel value is multiplied by --design-scale.
- * Default 0.5 → a 1920-wide artboard renders at ~960 logical pixels.
- * Change this one variable to resize the entire bar.
- */
 :root {
   --design-scale: 0.5;
 }
 
-/* ── Bar ──────────────────────────────────────────────────────────── */
+
+/* ==============================
+   MAIN BAR
+   ============================== */
 
 .topbar {
   width: 100%;
   height: calc(148px * var(--design-scale));
+
   background: #0c1015;
   border-bottom: 1px solid #090c10;
+
   display: flex;
   align-items: center;
+
   padding: 0 calc(30px * var(--design-scale));
+
   box-sizing: border-box;
-  font-family: 'Montserrat', system-ui, sans-serif;
+
+  font-family: "Montserrat", system-ui, sans-serif;
+
   position: sticky;
   top: 0;
+
   z-index: 1000;
+
   flex-shrink: 0;
 }
 
-/* ── Left cluster ─────────────────────────────────────────────────── */
+
+/* ==============================
+   LEFT SIDE
+   ============================== */
 
 .topbar__left {
   display: flex;
   align-items: center;
+
   gap: calc(16px * var(--design-scale));
+
   flex-shrink: 0;
 }
 
-/* Hamburger */
+
 .topbar__hamburger {
   background: none;
+
   border: none;
+
   cursor: pointer;
+
   padding: calc(12px * var(--design-scale));
+
   border-radius: calc(10px * var(--design-scale));
+
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s ease;
+
   min-width: 44px;
   min-height: 44px;
+
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
 }
 
-.topbar__hamburger-img,
-.topbar__hamburger svg {
-  width: calc(65px * var(--design-scale));
-  height: calc(40px * var(--design-scale));
-  display: block;
-  object-fit: contain;
-}
 
 .topbar__hamburger:hover,
 .topbar__hamburger--active {
-  background-color: #25292e;
+  background: #25292e;
 }
+
+
+.topbar__hamburger:active {
+  transform: scale(0.94);
+}
+
 
 .topbar__hamburger:focus-visible {
   outline: 2px solid #4a9eff;
   outline-offset: 2px;
 }
 
-/* Logo link (icon + wordmark) */
+
+.topbar__hamburger-img {
+  width: calc(65px * var(--design-scale));
+  height: calc(40px * var(--design-scale));
+
+  display: block;
+
+  object-fit: contain;
+}
+
+
+/* ==============================
+   LOGO
+   ============================== */
+
 .topbar__logo-link {
   display: flex;
   align-items: center;
+
   gap: calc(16px * var(--design-scale));
+
   text-decoration: none;
+
   flex-shrink: 0;
 }
+
 
 .topbar__logo-icon {
   width: calc(92px * var(--design-scale));
   height: calc(92px * var(--design-scale));
+
   display: block;
-  border-radius: calc(8px * var(--design-scale));
+
   object-fit: contain;
+
+  border-radius: calc(8px * var(--design-scale));
 }
+
 
 .topbar__logo-wordmark {
   width: calc(481px * var(--design-scale));
   height: calc(70px * var(--design-scale));
+
   display: block;
+
   object-fit: contain;
 }
 
-/* ── Search bar ───────────────────────────────────────────────────── */
+
+/* ==============================
+   SEARCH
+   ============================== */
 
 .topbar__search {
   flex: 1;
+
   max-width: calc(841px * var(--design-scale));
+
   margin: 0 calc(58px * var(--design-scale));
+
   display: flex;
   align-items: center;
 }
+
 
 .topbar__search-form {
   width: 100%;
+
+  height: calc(94px * var(--design-scale));
+
   display: flex;
   align-items: center;
+
   background: #25292e;
+
   border-radius: calc(28px * var(--design-scale));
-  height: calc(94px * var(--design-scale));
+
   padding: 0 calc(26px * var(--design-scale));
+
   box-sizing: border-box;
-  transition: background-color 0.15s ease;
+
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
+
 
 .topbar__search-form:focus-within {
   background: #2d3238;
+
+  box-shadow:
+    0 0 0 2px
+    rgba(74, 158, 255, 0.08);
 }
+
 
 .topbar__search-icon {
   width: calc(58px * var(--design-scale));
   height: calc(59px * var(--design-scale));
+
+  display: block;
+
   flex-shrink: 0;
-  color: #66676b;
+
+  object-fit: contain;
 }
+
 
 .topbar__search-input {
   flex: 1;
+
   background: none;
+
   border: none;
+
   outline: none;
-  font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: calc(50px * var(--design-scale));
+
   color: #f0f2f5;
+
+  font-family:
+    "Montserrat",
+    system-ui,
+    sans-serif;
+
+  font-size: calc(50px * var(--design-scale));
+
   margin-left: calc(20px * var(--design-scale));
+
   padding: 0;
+
   line-height: 1;
 }
 
+
 .topbar__search-input::placeholder {
   color: #66686c;
+
   opacity: 1;
 }
 
-/* Hide browser default search clear button */
+
 .topbar__search-input::-webkit-search-cancel-button {
   -webkit-appearance: none;
+
   appearance: none;
 }
 
-/* ── Right cluster ────────────────────────────────────────────────── */
+
+/* ==============================
+   RIGHT SIDE
+   ============================== */
 
 .topbar__right {
   display: flex;
   align-items: center;
+
   gap: calc(46px * var(--design-scale));
+
   flex-shrink: 0;
+
   margin-left: auto;
 }
 
+
 .topbar__icon-btn {
+  position: relative;
+
   background: none;
+
   border: none;
+
   cursor: pointer;
+
   padding: calc(10px * var(--design-scale));
+
   border-radius: calc(10px * var(--design-scale));
+
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.15s ease;
+
   min-width: 44px;
   min-height: 44px;
+
+  text-decoration: none;
+
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
 }
 
+
 .topbar__icon-btn:hover {
-  background-color: #25292e;
+  background: #25292e;
 }
+
+
+.topbar__icon-btn:active {
+  transform: scale(0.94);
+}
+
 
 .topbar__icon-btn:focus-visible {
   outline: 2px solid #4a9eff;
+
   outline-offset: 2px;
 }
+
 
 .topbar__bell-icon {
   width: calc(64px * var(--design-scale));
   height: calc(78px * var(--design-scale));
+
   display: block;
+
+  object-fit: contain;
+
+  position: relative;
+
+  z-index: 2;
+
+  transform-origin: 50% 10%;
 }
+
 
 .topbar__profile-icon {
   width: calc(78px * var(--design-scale));
   height: calc(78px * var(--design-scale));
+
   display: block;
+
+  object-fit: contain;
 }
 
-/* ── Responsive ───────────────────────────────────────────────────── */
+
+/* ==============================
+   NOTIFICATIONS
+   ============================== */
+
+.topbar__notifications {
+  position: relative;
+}
+
+
+/* ==============================
+   BELL ANIMATION
+   ============================== */
+
+.topbar__bell-button {
+  overflow: visible;
+}
+
+
+/*
+ * The bell itself rocks from side to side.
+ */
+.topbar__bell-button--ringing
+.topbar__bell-icon {
+  animation:
+    topbarBellRing
+    0.75s
+    cubic-bezier(
+      0.36,
+      0.07,
+      0.19,
+      0.97
+    );
+}
+
+
+/*
+ * Soft blue pulse behind the bell.
+ */
+.topbar__bell-glow {
+  position: absolute;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(91, 135, 214, 0.16);
+
+  opacity: 0;
+
+  transform: scale(0.55);
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+.topbar__bell-button--ringing
+.topbar__bell-glow {
+  animation:
+    topbarBellGlow
+    0.8s ease-out;
+}
+
+
+/*
+ * Give the notification badge a little
+ * bounce when the bell rings.
+ */
+.topbar__bell-button--ringing
+.topbar__notification-badge {
+  animation:
+    topbarBadgeBounce
+    0.55s
+    cubic-bezier(
+      0.34,
+      1.56,
+      0.64,
+      1
+    );
+}
+
+
+/* ==============================
+   UNREAD BADGE
+   ============================== */
+
+.topbar__notification-badge {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  min-width: 18px;
+  height: 18px;
+
+  padding: 0 4px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #0c1015;
+
+  border-radius: 999px;
+
+  background: #4f7bc5;
+
+  color: #ffffff;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  line-height: 1;
+
+  pointer-events: none;
+
+  z-index: 3;
+}
+
+
+/* ==============================
+   NOTIFICATION DROPDOWN
+   ============================== */
+
+.topbar__notification-menu {
+  position: absolute;
+
+  top: calc(100% + 15px);
+  right: -40px;
+
+  width: 400px;
+
+  max-height: 520px;
+
+  overflow: hidden;
+
+  background: #15181d;
+
+  border: 1px solid #303641;
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 18px 55px
+    rgba(0, 0, 0, 0.5);
+
+  z-index: 2000;
+
+  transform-origin: top right;
+
+  animation:
+    topbarNotificationOpen
+    0.22s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+    both;
+}
+
+
+/* ==============================
+   NOTIFICATION HEADER
+   ============================== */
+
+.topbar__notification-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 18px;
+
+  border-bottom: 1px solid #292e36;
+}
+
+
+.topbar__notification-header
+> div:first-child {
+  min-width: 0;
+}
+
+
+.topbar__notification-header
+> div:first-child
+> span {
+  color: #7298d8;
+
+  font-size: 8px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+
+.topbar__notification-header h3 {
+  margin: 5px 0 0;
+
+  color: #eef0f3;
+
+  font-size: 14px;
+}
+
+
+.topbar__notification-header-actions {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  flex-shrink: 0;
+}
+
+
+.topbar__notification-count {
+  min-width: 27px;
+
+  height: 27px;
+
+  padding: 0 7px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 999px;
+
+  background:
+    rgba(80, 122, 194, 0.15);
+
+  color: #82a8e7;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+
+/* ==============================
+   CLEAR ALL
+   ============================== */
+
+.topbar__clear-notifications {
+  padding: 6px 8px;
+
+  background: transparent;
+
+  border: 1px solid #343b45;
+
+  border-radius: 6px;
+
+  color: #89929f;
+
+  font-family: inherit;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+
+.topbar__clear-notifications:hover {
+  color: #e1e4e9;
+
+  border-color: #525d6b;
+
+  background: #20242a;
+}
+
+
+.topbar__clear-notifications:active {
+  transform: scale(0.95);
+}
+
+
+/* ==============================
+   NOTIFICATION LIST
+   ============================== */
+
+.topbar__notification-list {
+  max-height: 420px;
+
+  overflow-y: auto;
+}
+
+
+.topbar__notification-item {
+  position: relative;
+
+  display: flex;
+
+  gap: 12px;
+
+  padding: 16px 45px 16px 18px;
+
+  border-bottom: 1px solid #252a31;
+
+  transition:
+    background-color 0.15s ease;
+}
+
+
+.topbar__notification-item:last-child {
+  border-bottom: none;
+}
+
+
+.topbar__notification-item:hover {
+  background: #1c2026;
+}
+
+
+/* ==============================
+   AVATAR
+   ============================== */
+
+.topbar__notification-avatar {
+  width: 38px;
+
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border:
+    1px solid
+    rgba(81, 124, 198, 0.4);
+
+  border-radius: 50%;
+
+  background:
+    rgba(81, 124, 198, 0.12);
+
+  color: #44A3DB;
+
+  font-size: 9px;
+
+  font-weight: 800;
+}
+
+
+.topbar__notification-content {
+  min-width: 0;
+
+  flex: 1;
+}
+
+
+/* ==============================
+   NOTIFICATION TITLE
+   ============================== */
+
+.topbar__notification-title {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+
+.topbar__notification-title strong {
+  color: #e5e8ec;
+
+  font-size: 11px;
+}
+
+
+.topbar__notification-title span {
+  padding: 3px 5px;
+
+  border-radius: 4px;
+
+  background:
+    rgba(81, 124, 198, 0.14);
+
+  color: #44A3DB;
+
+  font-size: 6px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.7px;
+}
+
+
+/* ==============================
+   NOTIFICATION TEXT
+   ============================== */
+
+.topbar__notification-item p {
+  margin: 6px 0;
+
+  color: #a7adb7;
+
+  font-size: 10px;
+
+  line-height: 1.45;
+
+  overflow: hidden;
+
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+
+  -webkit-line-clamp: 2;
+}
+
+
+.topbar__notification-item small {
+  color: #676f7b;
+
+  font-size: 8px;
+}
+
+
+/* Image attachment */
+
+.topbar__notification-image-label {
+  width: fit-content;
+
+  margin: 6px 0;
+
+  padding: 4px 7px;
+
+  border-radius: 5px;
+
+  background:
+    rgba(81, 124, 198, 0.12);
+
+  color: #44A3DB;
+
+  font-size: 8px;
+
+  font-weight: 700;
+}
+
+
+/* ==============================
+   DELETE NOTIFICATION
+   ============================== */
+
+.topbar__delete-notification {
+  position: absolute;
+
+  top: 12px;
+  right: 12px;
+
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  background: transparent;
+
+  border: 1px solid transparent;
+
+  border-radius: 6px;
+
+  color: #68717e;
+
+  font-family: inherit;
+
+  font-size: 17px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+
+.topbar__delete-notification:hover {
+  color: #ee909b;
+
+  background:
+    rgba(201, 77, 91, 0.1);
+
+  border-color:
+    rgba(201, 77, 91, 0.25);
+}
+
+
+.topbar__delete-notification:active {
+  transform: scale(0.9);
+}
+
+
+/* ==============================
+   EMPTY STATE
+   ============================== */
+
+.topbar__notification-empty {
+  padding: 45px 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 6px;
+
+  text-align: center;
+}
+
+
+.topbar__notification-empty-icon {
+  width: 34px;
+  height: 34px;
+
+  margin-bottom: 5px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(81, 124, 198, 0.12);
+
+  color: #44A3DB;
+
+  font-size: 15px;
+
+  font-weight: 800;
+}
+
+
+.topbar__notification-empty strong {
+  color: #d7dbe1;
+
+  font-size: 11px;
+}
+
+
+.topbar__notification-empty span {
+  color: #6f7783;
+
+  font-size: 9px;
+}
+
+
+/* ==============================
+   SCROLLBAR
+   ============================== */
+
+.topbar__notification-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+
+.topbar__notification-list::-webkit-scrollbar-track {
+  background: #15181d;
+}
+
+
+.topbar__notification-list::-webkit-scrollbar-thumb {
+  background: #343a44;
+
+  border-radius: 999px;
+}
+
+
+.topbar__notification-list::-webkit-scrollbar-thumb:hover {
+  background: #414955;
+}
+
+
+/* ==============================
+   ANIMATIONS
+   ============================== */
+
+@keyframes topbarBellRing {
+  0% {
+    transform:
+      rotate(0deg)
+      scale(1);
+  }
+
+  12% {
+    transform:
+      rotate(16deg)
+      scale(1.05);
+  }
+
+  24% {
+    transform:
+      rotate(-14deg)
+      scale(1.05);
+  }
+
+  36% {
+    transform:
+      rotate(11deg)
+      scale(1.04);
+  }
+
+  48% {
+    transform:
+      rotate(-9deg)
+      scale(1.03);
+  }
+
+  60% {
+    transform:
+      rotate(6deg)
+      scale(1.02);
+  }
+
+  72% {
+    transform:
+      rotate(-4deg)
+      scale(1.01);
+  }
+
+  84% {
+    transform:
+      rotate(2deg)
+      scale(1);
+  }
+
+  100% {
+    transform:
+      rotate(0deg)
+      scale(1);
+  }
+}
+
+
+@keyframes topbarBellGlow {
+  0% {
+    opacity: 0;
+
+    transform: scale(0.55);
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+
+    transform: scale(1.45);
+  }
+}
+
+
+@keyframes topbarBadgeBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  35% {
+    transform: scale(1.35);
+  }
+
+  60% {
+    transform: scale(0.9);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+@keyframes topbarNotificationOpen {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-7px)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
 
 @media (max-width: 900px) {
   .topbar__logo-wordmark {
@@ -203,21 +1066,186 @@
   }
 
   .topbar__search {
-    margin: 0 calc(20px * var(--design-scale));
+    margin:
+      0
+      calc(
+        20px *
+        var(--design-scale)
+      );
   }
 }
 
+
 @media (max-width: 600px) {
   .topbar {
-    padding: 0 calc(16px * var(--design-scale));
+    padding:
+      0
+      calc(
+        16px *
+        var(--design-scale)
+      );
   }
 
   .topbar__search {
-    margin: 0 calc(12px * var(--design-scale));
+    margin:
+      0
+      calc(
+        12px *
+        var(--design-scale)
+      );
+
     max-width: none;
   }
 
   .topbar__right {
-    gap: calc(20px * var(--design-scale));
+    gap:
+      calc(
+        20px *
+        var(--design-scale)
+      );
   }
+
+  .topbar__notification-menu {
+    position: fixed;
+
+    top: 78px;
+    right: 12px;
+    left: 12px;
+
+    width: auto;
+
+    max-height:
+      calc(
+        100vh - 100px
+      );
+  }
+
+  .topbar__notification-list {
+    max-height:
+      calc(
+        100vh - 180px
+      );
+  }
+
+  .topbar__notification-header {
+    padding: 14px;
+  }
+}
+
+
+/* ==============================
+   REDUCED MOTION
+   ============================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar__bell-button--ringing
+  .topbar__bell-icon,
+
+  .topbar__bell-button--ringing
+  .topbar__bell-glow,
+
+  .topbar__bell-button--ringing
+  .topbar__notification-badge,
+
+  .topbar__notification-menu {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   SASEBOOK — SASE BLUE / NO PURPLE
+   Neutral black backgrounds + SASE navy/cyan accents
+   ========================================================= */
+:root {
+  --sase-navy: #001554;
+  --sase-blue: #44A3DB;
+  --sase-white: #FFFFFF;
+
+  /* Neutral backgrounds — intentionally no blue/purple tint */
+  --sase-bg: #0B0D10;
+  --sase-surface: #111318;
+  --sase-surface-light: #181B21;
+  --sase-card: #13161B;
+  --sase-card-hover: #191D24;
+
+  --sase-primary: #44A3DB;
+  --sase-primary-hover: #62B7E6;
+  --sase-primary-light: #8CCBEF;
+  --sase-primary-soft: rgba(68, 163, 219, 0.13);
+  --sase-primary-medium: rgba(68, 163, 219, 0.22);
+  --sase-primary-border: rgba(68, 163, 219, 0.42);
+
+  --sase-text: #FFFFFF;
+  --sase-text-secondary: #D5D9E0;
+  --sase-text-muted: #9299A5;
+  --sase-border: #292D35;
+  --sase-border-light: #363B45;
+
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+
+html, body, #root {
+  background: #0B0D10 !important;
+  color: #FFFFFF;
+}
+
+button, input, textarea, select {
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(68, 163, 219, 0.35);
+  color: #FFFFFF;
+}
+
+
+/* =========================================================
+   SASEBOOK SECTION EYEBROW ALIGNMENT FIX
+   Section eyebrows align exactly with the heading below.
+   Hero eyebrows are unaffected and may remain centered.
+   ========================================================= */
+
+/* Generic section header wrappers */
+.chapter-section-heading > div,
+.people-section-heading > div,
+.sponsors-section-heading > div,
+.explore-section-heading > div,
+.home-feed-heading > div,
+.home-section-header > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+
+/* Section-only eyebrow positioning */
+.chapter-section-heading .section-eyebrow,
+.people-section-heading .section-eyebrow,
+.sponsors-section-heading .section-eyebrow,
+.explore-section-heading .section-eyebrow,
+.home-feed-heading .home-eyebrow,
+.home-feed-heading .section-eyebrow,
+.home-section-header .home-eyebrow,
+.home-section-header .section-eyebrow {
+  width: fit-content !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  align-self: flex-start !important;
+  text-align: left !important;
+}
+
+/* Home feed: specifically undo any inherited centered eyebrow rule */
+.home-feed-heading .home-eyebrow,
+.home-feed-heading .section-eyebrow {
+  margin: 0 0 10px 0 !important;
+}
+
+/* Sponsor section: Featured aligns with Featured Sponsors */
+.sponsors-section-heading .section-eyebrow,
+.sponsor-section-heading .section-eyebrow,
+.featured-sponsors-header .section-eyebrow {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  align-self: flex-start !important;
+  text-align: left !important;
 }

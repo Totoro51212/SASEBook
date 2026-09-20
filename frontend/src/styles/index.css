@@ -4,7 +4,7 @@
   --bg: #fff;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
-  --accent: #aa3bff;
+  --accent: #44A3DB;
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
@@ -88,4 +88,166 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+
+/* =========================================================
+   SASEBOOK — SASE BLUE / NO PURPLE
+   Neutral black backgrounds + SASE navy/cyan accents
+   ========================================================= */
+:root {
+  --sase-navy: #001554;
+  --sase-blue: #44A3DB;
+  --sase-white: #FFFFFF;
+
+  /* Neutral backgrounds — intentionally no blue/purple tint */
+  --sase-bg: #0B0D10;
+  --sase-surface: #111318;
+  --sase-surface-light: #181B21;
+  --sase-card: #13161B;
+  --sase-card-hover: #191D24;
+
+  --sase-primary: #44A3DB;
+  --sase-primary-hover: #62B7E6;
+  --sase-primary-light: #8CCBEF;
+  --sase-primary-soft: rgba(68, 163, 219, 0.13);
+  --sase-primary-medium: rgba(68, 163, 219, 0.22);
+  --sase-primary-border: rgba(68, 163, 219, 0.42);
+
+  --sase-text: #FFFFFF;
+  --sase-text-secondary: #D5D9E0;
+  --sase-text-muted: #9299A5;
+  --sase-border: #292D35;
+  --sase-border-light: #363B45;
+
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+
+html, body, #root {
+  background: #0B0D10 !important;
+  color: #FFFFFF;
+}
+
+button, input, textarea, select {
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(68, 163, 219, 0.35);
+  color: #FFFFFF;
+}
+
+
+/* =========================================================
+   SASEBOOK TYPOGRAPHY SCALE
+   Consistent page hierarchy across the entire app
+   ========================================================= */
+:root {
+  --sase-page-title: clamp(44px, 4.4vw, 68px);
+  --sase-section-title: clamp(30px, 2.5vw, 42px);
+  --sase-page-copy: clamp(16px, 1.25vw, 20px);
+  --sase-eyebrow: 13px;
+}
+
+h1, h2, h3, p {
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+
+/* Common hero titles */
+.home-hero h1,
+.people-hero h1,
+.chapters-hero h1,
+.explore-hero h1,
+.sponsors-hero h1,
+.profile-hero h1 {
+  font-size: var(--sase-page-title) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.035em !important;
+  font-weight: 700 !important;
+}
+
+/* Common hero descriptions */
+.home-hero > p,
+.people-hero > p,
+.chapters-hero > p,
+.explore-hero > p,
+.sponsors-hero > p,
+.profile-hero > p {
+  font-size: var(--sase-page-copy) !important;
+  line-height: 1.65 !important;
+}
+
+/* Common eyebrow labels */
+.home-eyebrow,
+.people-eyebrow,
+.chapters-eyebrow,
+.explore-eyebrow,
+.sponsors-eyebrow,
+.profile-eyebrow,
+.section-eyebrow {
+  font-size: var(--sase-eyebrow) !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.20em !important;
+  font-weight: 700 !important;
+  color: #44A3DB !important;
+}
+
+@media (max-width: 700px) {
+  :root {
+    --sase-page-title: 40px;
+    --sase-section-title: 30px;
+    --sase-page-copy: 16px;
+  }
+}
+
+
+/* =========================================================
+   SASEBOOK SECTION EYEBROW ALIGNMENT FIX
+   Section eyebrows align exactly with the heading below.
+   Hero eyebrows are unaffected and may remain centered.
+   ========================================================= */
+
+/* Generic section header wrappers */
+.chapter-section-heading > div,
+.people-section-heading > div,
+.sponsors-section-heading > div,
+.explore-section-heading > div,
+.home-feed-heading > div,
+.home-section-header > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+
+/* Section-only eyebrow positioning */
+.chapter-section-heading .section-eyebrow,
+.people-section-heading .section-eyebrow,
+.sponsors-section-heading .section-eyebrow,
+.explore-section-heading .section-eyebrow,
+.home-feed-heading .home-eyebrow,
+.home-feed-heading .section-eyebrow,
+.home-section-header .home-eyebrow,
+.home-section-header .section-eyebrow {
+  width: fit-content !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  align-self: flex-start !important;
+  text-align: left !important;
+}
+
+/* Home feed: specifically undo any inherited centered eyebrow rule */
+.home-feed-heading .home-eyebrow,
+.home-feed-heading .section-eyebrow {
+  margin: 0 0 10px 0 !important;
+}
+
+/* Sponsor section: Featured aligns with Featured Sponsors */
+.sponsors-section-heading .section-eyebrow,
+.sponsor-section-heading .section-eyebrow,
+.featured-sponsors-header .section-eyebrow {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  align-self: flex-start !important;
+  text-align: left !important;
 }
