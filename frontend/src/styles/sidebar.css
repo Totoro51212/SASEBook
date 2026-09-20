@@ -1,0 +1,214 @@
+/* ── SASEBook Side Bar Drawer ─────────────────────────────────────── */
+
+:root {
+  --design-scale: 0.5;
+}
+
+/* ── Backdrop Overlay ─────────────────────────────────────────────── */
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 990;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-backdrop--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Sidebar Container ────────────────────────────────────────────── */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: calc(144px * var(--design-scale));
+  max-width: 85vw;
+  background-color: #0c1015;
+  border-right: 1px solid #1a1f26;
+  z-index: 995;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: calc(184px * var(--design-scale)) calc(12px * var(--design-scale)) calc(36px * var(--design-scale));
+  box-sizing: border-box;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  transform: translateX(0);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sidebar--open {
+  width: calc(486px * var(--design-scale));
+  padding: calc(184px * var(--design-scale)) calc(14px * var(--design-scale)) calc(36px * var(--design-scale));
+  box-shadow: calc(16px * var(--design-scale)) 0 calc(36px * var(--design-scale)) rgba(0, 0, 0, 0.7);
+  overflow-y: auto;
+}
+
+.sidebar--scrolled {
+  padding-top: calc(36px * var(--design-scale));
+}
+
+.sidebar--open.sidebar--scrolled {
+  padding-top: calc(36px * var(--design-scale));
+}
+
+/* ── Navigation List ──────────────────────────────────────────────── */
+
+.sidebar__nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(20px * var(--design-scale));
+}
+
+.sidebar__item {
+  width: 100%;
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(129px * var(--design-scale));
+  padding: 0;
+  border-radius: calc(28px * var(--design-scale));
+  text-decoration: none;
+  color: #f0f2f5;
+  gap: 0;
+  transition: background-color 0.18s ease, transform 0.12s ease, padding 0.3s ease;
+  user-select: none;
+  overflow: hidden;
+}
+
+.sidebar--open .sidebar__link {
+  justify-content: flex-start;
+  padding: 0 calc(34px * var(--design-scale));
+  gap: calc(26px * var(--design-scale));
+}
+
+.sidebar__link:hover {
+  background-color: rgba(37, 41, 46, 0.7);
+}
+
+.sidebar__link:focus-visible {
+  outline: 2px solid #4a9eff;
+  outline-offset: 2px;
+}
+
+/* Active item matches box1 in PSD concept */
+.sidebar__link--active {
+  background-color: #25292e;
+}
+
+.sidebar__link--active:hover {
+  background-color: #2e333a;
+}
+
+/* ── Icon & Label ─────────────────────────────────────────────────── */
+
+.sidebar__icon-container {
+  width: calc(70px * var(--design-scale));
+  height: calc(65px * var(--design-scale));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sidebar__icon {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.sidebar__label {
+  font-size: calc(44px * var(--design-scale));
+  font-weight: 700;
+  color: #f0f2f5;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar--open .sidebar__label {
+  display: block;
+  opacity: 1;
+}
+
+/* ── Footer / Terms of Service ────────────────────────────────────── */
+
+.sidebar__footer {
+  padding-top: calc(40px * var(--design-scale));
+  padding-left: calc(34px * var(--design-scale));
+  padding-bottom: calc(10px * var(--design-scale));
+  margin-top: auto;
+  display: none;
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar--open .sidebar__footer {
+  display: block;
+  opacity: 1;
+}
+
+.sidebar__tos {
+  color: #8b929d;
+  font-size: calc(24px * var(--design-scale));
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.sidebar__tos:hover {
+  color: #f0f2f5;
+}
+
+/* ── Main Content Offset ─────────────────────────────────────────── */
+
+.main-content {
+  padding-left: calc(144px * var(--design-scale));
+  transition: padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  min-height: calc(100vh - calc(148px * var(--design-scale)));
+}
+
+/* ── Mobile Tweaks ────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 64px;
+    padding: 80px 8px 16px;
+  }
+
+  .sidebar--scrolled,
+  .sidebar--open.sidebar--scrolled {
+    padding-top: 16px;
+  }
+
+  .sidebar--open {
+    width: 280px;
+    max-width: 85vw;
+    padding: 80px 14px 24px;
+  }
+
+  .main-content {
+    padding-left: 64px;
+  }
+}
