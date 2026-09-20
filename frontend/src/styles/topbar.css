@@ -422,13 +422,13 @@
 .topbar__notification-badge {
   position: absolute;
 
-  top: 0;
-  right: 0;
+  top: -5px;
+  right: -6px;
 
-  min-width: 18px;
-  height: 18px;
+  min-width: 28px;
+  height: 28px;
 
-  padding: 0 4px;
+  padding: 0 7px;
 
   box-sizing: border-box;
 
@@ -444,7 +444,7 @@
 
   color: #ffffff;
 
-  font-size: 8px;
+  font-size: 12px;
 
   font-weight: 800;
 
