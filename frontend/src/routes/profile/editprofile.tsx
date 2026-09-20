@@ -1,9 +1,13 @@
+import { useState, type ChangeEvent } from "react";
+
+
 type Profile = {
   fullName: string;
   username: string;
   password: string;
   major: string;
   bio: string;
+  affiliation: string;
   interests: string;
 };
 
@@ -15,13 +19,15 @@ type AprofileProps = {
   onSave: () => void;
 };
 
-export default function Aprofile({
+export default function Editprofile({
   profile,
   hasProfile,
   onEdit,
   onChange,
   onSave,
-}: AprofileProps) {
+}: AprofileProps) 
+
+{
   return (
     <>
       {hasProfile ? (
@@ -64,8 +70,9 @@ export default function Aprofile({
               <p className="profile-label">Welcome</p>
               <h1 className="profile-name">Create your profile</h1>
             </div>
+            <PfpButton />
           </div>
-
+          
           <div className="profile-form-grid">
             <label className="profile-field">
               <span>Full Name</span>
@@ -122,6 +129,29 @@ export default function Aprofile({
             </label>
           </div>
 
+          <div className="profile-checkbox-group">
+            <span className="profile-checkbox-label">I am a ...</span>
+            <div className="profile-checkbox-row" aria-label="Profile type">
+              {[
+                "Student",
+                "Chapter",
+                "Sponsor/Recruiter",
+                "Miscellaneous"
+              ].map((tag) => (
+                <label key={tag} className="profile-checkbox-item">
+                  <input
+                    type="radio"
+                    name="profile-type"
+                    value={tag}
+                    checked={profile.affiliation === tag}
+                    onChange={(event) => onChange("affiliation", event.target.value)}
+                  />
+                  <span>{tag}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
           <button className="profile-primary-button" onClick={onSave}>
             Save profile
           </button>
@@ -131,3 +161,27 @@ export default function Aprofile({
   );
 }
 
+
+
+export function PfpButton() {
+  const [file, setFile] = useState<string | null>(null);
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        console.log(e.target.files);
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(URL.createObjectURL(selectedFile));
+    }
+    }
+
+    return (
+        <label className="pfp-circle">
+          {file ? (
+              <img src={file} alt="Uploaded preview" />
+          ) : (
+              <span>+</span>
+          )}
+          <input type="file" onChange={handleChange} />
+        </label>
+    );
+}
