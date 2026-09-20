@@ -232,7 +232,7 @@ For regional leadership:
 
 ---
 
-# Project Stack 🛠️
+# Project Stack
 
 ## Frontend
 
@@ -251,7 +251,7 @@ Additional technologies will be documented here as they are added during develop
 
 ---
 
-# Installation and Development 💻
+# Installation and Development
 
 ## Prerequisites
 
@@ -346,34 +346,7 @@ Our goal is to create a functional prototype that addresses a real challenge wit
 
 ---
 
-# Project Stack :tools:
-
-**Frontend**
-*   **Framework:** React (TypeScript)
-*   **Build Tool:** Vite
-*   **Styling:** CSS
-*   **Routing:** React Router
-
-**Backend & Data**
-*   Supabase
-
-**Tools & Workflow**
-*   **Version Control:** Git & GitHub
-*   **Package Manager:** npm
-*   **Design/Prototyping:** Adobe Photoshop, Whiteboard
-*   **Hosting/Deployment:** GitHub Pages
-
----
-
-# Installation and Development :computer:
-
-## Prerequisites
-
-- [Node.js (version 18 or higher)](https://nodejs.org/en/download)
-- npm package manager
-- Git
-
-# Team - The Rice Cookers :rice:
+# Team - The Rice Cookers
 
 | Name | Role | Links |
 | :--- | :--- | :--- |
