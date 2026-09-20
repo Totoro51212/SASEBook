@@ -281,3 +281,23 @@ SELECT * FROM chapters;
 SELECT * FROM profiles;
 SELECT * FROM events;
 SELECT * FROM sponsors;
+
+-- ============================================================
+-- 6. POSTS (Required for Feed UI testing)
+-- ============================================================
+
+INSERT INTO posts
+(profile_id, content)
+VALUES
+(
+    (SELECT id FROM profiles WHERE email = 'kristian.demo@sasebook.test'),
+    'Excited to start building our hackathon project! Let me know if anyone wants to team up.'
+),
+(
+    (SELECT id FROM profiles WHERE email = 'jamie.lee@sasebook.test'),
+    'Does anyone have a good template for a React Native login screen?'
+),
+(
+    (SELECT id FROM profiles WHERE email = 'emily.tran@sasebook.test'),
+    'Just registered for the Industry Networking Night. Looking forward to meeting the recruiters from Lockheed Martin.'
+);
