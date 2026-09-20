@@ -7,6 +7,7 @@ type Profile = {
   password: string;
   major: string;
   bio: string;
+  affiliation: string;
   interests: string;
 };
 
@@ -24,7 +25,9 @@ export default function Editprofile({
   onEdit,
   onChange,
   onSave,
-}: AprofileProps) {
+}: AprofileProps) 
+
+{
   return (
     <>
       {hasProfile ? (
@@ -128,7 +131,7 @@ export default function Editprofile({
 
           <div className="profile-checkbox-group">
             <span className="profile-checkbox-label">I am a ...</span>
-            <div className="profile-checkbox-row" aria-label="Profile interests">
+            <div className="profile-checkbox-row" aria-label="Profile type">
               {[
                 "Student",
                 "Chapter",
@@ -136,7 +139,13 @@ export default function Editprofile({
                 "Miscellaneous"
               ].map((tag) => (
                 <label key={tag} className="profile-checkbox-item">
-                  <input type="checkbox" />
+                  <input
+                    type="radio"
+                    name="profile-type"
+                    value={tag}
+                    checked={profile.affiliation === tag}
+                    onChange={(event) => onChange("affiliation", event.target.value)}
+                  />
                   <span>{tag}</span>
                 </label>
               ))}
