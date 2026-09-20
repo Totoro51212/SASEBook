@@ -446,27 +446,7 @@ export default function Explore({
 
 
   function openChapterPage(chapter: Chapter) {
-
-    /*
-
-     * Chapters currently lives at /chapters.
-
-     * We also include the chapter slug in the URL so the
-
-     * destination can use it later for direct chapter opening.
-
-     */
-
-    navigate(
-
-      `/chapters?chapter=${encodeURIComponent(
-
-        chapter.slug
-
-      )}`
-
-    );
-
+    navigate(`/chapters/${encodeURIComponent(chapter.slug)}`);
   }
 
 
