@@ -175,11 +175,21 @@ export default function Routing() {
 
             <Route
               path="/people"
-              element={<People profileData={profiles} />}
+              element={
+                <People
+                  profileData={profiles}
+                  chapterData={chapters}
+                />
+              }
             />
             <Route
               path="/people/:profileId"
-              element={<People profileData={profiles} />}
+              element={
+                <People
+                  profileData={profiles}
+                  chapterData={chapters}
+                />
+              }
             />
 
             <Route
