@@ -1,15 +1,13 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "../styles/people.css";
-import type { DirectoryProfile, Profile } from "../types";
-
-type Person = DirectoryProfile;
+import type { Profile } from "../types";
 
 type PeopleProps = {
   profileData: Profile[];
 };
 
-const demoPeople: DirectoryProfile[] = [
+const demoPeople: Profile<string[]>[] = [
   {
     id: 1,
     name: "Kristian Nguyen",
@@ -147,7 +145,7 @@ const demoPeople: DirectoryProfile[] = [
   },
 ];
 
-function toDirectoryProfile(profile: Profile): DirectoryProfile {
+function toProfileRecord(profile: Profile): Profile<string[]> {
   const name = profile.name?.trim() || "SASE Member";
   const nameParts = name.split(/\s+/);
   const initials = nameParts
@@ -193,7 +191,7 @@ export default function People({ profileData }: PeopleProps) {
     ? [...profileData, savedProfile]
     : profileData;
   const people = availableProfiles.length > 0
-    ? availableProfiles.map(toDirectoryProfile)
+    ? availableProfiles.map(toProfileRecord)
     : demoPeople;
   const navigate = useNavigate();
   const location = useLocation();
@@ -224,7 +222,7 @@ export default function People({ profileData }: PeopleProps) {
     role: "officer",
   };
 
-  const canViewChapter = (person: Person) => {
+  const canViewChapter = (person: Profile<string[]>) => {
     if (person.chapterVisibility === "everyone") {
       return true;
     }
