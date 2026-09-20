@@ -4,7 +4,7 @@
     1080
   ],
   "pieces": {
-    "hamburger.png": {
+    "hamburger.svg": {
       "x": 36,
       "y": 56,
       "w": 65,
@@ -22,19 +22,19 @@
       "w": 481,
       "h": 70
     },
-    "search-icon.png": {
+    "search-icon.svg": {
       "x": 829,
       "y": 41,
       "w": 58,
       "h": 59
     },
-    "bell.png": {
+    "bell.svg": {
       "x": 1702,
       "y": 35,
       "w": 64,
       "h": 78
     },
-    "profile.png": {
+    "profile.svg": {
       "x": 1812,
       "y": 37,
       "w": 78,

@@ -7,6 +7,9 @@ import Myprofile from './routes/profile/myprofile'
 import Topbar from './components/topbar'
 import Sidebar from './components/sidebar'
 import Sponsors from './routes/sponsors'
+
+import { useGeneralData } from './hooks/useData'
+
 import {
   Routes,
   Route,
@@ -47,6 +50,12 @@ const starterPosts: FeedPost[] = [
 ]
 
 export default function Routing() {
+  const {
+    profiles,
+    chapters,
+    sponsors,
+  } = useGeneralData();
+
   const [sidebarOpen, setSidebarOpen] =
     useState(false)
 
@@ -120,6 +129,7 @@ export default function Routing() {
    */
   useEffect(() => {
     window.scrollTo(0, 0)
+    setNotificationsOpen(false)
   }, [pathname])
 
   /*
@@ -334,13 +344,14 @@ export default function Routing() {
 
       {/* PAGE CONTENT */}
       <main className="main-content">
-        <Routes>
+        <div key={pathname} className="page-transition">
+          <Routes>
 
           {/* HOME */}
           <Route
             path="/"
             element={
-              <Home
+                <Home
                 posts={posts}
                 isOfficer={isOfficer}
                 onCreatePost={
@@ -356,7 +367,7 @@ export default function Routing() {
           {/* PEOPLE */}
           <Route
             path="/people"
-            element={<People />}
+            element={<People profileData={profiles} />}
           />
 
           {/* CHAPTERS */}
@@ -364,6 +375,7 @@ export default function Routing() {
             path="/chapters"
             element={
               <Chapters
+                chapterData={chapters}
                 posts={posts}
                 onDeletePost={
                   handleDeletePost
@@ -375,22 +387,23 @@ export default function Routing() {
           {/* EXPLORE */}
           <Route
             path="/explore"
-            element={<Explore />}
+            element={<Explore exploreData={[]} />}
           />
 
           {/* PROFILE */}
           <Route
             path="/myprofile"
-            element={<Myprofile />}
+            element={<Myprofile profileData={profiles} />}
           />
 
           {/* SPONSORS */}
           <Route
             path="/sponsors"
-            element={<Sponsors />}
+            element={<Sponsors sponsorData={sponsors} />}
           />
 
-        </Routes>
+          </Routes>
+        </div>
       </main>
     </>
   )

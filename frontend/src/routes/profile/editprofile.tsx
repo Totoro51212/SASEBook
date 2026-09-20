@@ -1,28 +1,19 @@
 import { useState, type ChangeEvent } from "react";
-
-
-type Profile = {
-  fullName: string;
-  firstName: string;
-  lastName: string;
-  username: string;
-  password: string;
-  major: string;
-  bio: string;
-  affiliation: string;
-  interests: string;
-  position: string;
-  saseChapter: string;
-};
+import type { Profile } from "../../types";
 
 type AprofileProps = {
-  profile: Profile;
+  profile: EditableProfile;
   hasProfile: boolean;
   onEdit: () => void;
-  onChange: (field: keyof Profile, value: string) => void;
+  onChange: (field: keyof Profile<string>, value: string) => void;
   onSave: () => void;
   onBack?: () => void;
 };
+
+type EditableProfile = Profile<string> & Required<Pick<Profile<string>,
+  "firstName" | "lastName" | "username" | "password" |
+  "affiliation" | "position" | "saseChapter"
+>>;
 
 export default function Editprofile({
   profile,
@@ -73,16 +64,6 @@ export default function Editprofile({
 
   return (
     <>
-      {onBack && (
-        <button
-          type="button"
-          className="profile-back-button"
-          onClick={onBack}
-        >
-          ← Back
-        </button>
-      )}
-
       <div className="profile-header-row">
         <div>
           <p className="profile-label">Welcome</p>

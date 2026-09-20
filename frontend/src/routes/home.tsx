@@ -1,16 +1,8 @@
 import { useRef, useState, type ChangeEvent } from 'react'
 import '../styles/home.css'
+import type { FeedPost } from '../types'
 
-export type FeedPost = {
-  id: number
-  author: string
-  chapter: string
-  content: string
-  createdAt: string
-  isOfficerPost: boolean
-  imageUrl?: string
-  canDelete?: boolean
-}
+export type { FeedPost } from '../types'
 
 interface HomeProps {
   posts: FeedPost[]
@@ -95,7 +87,7 @@ export default function Home({
           </p>
 
           <h1>
-            Welcome back, Kristian.
+            Welcome Back
           </h1>
 
           <p className="home-welcome-text">
