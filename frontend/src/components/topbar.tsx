@@ -1,6 +1,12 @@
 import '../styles/topbar.css'
 import { Link } from 'react-router-dom'
-import { type FormEvent } from 'react'
+import {
+  type FormEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import type { FeedPost } from '../routes/home'
 
 interface TopbarProps {
   sidebarOpen?: boolean
@@ -8,6 +14,16 @@ interface TopbarProps {
   onSearch?: (query: string) => void
   onNotificationsClick?: () => void
   onProfileClick?: () => void
+
+  notifications?: FeedPost[]
+  notificationsOpen?: boolean
+  unreadCount?: number
+
+  onDeleteNotification?: (
+    notificationId: number
+  ) => void
+
+  onClearNotifications?: () => void
 }
 
 export default function Topbar({
@@ -16,53 +32,138 @@ export default function Topbar({
   onSearch,
   onNotificationsClick,
   onProfileClick,
+  notifications = [],
+  notificationsOpen = false,
+  unreadCount = 0,
+  onDeleteNotification,
+  onClearNotifications,
 }: TopbarProps) {
+  const [bellRinging, setBellRinging] =
+    useState(false)
+
+  const previousUnreadCount =
+    useRef(unreadCount)
+
+  const ringTimeout =
+    useRef<number | null>(null)
+
+  /*
+   * Plays the bell animation.
+   *
+   * We briefly remove the animation first so
+   * repeated clicks can restart it.
+   */
+  function ringBell() {
+    if (ringTimeout.current !== null) {
+      window.clearTimeout(
+        ringTimeout.current
+      )
+    }
+
+    setBellRinging(false)
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setBellRinging(true)
+
+        ringTimeout.current =
+          window.setTimeout(() => {
+            setBellRinging(false)
+          }, 850)
+      })
+    })
+  }
+
+  /*
+   * Ring automatically whenever the unread
+   * notification count increases.
+   */
+  useEffect(() => {
+    if (
+      unreadCount >
+      previousUnreadCount.current
+    ) {
+      ringBell()
+    }
+
+    previousUnreadCount.current =
+      unreadCount
+  }, [unreadCount])
+
+  /*
+   * Clean up the timeout if Topbar unmounts.
+   */
+  useEffect(() => {
+    return () => {
+      if (ringTimeout.current !== null) {
+        window.clearTimeout(
+          ringTimeout.current
+        )
+      }
+    }
+  }, [])
+
   function handleMenuClick() {
     if (onMenuClick) {
       onMenuClick()
-    } else {
-      console.log('[Topbar] Menu clicked – no handler attached')
     }
   }
-  function handleSearchSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const form = e.currentTarget
-    const input = form.elements.namedItem('search') as HTMLInputElement
+
+  function handleSearchSubmit(
+    event: FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault()
+
+    const form = event.currentTarget
+
+    const input =
+      form.elements.namedItem(
+        'search'
+      ) as HTMLInputElement
+
     const query = input.value.trim()
-    if (query) {
-      if (onSearch) {
-        onSearch(query)
-      } else {
-        console.log('[Topbar] Search submitted:', query)
-      }
+
+    if (query && onSearch) {
+      onSearch(query)
     }
   }
 
   function handleNotificationsClick() {
+    /*
+     * Ring every time the user presses
+     * the notification bell.
+     */
+    ringBell()
+
     if (onNotificationsClick) {
       onNotificationsClick()
-    } else {
-      console.log('[Topbar] Notifications clicked – no handler attached')
     }
   }
 
   function handleProfileClick() {
     if (onProfileClick) {
       onProfileClick()
-    } else {
-      console.log('[Topbar] Profile clicked – no handler attached')
     }
   }
 
   return (
     <header className="topbar">
-      {/* ── Left cluster ────────────────────────────────── */}
+
+      {/* LEFT SIDE */}
       <div className="topbar__left">
-        {/* Hamburger */}
+
         <button
-          className={`topbar__hamburger ${sidebarOpen ? 'topbar__hamburger--active' : ''}`}
+          className={`topbar__hamburger ${
+            sidebarOpen
+              ? 'topbar__hamburger--active'
+              : ''
+          }`}
           onClick={handleMenuClick}
-          aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+          aria-label={
+            sidebarOpen
+              ? 'Close menu'
+              : 'Open menu'
+          }
           aria-expanded={sidebarOpen}
           type="button"
         >
@@ -73,23 +174,29 @@ export default function Topbar({
           />
         </button>
 
-        {/* Logo: icon + wordmark → home link */}
-        <Link to="/" className="topbar__logo-link">
+        <Link
+          to="/"
+          className="topbar__logo-link"
+        >
           <img
             className="topbar__logo-icon"
             src="/topbar/logo-icon.png"
             alt="SASEBook icon"
           />
+
           <img
             className="topbar__logo-wordmark"
             src="/topbar/logo-wordmark.png"
             alt="SASEBook"
           />
         </Link>
+
       </div>
 
-      {/* ── Search bar ──────────────────────────────────── */}
+
+      {/* SEARCH */}
       <div className="topbar__search">
+
         <form
           role="search"
           className="topbar__search-form"
@@ -100,6 +207,7 @@ export default function Topbar({
             src="/topbar/search-icon.png"
             alt=""
           />
+
           <input
             className="topbar__search-input"
             type="search"
@@ -108,25 +216,204 @@ export default function Topbar({
             autoComplete="off"
           />
         </form>
+
       </div>
 
-      {/* ── Right cluster ───────────────────────────────── */}
-      <div className="topbar__right">
-        {/* Bell */}
-        <button
-          className="topbar__icon-btn"
-          onClick={handleNotificationsClick}
-          aria-label="Notifications"
-          type="button"
-        >
-          <img
-            className="topbar__bell-icon"
-            src="/topbar/bell.png"
-            alt=""
-          />
-        </button>
 
-        {/* Profile */}
+      {/* RIGHT SIDE */}
+      <div className="topbar__right">
+
+        <div className="topbar__notifications">
+
+          {/* BELL */}
+          <button
+            className={`topbar__icon-btn topbar__bell-button ${
+              bellRinging
+                ? 'topbar__bell-button--ringing'
+                : ''
+            }`}
+            onClick={
+              handleNotificationsClick
+            }
+            aria-label="Notifications"
+            aria-expanded={
+              notificationsOpen
+            }
+            type="button"
+          >
+
+            <span className="topbar__bell-glow" />
+
+            <img
+              className="topbar__bell-icon"
+              src="/topbar/bell.png"
+              alt=""
+            />
+
+            {unreadCount > 0 && (
+              <span className="topbar__notification-badge">
+                {unreadCount > 9
+                  ? '9+'
+                  : unreadCount}
+              </span>
+            )}
+
+          </button>
+
+
+          {/* DROPDOWN */}
+          {notificationsOpen && (
+            <div className="topbar__notification-menu">
+
+              {/* HEADER */}
+              <div className="topbar__notification-header">
+
+                <div>
+                  <span>
+                    NOTIFICATIONS
+                  </span>
+
+                  <h3>
+                    Recent announcements
+                  </h3>
+                </div>
+
+                <div className="topbar__notification-header-actions">
+
+                  <span className="topbar__notification-count">
+                    {notifications.length}
+                  </span>
+
+                  {notifications.length > 0 && (
+                    <button
+                      className="topbar__clear-notifications"
+                      type="button"
+                      onClick={
+                        onClearNotifications
+                      }
+                    >
+                      Clear all
+                    </button>
+                  )}
+
+                </div>
+
+              </div>
+
+
+              {/* LIST */}
+              <div className="topbar__notification-list">
+
+                {notifications.length === 0 ? (
+
+                  <div className="topbar__notification-empty">
+
+                    <div className="topbar__notification-empty-icon">
+                      ✓
+                    </div>
+
+                    <strong>
+                      You're all caught up
+                    </strong>
+
+                    <span>
+                      No notifications to show.
+                    </span>
+
+                  </div>
+
+                ) : (
+
+                  notifications
+                    .slice(0, 10)
+                    .map((post) => (
+
+                      <div
+                        className="topbar__notification-item"
+                        key={post.id}
+                      >
+
+                        <div className="topbar__notification-avatar">
+                          {post.chapter
+                            .split(' ')
+                            .map(
+                              (word) =>
+                                word[0]
+                            )
+                            .slice(0, 2)
+                            .join('')}
+                        </div>
+
+
+                        <div className="topbar__notification-content">
+
+                          <div className="topbar__notification-title">
+
+                            <strong>
+                              {post.author}
+                            </strong>
+
+                            {post.isOfficerPost && (
+                              <span>
+                                OFFICER
+                              </span>
+                            )}
+
+                          </div>
+
+
+                          {post.content && (
+                            <p>
+                              {post.content}
+                            </p>
+                          )}
+
+
+                          {post.imageUrl && (
+                            <div className="topbar__notification-image-label">
+                              🖼 Image attached
+                            </div>
+                          )}
+
+
+                          <small>
+                            {post.chapter}
+                            {' • '}
+                            {post.createdAt}
+                          </small>
+
+                        </div>
+
+
+                        <button
+                          className="topbar__delete-notification"
+                          type="button"
+                          aria-label="Delete notification"
+                          title="Delete notification"
+                          onClick={() =>
+                            onDeleteNotification?.(
+                              post.id
+                            )
+                          }
+                        >
+                          ×
+                        </button>
+
+                      </div>
+
+                    ))
+
+                )}
+
+              </div>
+
+            </div>
+          )}
+
+        </div>
+
+
+        {/* PROFILE */}
         <Link
           to="/myprofile"
           className="topbar__icon-btn"
@@ -139,7 +426,9 @@ export default function Topbar({
             alt=""
           />
         </Link>
+
       </div>
+
     </header>
   )
 }

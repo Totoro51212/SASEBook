@@ -1,0 +1,1760 @@
+/* ==============================
+   HOME PAGE
+   ============================== */
+
+.home-page {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at 50% -150px,
+      rgba(77, 111, 177, 0.08),
+      transparent 420px
+    ),
+    #15171c;
+
+  color: #f4f6fa;
+
+  font-family:
+    "Montserrat",
+    system-ui,
+    sans-serif;
+}
+
+.home-container {
+  width: 100%;
+  max-width: 1050px;
+
+  margin: 0 auto;
+
+  padding: 48px 30px 90px;
+
+  box-sizing: border-box;
+}
+
+
+/* ==============================
+   PAGE ENTRANCE
+   ============================== */
+
+.home-welcome {
+  max-width: 760px;
+
+  margin: 0 auto 42px;
+
+  text-align: center;
+
+  animation: homeFadeUp 0.55s ease-out both;
+}
+
+.home-officer-panel {
+  animation:
+    homeFadeUp 0.55s ease-out 0.08s both;
+}
+
+.home-feed-section {
+  animation:
+    homeFadeUp 0.55s ease-out 0.16s both;
+}
+
+
+/* ==============================
+   WELCOME
+   ============================== */
+
+.home-eyebrow {
+  margin: 0 0 10px;
+
+  color: #789ee2;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.home-welcome h1 {
+  margin: 0;
+
+  color: #f5f6f8;
+
+  font-size: clamp(36px, 4vw, 52px);
+
+  font-weight: 700;
+
+  line-height: 1.1;
+
+  letter-spacing: -1.6px;
+}
+
+.home-welcome-text {
+  max-width: 650px;
+
+  margin: 14px auto 0;
+
+  color: #8992a2;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* ==============================
+   OFFICER PANEL
+   ============================== */
+
+.home-officer-panel {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  flex-wrap: wrap;
+
+  gap: 20px;
+
+  margin-bottom: 52px;
+
+  padding: 20px 22px;
+
+  border: 1px solid #303640;
+
+  border-radius: 12px;
+
+  background: #1a1d22;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.home-officer-panel:hover {
+  border-color: #3a4554;
+
+  box-shadow:
+    0 8px 30px
+    rgba(0, 0, 0, 0.14);
+}
+
+.home-officer-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.home-officer-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid #405477;
+
+  border-radius: 10px;
+
+  background: #202837;
+
+  color: #8cafec;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.home-officer-panel:hover
+.home-officer-icon {
+  transform: scale(1.04);
+
+  background: #242e40;
+}
+
+.home-officer-title-row {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 9px;
+}
+
+.home-officer-title-row h2 {
+  margin: 0;
+
+  color: #f0f2f5;
+
+  font-size: 15px;
+
+  font-weight: 700;
+}
+
+.home-officer-info p {
+  margin: 5px 0 0;
+
+  color: #79828f;
+
+  font-size: 10px;
+}
+
+.home-officer-badge,
+.home-officer-tag {
+  display: inline-flex;
+
+  align-items: center;
+
+  width: fit-content;
+
+  border: 1px solid
+    rgba(91, 135, 214, 0.4);
+
+  border-radius: 4px;
+
+  background:
+    rgba(91, 135, 214, 0.1);
+
+  color: #82a9ed;
+
+  font-size: 7px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+}
+
+.home-officer-badge {
+  padding: 4px 6px;
+}
+
+
+/* ==============================
+   CREATE BUTTON
+   ============================== */
+
+.home-create-button {
+  flex-shrink: 0;
+
+  padding: 10px 16px;
+
+  border: 1px solid #5a7dbb;
+
+  border-radius: 7px;
+
+  background: #4f70ab;
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.home-create-button:hover {
+  background: #5d80bd;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 6px 18px
+    rgba(65, 105, 170, 0.25);
+}
+
+.home-create-button:active {
+  transform: translateY(0) scale(0.97);
+
+  box-shadow: none;
+}
+
+
+/* ==============================
+   POST COMPOSER
+   ============================== */
+
+.home-composer {
+  width: 100%;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #2c3139;
+
+  transform-origin: top center;
+
+  animation:
+    homeComposerOpen
+    0.3s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+.home-composer-author {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 12px;
+}
+
+.home-composer-author > div:last-child {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.home-composer-author strong {
+  color: #e6e9ed;
+
+  font-size: 11px;
+}
+
+.home-composer-author span {
+  color: #747d89;
+
+  font-size: 9px;
+}
+
+.home-avatar {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: 1px solid #405477;
+
+  border-radius: 50%;
+
+  background: #202634;
+
+  color: #82a7e7;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.home-post-card:hover .home-avatar {
+  transform: scale(1.05);
+
+  border-color: #5271a5;
+}
+
+.home-composer textarea {
+  width: 100%;
+
+  min-height: 100px;
+
+  box-sizing: border-box;
+
+  resize: vertical;
+
+  padding: 13px 14px;
+
+  border: 1px solid #343a44;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  background: #111318;
+
+  color: #eef0f4;
+
+  font-family: inherit;
+
+  font-size: 11px;
+
+  line-height: 1.6;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.home-composer textarea::placeholder {
+  color: #646d79;
+}
+
+.home-composer textarea:focus {
+  border-color: #5377b6;
+
+  background: #12151a;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(82, 123, 192, 0.08);
+}
+
+
+/* ==============================
+   IMAGE UPLOAD
+   ============================== */
+
+.home-file-input {
+  display: none;
+}
+
+.home-image-preview {
+  position: relative;
+
+  margin-top: 12px;
+
+  overflow: hidden;
+
+  border: 1px solid #303640;
+
+  border-radius: 9px;
+
+  background: #101216;
+
+  animation:
+    homeImageAppear
+    0.3s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+.home-image-preview img {
+  display: block;
+
+  width: 100%;
+
+  max-height: 400px;
+
+  object-fit: contain;
+}
+
+.home-remove-image {
+  position: absolute;
+
+  top: 9px;
+
+  right: 9px;
+
+  padding: 6px 9px;
+
+  border: 1px solid #3d424b;
+
+  border-radius: 6px;
+
+  background:
+    rgba(12, 14, 18, 0.92);
+
+  color: #d7dbe1;
+
+  font-family: inherit;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.home-remove-image:hover {
+  background: #2b2023;
+
+  color: #ee9aa4;
+
+  transform: translateY(-1px);
+}
+
+
+/* ==============================
+   COMPOSER BOTTOM
+   ============================== */
+
+.home-composer-bottom {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 11px;
+}
+
+.home-composer-tools {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.home-image-button {
+  padding: 7px 10px;
+
+  border: 1px solid #343a45;
+
+  border-radius: 6px;
+
+  background: #22262c;
+
+  color: #aeb6c1;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.home-image-button:hover {
+  border-color: #527bc0;
+
+  background: #262c35;
+
+  color: #dce7f9;
+
+  transform: translateY(-1px);
+}
+
+.home-image-button:active {
+  transform: scale(0.97);
+}
+
+.home-character-count {
+  color: #606976;
+
+  font-size: 8px;
+}
+
+.home-composer-actions {
+  display: flex;
+
+  gap: 8px;
+}
+
+.home-cancel-button,
+.home-post-button {
+  padding: 8px 13px;
+
+  border-radius: 6px;
+
+  font-family: inherit;
+
+  font-size: 9px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.home-cancel-button {
+  border: 1px solid #343a45;
+
+  background: #23262c;
+
+  color: #aeb5bf;
+}
+
+.home-cancel-button:hover {
+  background: #2b2f36;
+
+  color: #e0e3e8;
+}
+
+.home-post-button {
+  border: 1px solid #527bc0;
+
+  background: #496fae;
+
+  color: #ffffff;
+}
+
+.home-post-button:hover:not(:disabled) {
+  background: #567fbd;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 15px
+    rgba(73, 111, 174, 0.22);
+}
+
+.home-cancel-button:active,
+.home-post-button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.home-post-button:disabled {
+  border-color: #343a45;
+
+  background: #292d34;
+
+  color: #656d78;
+
+  cursor: not-allowed;
+}
+
+
+/* ==============================
+   FEED HEADER
+   ============================== */
+
+.home-feed-section {
+  width: 100%;
+}
+
+.home-feed-heading {
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 16px;
+}
+
+.home-feed-heading h2 {
+  margin: 4px 0 0;
+
+  color: #f0f2f5;
+
+  font-size: 22px;
+
+  font-weight: 700;
+
+  letter-spacing: -0.4px;
+}
+
+.home-post-count {
+  color: #707987;
+
+  font-size: 9px;
+}
+
+
+/* ==============================
+   FEED
+   ============================== */
+
+.home-feed {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+
+/* ==============================
+   POST CARDS
+   ============================== */
+
+.home-post-card {
+  padding: 19px 21px;
+
+  border: 1px solid #292f37;
+
+  border-radius: 11px;
+
+  background: #1a1d22;
+
+  opacity: 0;
+
+  animation:
+    homePostEnter
+    0.4s
+    cubic-bezier(0.22, 1, 0.36, 1)
+    forwards;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* Stagger first few posts */
+
+.home-post-card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.home-post-card:nth-child(2) {
+  animation-delay: 0.27s;
+}
+
+.home-post-card:nth-child(3) {
+  animation-delay: 0.34s;
+}
+
+.home-post-card:nth-child(4) {
+  animation-delay: 0.41s;
+}
+
+.home-post-card:nth-child(5) {
+  animation-delay: 0.48s;
+}
+
+.home-post-card:hover {
+  border-color: #3b4656;
+
+  background: #1c2026;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 9px 26px
+    rgba(0, 0, 0, 0.14);
+}
+
+
+/* ==============================
+   POST HEADER
+   ============================== */
+
+.home-post-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+}
+
+.home-post-author {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.home-post-name-row {
+  display: flex;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 7px;
+}
+
+.home-post-name-row strong {
+  color: #e9ebef;
+
+  font-size: 11px;
+
+  font-weight: 700;
+}
+
+.home-officer-tag {
+  padding: 3px 5px;
+
+  font-size: 6px;
+}
+
+.home-post-meta {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  color: #737c89;
+
+  font-size: 8px;
+}
+
+
+/* ==============================
+   DELETE POST
+   ============================== */
+
+.home-delete-post {
+  margin-left: auto;
+
+  padding: 6px 9px;
+
+  border: 1px solid transparent;
+
+  border-radius: 6px;
+
+  background: transparent;
+
+  color: #727b87;
+
+  font-family: inherit;
+
+  font-size: 8px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.home-delete-post:hover {
+  border-color:
+    rgba(201, 77, 91, 0.25);
+
+  background:
+    rgba(201, 77, 91, 0.08);
+
+  color: #e58b96;
+
+  transform: translateY(-1px);
+}
+
+.home-delete-post:active {
+  transform: scale(0.95);
+}
+
+
+/* ==============================
+   POST BODY
+   ============================== */
+
+.home-post-body {
+  margin-left: 49px;
+}
+
+.home-post-content {
+  margin: 13px 0 0;
+
+  color: #bec4cd;
+
+  font-size: 11px;
+
+  line-height: 1.65;
+
+  white-space: pre-wrap;
+}
+
+
+/* ==============================
+   POST IMAGE
+   ============================== */
+
+.home-post-image {
+  margin-top: 14px;
+
+  overflow: hidden;
+
+  border: 1px solid #2c323b;
+
+  border-radius: 9px;
+
+  background: #101216;
+}
+
+.home-post-image img {
+  display: block;
+
+  width: 100%;
+
+  max-height: 520px;
+
+  object-fit: contain;
+
+  transition:
+    transform 0.35s ease;
+}
+
+.home-post-card:hover
+.home-post-image img {
+  transform: scale(1.01);
+}
+
+
+/* ==============================
+   EMPTY FEED
+   ============================== */
+
+.home-empty-feed {
+  padding: 50px 20px;
+
+  border: 1px dashed #303640;
+
+  border-radius: 11px;
+
+  text-align: center;
+
+  animation:
+    homeFadeUp
+    0.4s ease-out both;
+}
+
+.home-empty-icon {
+  margin-bottom: 10px;
+
+  font-size: 24px;
+}
+
+.home-empty-feed h3 {
+  margin: 0 0 6px;
+
+  color: #e6e8ec;
+
+  font-size: 14px;
+}
+
+.home-empty-feed p {
+  margin: 0;
+
+  color: #717986;
+
+  font-size: 10px;
+}
+
+
+/* ==============================
+   ANIMATIONS
+   ============================== */
+
+@keyframes homeFadeUp {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
+
+
+@keyframes homeComposerOpen {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-8px)
+      scaleY(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scaleY(1);
+  }
+}
+
+
+@keyframes homePostEnter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(10px)
+      scale(0.995);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+@keyframes homeImageAppear {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(6px)
+      scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* ==============================
+   MOBILE
+   ============================== */
+
+@media (max-width: 700px) {
+
+  .home-container {
+    padding:
+      35px
+      18px
+      70px;
+  }
+
+  .home-welcome {
+    margin-bottom: 30px;
+  }
+
+  .home-welcome h1 {
+    font-size: 34px;
+  }
+
+  .home-officer-panel {
+    align-items: stretch;
+
+    margin-bottom: 38px;
+  }
+
+  .home-create-button {
+    width: 100%;
+  }
+
+  .home-composer-bottom {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .home-composer-actions {
+    width: 100%;
+  }
+
+  .home-cancel-button,
+  .home-post-button {
+    flex: 1;
+  }
+
+  .home-post-body {
+    margin-left: 0;
+  }
+}
+
+
+/* ==============================
+   ACCESSIBILITY
+   ============================== */
+
+/*
+ * Respect users who have reduced-motion
+ * enabled in their operating system.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .home-welcome,
+  .home-officer-panel,
+  .home-feed-section,
+  .home-composer,
+  .home-post-card,
+  .home-image-preview,
+  .home-empty-feed {
+    animation: none;
+
+    opacity: 1;
+  }
+
+  .home-create-button,
+  .home-post-button,
+  .home-cancel-button,
+  .home-image-button,
+  .home-delete-post,
+  .home-avatar,
+  .home-officer-icon,
+  .home-post-card,
+  .home-post-image img {
+    transition: none;
+  }
+}
+
+/* =========================================================
+   SASEBOOK — SASE BLUE / NO PURPLE
+   Neutral black backgrounds + SASE navy/cyan accents
+   ========================================================= */
+:root {
+  --sase-navy: #001554;
+  --sase-blue: #44A3DB;
+  --sase-white: #FFFFFF;
+
+  /* Neutral backgrounds — intentionally no blue/purple tint */
+  --sase-bg: #0B0D10;
+  --sase-surface: #111318;
+  --sase-surface-light: #181B21;
+  --sase-card: #13161B;
+  --sase-card-hover: #191D24;
+
+  --sase-primary: #44A3DB;
+  --sase-primary-hover: #62B7E6;
+  --sase-primary-light: #8CCBEF;
+  --sase-primary-soft: rgba(68, 163, 219, 0.13);
+  --sase-primary-medium: rgba(68, 163, 219, 0.22);
+  --sase-primary-border: rgba(68, 163, 219, 0.42);
+
+  --sase-text: #FFFFFF;
+  --sase-text-secondary: #D5D9E0;
+  --sase-text-muted: #9299A5;
+  --sase-border: #292D35;
+  --sase-border-light: #363B45;
+
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+
+html, body, #root {
+  background: #0B0D10 !important;
+  color: #FFFFFF;
+}
+
+button, input, textarea, select {
+  font-family: "Montserrat", system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(68, 163, 219, 0.35);
+  color: #FFFFFF;
+}
+
+
+/* =========================================================
+   HOME — MATCH THE REST OF SASEBOOK
+   ========================================================= */
+.home-page {
+  background: #0B0D10 !important;
+}
+
+/* Make Home use the same centered hero language as People */
+.home-hero {
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+  padding: 76px 32px 54px !important;
+  text-align: center !important;
+}
+
+.home-hero .home-eyebrow,
+.home-hero .section-eyebrow {
+  display: block !important;
+  width: fit-content !important;
+  margin: 0 auto 22px !important;
+  text-align: center !important;
+}
+
+.home-hero h1 {
+  max-width: 1000px !important;
+  margin: 0 auto 20px !important;
+  font-size: clamp(48px, 4.5vw, 68px) !important;
+  line-height: 1.06 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.04em !important;
+  color: #FFFFFF !important;
+}
+
+.home-hero > p {
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  color: #9299A5 !important;
+  font-size: clamp(17px, 1.25vw, 20px) !important;
+  line-height: 1.65 !important;
+}
+
+/* Keep the officer composer aligned to the same page width */
+.home-officer-composer,
+.home-composer,
+.home-create-post {
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Home section heading hierarchy */
+.home-section-header h2,
+.home-feed-header h2 {
+  font-size: clamp(30px, 2.5vw, 42px) !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.025em !important;
+}
+
+/* SASE blue buttons, no lavender */
+.home-page button[class*="primary"],
+.home-page .home-create-button,
+.home-page .create-post-button {
+  background: #44A3DB !important;
+  border-color: #44A3DB !important;
+  color: #FFFFFF !important;
+}
+
+.home-page button[class*="primary"]:hover,
+.home-page .home-create-button:hover,
+.home-page .create-post-button:hover {
+  background: #62B7E6 !important;
+  border-color: #62B7E6 !important;
+}
+
+@media (max-width: 700px) {
+  .home-hero {
+    padding: 52px 20px 38px !important;
+  }
+
+  .home-hero h1 {
+    font-size: 40px !important;
+  }
+}
+
+
+/* =========================================================
+   HOME — CONSISTENT WITH PEOPLE / CHAPTERS / OTHER PAGES
+   ========================================================= */
+
+.home-page {
+  min-height: 100vh;
+  background: #0B0D10 !important;
+  color: #FFFFFF;
+}
+
+/* Same centered hero structure used throughout SASEBook */
+.home-hero {
+  width: 100%;
+  max-width: 1180px !important;
+  margin: 0 auto !important;
+  padding: 72px 32px 54px !important;
+  text-align: center !important;
+  box-sizing: border-box;
+}
+
+.home-hero .home-eyebrow,
+.home-hero .section-eyebrow {
+  display: block !important;
+  width: fit-content !important;
+  margin: 0 auto 20px !important;
+  color: #44A3DB !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.20em !important;
+  text-transform: uppercase;
+  text-align: center !important;
+}
+
+.home-hero h1 {
+  max-width: 1000px !important;
+  margin: 0 auto 20px !important;
+  color: #FFFFFF !important;
+  font-size: clamp(48px, 4.5vw, 68px) !important;
+  line-height: 1.06 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.home-hero > p {
+  max-width: 900px !important;
+  margin: 0 auto !important;
+  color: #9299A5 !important;
+  font-size: clamp(17px, 1.25vw, 20px) !important;
+  line-height: 1.65 !important;
+}
+
+/* Main Home sections use the same content width as other pages */
+.home-content,
+.home-feed,
+.home-feed-section,
+.home-officer-section,
+.home-composer-section {
+  width: calc(100% - 64px);
+  max-width: 1460px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Officer composer matches the site's card language */
+.home-officer-composer,
+.home-composer,
+.home-create-post {
+  background: #13161B !important;
+  border: 1px solid #292D35 !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+}
+
+/* Home buttons use the official SASE cyan */
+.home-page .home-primary-button,
+.home-page .home-create-button,
+.home-page .create-post-button,
+.home-page button[class*="primary"] {
+  background: #44A3DB !important;
+  border-color: #44A3DB !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease !important;
+}
+
+.home-page .home-primary-button:hover,
+.home-page .home-create-button:hover,
+.home-page .create-post-button:hover,
+.home-page button[class*="primary"]:hover {
+  background: #62B7E6 !important;
+  border-color: #62B7E6 !important;
+  transform: translateY(-2px);
+}
+
+/* Consistent section title hierarchy */
+.home-section-header,
+.home-feed-header {
+  text-align: left;
+}
+
+.home-section-header .section-eyebrow,
+.home-feed-header .section-eyebrow {
+  color: #44A3DB !important;
+  font-size: 13px !important;
+  letter-spacing: 0.20em !important;
+}
+
+.home-section-header h2,
+.home-feed-header h2 {
+  margin-top: 8px;
+  color: #FFFFFF !important;
+  font-size: clamp(30px, 2.5vw, 42px) !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+}
+
+/* Feed cards match cards elsewhere */
+.home-post-card {
+  background: #13161B !important;
+  border: 1px solid #292D35 !important;
+  border-radius: 18px !important;
+  box-shadow: none !important;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    background-color 0.22s ease !important;
+}
+
+.home-post-card:hover {
+  background: #191D24 !important;
+  border-color: rgba(68, 163, 219, 0.42) !important;
+  transform: translateY(-3px);
+}
+
+/* Badges and small accents: blue, never purple */
+.home-page .officer-badge,
+.home-page [class*="badge"] {
+  color: #8CCBEF !important;
+  background: rgba(68, 163, 219, 0.13) !important;
+  border-color: rgba(68, 163, 219, 0.42) !important;
+}
+
+@media (max-width: 700px) {
+  .home-hero {
+    padding: 52px 20px 38px !important;
+  }
+
+  .home-hero h1 {
+    font-size: 40px !important;
+  }
+
+  .home-content,
+  .home-feed,
+  .home-feed-section,
+  .home-officer-section,
+  .home-composer-section {
+    width: calc(100% - 32px);
+  }
+}
+
+
+/* =========================================================
+   HOME FINAL LAYOUT FIX
+   Uses actual Home classes: home-container / home-welcome /
+   home-officer-panel / home-feed-section
+   ========================================================= */
+
+.home-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #0B0D10 !important;
+  color: #FFFFFF;
+}
+
+/* Match the wide layout used by People / Chapters */
+.home-container {
+  width: min(1460px, calc(100% - 80px)) !important;
+  max-width: 1460px !important;
+  margin: 0 auto !important;
+  padding: 68px 0 96px !important;
+}
+
+/* HERO */
+.home-welcome {
+  width: 100%;
+  max-width: 1100px !important;
+  margin: 0 auto 54px !important;
+  text-align: center;
+}
+
+.home-eyebrow {
+  display: block;
+  margin: 0 0 18px !important;
+  color: #44A3DB !important;
+  font-size: 13px !important;
+  line-height: 1.2;
+  font-weight: 800 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase;
+}
+
+.home-welcome h1 {
+  margin: 0 !important;
+  color: #FFFFFF !important;
+  font-size: clamp(48px, 4.2vw, 66px) !important;
+  line-height: 1.06 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.04em !important;
+}
+
+.home-welcome-text {
+  max-width: 900px !important;
+  margin: 20px auto 0 !important;
+  color: #9299A5 !important;
+  font-size: clamp(16px, 1.2vw, 19px) !important;
+  line-height: 1.65 !important;
+}
+
+/* OFFICER CARD */
+.home-officer-panel {
+  width: 100%;
+  min-height: 132px;
+  margin: 0 0 64px !important;
+  padding: 28px 32px !important;
+  gap: 28px !important;
+  border: 1px solid #292D35 !important;
+  border-radius: 18px !important;
+  background: #13161B !important;
+  box-sizing: border-box;
+}
+
+.home-officer-info {
+  gap: 18px !important;
+}
+
+.home-officer-icon {
+  width: 56px !important;
+  height: 56px !important;
+  border: 1px solid rgba(68, 163, 219, 0.42) !important;
+  border-radius: 14px !important;
+  background: rgba(68, 163, 219, 0.10) !important;
+  color: #8CCBEF !important;
+  font-size: 13px !important;
+}
+
+.home-officer-title-row {
+  gap: 10px !important;
+}
+
+.home-officer-title-row h2 {
+  color: #FFFFFF !important;
+  font-size: 20px !important;
+  line-height: 1.2 !important;
+}
+
+.home-officer-info p {
+  margin-top: 10px !important;
+  color: #9299A5 !important;
+  font-size: 14px !important;
+}
+
+.home-officer-badge,
+.home-officer-tag {
+  border-color: rgba(68, 163, 219, 0.42) !important;
+  background: rgba(68, 163, 219, 0.10) !important;
+  color: #8CCBEF !important;
+}
+
+.home-create-button {
+  min-height: 46px !important;
+  padding: 0 22px !important;
+  border: 1px solid #44A3DB !important;
+  border-radius: 10px !important;
+  background: #44A3DB !important;
+  color: #FFFFFF !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+
+.home-create-button:hover {
+  border-color: #62B7E6 !important;
+  background: #62B7E6 !important;
+  transform: translateY(-2px);
+}
+
+/* FEED HEADER */
+.home-feed-section {
+  width: min(1320px, 100%) !important;
+  margin: 0 auto !important;
+}
+
+.home-feed-heading {
+  margin-bottom: 22px !important;
+  align-items: flex-end !important;
+}
+
+.home-feed-heading .home-eyebrow {
+  margin-bottom: 10px !important;
+}
+
+.home-feed-heading h2 {
+  margin: 0 !important;
+  color: #FFFFFF !important;
+  font-size: clamp(30px, 2.4vw, 38px) !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+}
+
+.home-post-count {
+  padding-bottom: 5px;
+  color: #9299A5 !important;
+  font-size: 12px !important;
+}
+
+/* FEED */
+.home-feed {
+  gap: 16px !important;
+}
+
+.home-post-card {
+  padding: 24px 26px !important;
+  border: 1px solid #292D35 !important;
+  border-radius: 16px !important;
+  background: #13161B !important;
+}
+
+.home-post-card:hover {
+  border-color: rgba(68, 163, 219, 0.42) !important;
+  background: #171B21 !important;
+  transform: translateY(-2px);
+}
+
+.home-avatar {
+  width: 48px !important;
+  height: 48px !important;
+  border-color: rgba(68, 163, 219, 0.42) !important;
+  background: rgba(68, 163, 219, 0.10) !important;
+  color: #8CCBEF !important;
+}
+
+.home-post-name-row strong {
+  color: #FFFFFF !important;
+  font-size: 14px !important;
+}
+
+.home-post-meta {
+  color: #7F8997 !important;
+  font-size: 11px !important;
+}
+
+.home-post-body {
+  margin-left: 60px !important;
+}
+
+.home-post-content {
+  margin-top: 14px !important;
+  color: #C7CDD6 !important;
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+}
+
+/* Composer opened after clicking Create Post */
+.home-composer {
+  border-color: #292D35 !important;
+  background: #13161B !important;
+  border-radius: 16px !important;
+}
+
+.home-composer textarea {
+  color: #FFFFFF !important;
+}
+
+.home-post-button {
+  background: #44A3DB !important;
+  border-color: #44A3DB !important;
+  color: #FFFFFF !important;
+}
+
+.home-post-button:hover:not(:disabled) {
+  background: #62B7E6 !important;
+  border-color: #62B7E6 !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .home-container {
+    width: min(100% - 40px, 1460px) !important;
+    padding-top: 52px !important;
+  }
+
+  .home-officer-panel {
+    align-items: flex-start;
+  }
+
+  .home-create-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-container {
+    width: min(100% - 28px, 1460px) !important;
+    padding: 42px 0 72px !important;
+  }
+
+  .home-welcome {
+    margin-bottom: 38px !important;
+  }
+
+  .home-welcome h1 {
+    font-size: 40px !important;
+  }
+
+  .home-officer-panel {
+    padding: 22px 18px !important;
+    margin-bottom: 48px !important;
+  }
+
+  .home-post-card {
+    padding: 20px 18px !important;
+  }
+
+  .home-post-body {
+    margin-left: 0 !important;
+  }
+
+  .home-post-content {
+    margin-top: 18px !important;
+  }
+}
+
+
+/* =========================================================
+   SASEBOOK SECTION EYEBROW ALIGNMENT FIX
+   Section eyebrows align exactly with the heading below.
+   Hero eyebrows are unaffected and may remain centered.
+   ========================================================= */
+
+/* Generic section header wrappers */
+.chapter-section-heading > div,
+.people-section-heading > div,
+.sponsors-section-heading > div,
+.explore-section-heading > div,
+.home-feed-heading > div,
+.home-section-header > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important;
+  text-align: left !important;
+}
+
+/* Section-only eyebrow positioning */
+.chapter-section-heading .section-eyebrow,
+.people-section-heading .section-eyebrow,
+.sponsors-section-heading .section-eyebrow,
+.explore-section-heading .section-eyebrow,
+.home-feed-heading .home-eyebrow,
+.home-feed-heading .section-eyebrow,
+.home-section-header .home-eyebrow,
+.home-section-header .section-eyebrow {
+  width: fit-content !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  align-self: flex-start !important;
+  text-align: left !important;
+}
+
+/* Home feed: specifically undo any inherited centered eyebrow rule */
+.home-feed-heading .home-eyebrow,
+.home-feed-heading .section-eyebrow {
+  margin: 0 0 10px 0 !important;
+}
+
+/* Sponsor section: Featured aligns with Featured Sponsors */
+.sponsors-section-heading .section-eyebrow,
+.sponsor-section-heading .section-eyebrow,
+.featured-sponsors-header .section-eyebrow {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  align-self: flex-start !important;
+  text-align: left !important;
+}

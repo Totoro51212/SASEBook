@@ -1,15 +1,13 @@
-import { type FormEvent, useMemo, useState } from "react";
+import { type FormEvent, type RefObject, useMemo, useRef, useState } from "react";
+import type { FeedPost } from "./home";
 import "../styles/chapters.css";
-
 type ChapterTab = "Overview" | "Events" | "Members" | "Officers";
-
 type EventType =
   | "Professional"
   | "Social"
   | "General Body Meeting"
   | "Workshop"
   | "Community";
-
 type ChapterEvent = {
   id: number;
   chapterId: number;
@@ -20,9 +18,7 @@ type ChapterEvent = {
   type: EventType;
   description: string;
 };
-
 type MemberVisibility = "officers" | "members" | "everyone";
-
 type ChapterMember = {
   id: number;
   name: string;
@@ -30,14 +26,12 @@ type ChapterMember = {
   year: string;
   visibility: MemberVisibility;
 };
-
 type Officer = {
   id: number;
   name: string;
   position: string;
   major: string;
 };
-
 type Chapter = {
   id: number;
   slug: string;
@@ -52,7 +46,6 @@ type Chapter = {
   members: ChapterMember[];
   officers: Officer[];
 };
-
 const chapters: Chapter[] = [
   {
     id: 1,
@@ -203,7 +196,6 @@ const chapters: Chapter[] = [
     ],
   },
 ];
-
 const startingEvents: ChapterEvent[] = [
   {
     id: 1,
@@ -250,26 +242,25 @@ const startingEvents: ChapterEvent[] = [
       "Network with engineers and recruiters from companies across Central Florida.",
   },
 ];
-
-export default function Chapters() {
+type ChaptersProps = {
+  posts: FeedPost[];
+  onDeletePost: (postId: number) => void;
+};
+export default function Chapters({ posts, onDeletePost }: ChaptersProps) {
+  const eventRailRef = useRef<HTMLDivElement>(null);
+  const postRailRef = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState("");
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
   const [activeTab, setActiveTab] = useState<ChapterTab>("Overview");
-
   const [events, setEvents] = useState<ChapterEvent[]>(startingEvents);
-
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationSent, setNotificationSent] = useState(false);
-
   /*
     Demo permissions.
-
     For the hackathon demo, we treat the current user as an
     officer of Florida Poly.
-
     Later this should come from authentication + the database.
   */
   const currentUser = {
@@ -277,14 +268,11 @@ export default function Chapters() {
     chapterId: 1,
     role: "officer",
   };
-
   const filteredChapters = useMemo(() => {
     const query = search.toLowerCase().trim();
-
     if (!query) {
       return chapters;
     }
-
     return chapters.filter((chapter) => {
       return (
         chapter.chapterName.toLowerCase().includes(query) ||
@@ -295,21 +283,26 @@ export default function Chapters() {
       );
     });
   }, [search]);
-
   const getChapterEvents = (chapterId: number) => {
     return events.filter((event) => event.chapterId === chapterId);
   };
-
   const isOfficerOfChapter = (chapterId: number) => {
     return (
       currentUser.chapterId === chapterId &&
       currentUser.role === "officer"
     );
   };
-
+  const scrollRail = (
+    rail: RefObject<HTMLDivElement | null>,
+    direction: "left" | "right"
+  ) => {
+    rail.current?.scrollBy({
+      left: direction === "right" ? 420 : -420,
+      behavior: "smooth",
+    });
+  };
   /*
     Privacy logic for chapter membership.
-
     Eventually this check should happen on the backend too.
   */
   const canViewMember = (
@@ -319,13 +312,10 @@ export default function Chapters() {
     if (member.visibility === "everyone") {
       return true;
     }
-
     const sameChapter = currentUser.chapterId === chapterId;
-
     if (member.visibility === "members" && sameChapter) {
       return true;
     }
-
     if (
       member.visibility === "officers" &&
       sameChapter &&
@@ -333,35 +323,27 @@ export default function Chapters() {
     ) {
       return true;
     }
-
     return false;
   };
-
   const openChapter = (chapter: Chapter) => {
     setSelectedChapter(chapter);
     setActiveTab("Overview");
     setNotificationSent(false);
-
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
-
   const closeChapter = () => {
     setSelectedChapter(null);
     setActiveTab("Overview");
   };
-
   const handleCreateEvent = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if (!selectedChapter) {
       return;
     }
-
     const form = new FormData(event.currentTarget);
-
     const newEvent: ChapterEvent = {
       id: Date.now(),
       chapterId: selectedChapter.id,
@@ -372,28 +354,22 @@ export default function Chapters() {
       type: String(form.get("type")) as EventType,
       description: String(form.get("description")),
     };
-
     setEvents((currentEvents) => [
       ...currentEvents,
       newEvent,
     ]);
-
     setShowCreateEvent(false);
     setActiveTab("Events");
   };
-
   const handleSendNotification = (
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-
     if (!notificationMessage.trim()) {
       return;
     }
-
     /*
       Demo behavior for now.
-
       Next we can store notifications in shared application
       state / backend data so members actually receive them.
     */
@@ -401,17 +377,13 @@ export default function Chapters() {
     setNotificationMessage("");
     setShowNotification(false);
   };
-
   if (selectedChapter) {
     const chapterEvents = getChapterEvents(selectedChapter.id);
-
     const visibleMembers = selectedChapter.members.filter(
       (member) =>
         canViewMember(member, selectedChapter.id)
     );
-
     const userIsOfficer = isOfficerOfChapter(selectedChapter.id);
-
     return (
       <main className="chapters-page">
         <section className="chapter-detail">
@@ -421,34 +393,27 @@ export default function Chapters() {
           >
             ← Back to Chapters
           </button>
-
           <div className="chapter-detail-hero">
             <div className="chapter-logo-large">
               {selectedChapter.shortName}
             </div>
-
             <div className="chapter-detail-heading">
               <span className="chapter-region-badge">
                 {selectedChapter.region} Region
               </span>
-
               <h1>{selectedChapter.chapterName}</h1>
-
               <p>
                 {selectedChapter.location}
               </p>
-
               <div className="chapter-detail-stats">
                 <span>
                   <strong>{selectedChapter.memberCount}</strong>
                   Members
                 </span>
-
                 <span>
                   <strong>{chapterEvents.length}</strong>
                   Upcoming Events
                 </span>
-
                 <span>
                   <strong>{selectedChapter.founded}</strong>
                   Founded
@@ -456,22 +421,18 @@ export default function Chapters() {
               </div>
             </div>
           </div>
-
           {userIsOfficer && (
             <section className="officer-dashboard">
               <div>
                 <span className="officer-label">
                   OFFICER DASHBOARD
                 </span>
-
                 <h2>Manage your chapter</h2>
-
                 <p>
                   Create events and send updates to your
                   chapter members.
                 </p>
               </div>
-
               <div className="officer-actions">
                 <button
                   className="chapter-primary-button"
@@ -479,7 +440,6 @@ export default function Chapters() {
                 >
                   + Create Event
                 </button>
-
                 <button
                   className="chapter-secondary-button"
                   onClick={() => setShowNotification(true)}
@@ -489,13 +449,11 @@ export default function Chapters() {
               </div>
             </section>
           )}
-
           {notificationSent && (
             <div className="chapter-success-message">
               ✓ Notification sent to chapter members.
             </div>
           )}
-
           <div className="chapter-tabs">
             {(
               [
@@ -516,7 +474,6 @@ export default function Chapters() {
               </button>
             ))}
           </div>
-
           <section className="chapter-tab-content">
             {activeTab === "Overview" && (
               <>
@@ -525,14 +482,11 @@ export default function Chapters() {
                     <span className="section-eyebrow">
                       ABOUT
                     </span>
-
                     <h2>About this chapter</h2>
                   </div>
                 </div>
-
                 <div className="chapter-about-card">
                   <p>{selectedChapter.description}</p>
-
                   <div className="chapter-info-grid">
                     <div>
                       <span>University</span>
@@ -540,21 +494,18 @@ export default function Chapters() {
                         {selectedChapter.university}
                       </strong>
                     </div>
-
                     <div>
                       <span>Location</span>
                       <strong>
                         {selectedChapter.location}
                       </strong>
                     </div>
-
                     <div>
                       <span>Region</span>
                       <strong>
                         {selectedChapter.region}
                       </strong>
                     </div>
-
                     <div>
                       <span>Founded</span>
                       <strong>
@@ -563,16 +514,13 @@ export default function Chapters() {
                     </div>
                   </div>
                 </div>
-
                 <div className="chapter-section-heading chapter-section-space">
                   <div>
                     <span className="section-eyebrow">
                       COMING UP
                     </span>
-
                     <h2>Upcoming Events</h2>
                   </div>
-
                   <button
                     className="chapter-text-button"
                     onClick={() => setActiveTab("Events")}
@@ -580,32 +528,122 @@ export default function Chapters() {
                     View all →
                   </button>
                 </div>
-
-                <div className="chapter-event-grid">
-                  {chapterEvents.slice(0, 3).map((event) => (
-                    <article
-                      className="chapter-event-card"
-                      key={event.id}
-                    >
-                      <span className="event-type">
-                        {event.type}
-                      </span>
-
+                <div className="chapter-carousel-heading-actions">
+                  <button
+                    type="button"
+                    className="chapter-carousel-arrow"
+                    onClick={() => scrollRail(eventRailRef, "left")}
+                    aria-label="Previous events"
+                  >
+                    ←
+                  </button>
+                  <button
+                    type="button"
+                    className="chapter-carousel-arrow"
+                    onClick={() => scrollRail(eventRailRef, "right")}
+                    aria-label="Next events"
+                  >
+                    →
+                  </button>
+                </div>
+                <div className="chapter-horizontal-rail" ref={eventRailRef}>
+                  {chapterEvents.map((event) => (
+                    <article className="chapter-event-card chapter-event-slide" key={event.id}>
+                      <span className="event-type">{event.type}</span>
                       <h3>{event.title}</h3>
-
-                      <p className="event-date">
-                        {event.date} • {event.time}
-                      </p>
-
-                      <p className="event-location">
-                        {event.location}
-                      </p>
+                      <p className="event-date">{event.date} • {event.time}</p>
+                      <p className="event-location">{event.location}</p>
                     </article>
                   ))}
                 </div>
+                <div className="chapter-section-heading chapter-section-space">
+                  <div>
+                    <span className="section-eyebrow">CHAPTER UPDATES</span>
+                    <h2>Latest Posts</h2>
+                    <p>News and announcements from {selectedChapter.shortName} SASE.</p>
+                  </div>
+                  <div className="chapter-carousel-heading-actions">
+                    <button
+                      type="button"
+                      className="chapter-carousel-arrow"
+                      onClick={() => scrollRail(postRailRef, "left")}
+                      aria-label="Previous posts"
+                    >
+                      ←
+                    </button>
+                    <button
+                      type="button"
+                      className="chapter-carousel-arrow"
+                      onClick={() => scrollRail(postRailRef, "right")}
+                      aria-label="Next posts"
+                    >
+                      →
+                    </button>
+                  </div>
+                </div>
+                {(() => {
+                  const chapterPosts = posts.filter((post) =>
+                    post.chapter
+                      .toLowerCase()
+                      .startsWith(selectedChapter.shortName.toLowerCase())
+                  );
+                  if (chapterPosts.length === 0) {
+                    return (
+                      <div className="chapter-post-empty">
+                        <div className="chapter-post-empty-icon">📣</div>
+                        <h3>No posts yet</h3>
+                        <p>Updates from {selectedChapter.shortName} SASE will appear here.</p>
+                      </div>
+                    );
+                  }
+                  return (
+                    <div className="chapter-horizontal-rail" ref={postRailRef}>
+                      {chapterPosts.map((post) => (
+                        <article className="chapter-social-post" key={post.id}>
+                          <div className="chapter-social-post-header">
+                            <div className="chapter-social-avatar">
+                              {selectedChapter.shortName}
+                            </div>
+                            <div className="chapter-social-author">
+                              <div className="chapter-social-name">
+                                <strong>{post.author}</strong>
+                                {post.isOfficerPost && <span>OFFICER</span>}
+                              </div>
+                              <p>
+                                {post.chapter}
+                                <span>•</span>
+                                {post.createdAt}
+                              </p>
+                            </div>
+                            {post.canDelete && userIsOfficer && (
+                              <button
+                                className="chapter-post-delete"
+                                type="button"
+                                onClick={() => {
+                                  if (window.confirm("Delete this post?")) {
+                                    onDeletePost(post.id);
+                                  }
+                                }}
+                              >
+                                Delete
+                              </button>
+                            )}
+                          </div>
+                          {post.content && (
+                            <p className="chapter-social-content">{post.content}</p>
+                          )}
+                          {post.imageUrl && (
+                            <div className="chapter-social-image">
+                              <img src={post.imageUrl} alt="Post attachment" />
+                            </div>
+                          )}
+                        </article>
+                      ))}
+                    </div>
+                  );
+                })()}
               </>
             )}
-
             {activeTab === "Events" && (
               <>
                 <div className="chapter-section-heading">
@@ -613,10 +651,8 @@ export default function Chapters() {
                     <span className="section-eyebrow">
                       EVENTS
                     </span>
-
                     <h2>Upcoming Events</h2>
                   </div>
-
                   {userIsOfficer && (
                     <button
                       className="chapter-primary-button"
@@ -626,12 +662,10 @@ export default function Chapters() {
                     </button>
                   )}
                 </div>
-
                 <div className="chapter-event-list">
                   {chapterEvents.length === 0 ? (
                     <div className="chapter-empty">
                       <h3>No upcoming events</h3>
-
                       <p>
                         This chapter has not posted any
                         upcoming events yet.
@@ -651,7 +685,6 @@ export default function Chapters() {
                               day: "2-digit",
                             })}
                           </strong>
-
                           <span>
                             {new Date(
                               `${event.date}T12:00:00`
@@ -662,23 +695,18 @@ export default function Chapters() {
                               .toUpperCase()}
                           </span>
                         </div>
-
                         <div className="event-main-info">
                           <span className="event-type">
                             {event.type}
                           </span>
-
                           <h3>{event.title}</h3>
-
                           <p>
                             {event.time} • {event.location}
                           </p>
-
                           <p className="event-description">
                             {event.description}
                           </p>
                         </div>
-
                         <button className="chapter-secondary-button">
                           RSVP
                         </button>
@@ -688,7 +716,6 @@ export default function Chapters() {
                 </div>
               </>
             )}
-
             {activeTab === "Members" && (
               <>
                 <div className="chapter-section-heading">
@@ -696,24 +723,19 @@ export default function Chapters() {
                     <span className="section-eyebrow">
                       COMMUNITY
                     </span>
-
                     <h2>Chapter Members</h2>
-
                     <p>
                       Members shown here depend on each
                       person's chapter privacy settings.
                     </p>
                   </div>
                 </div>
-
                 <div className="chapter-privacy-notice">
                   <span>🔒</span>
-
                   <div>
                     <strong>
                       Membership privacy is respected
                     </strong>
-
                     <p>
                       Members can choose whether their chapter
                       membership is visible to officers only,
@@ -721,7 +743,6 @@ export default function Chapters() {
                     </p>
                   </div>
                 </div>
-
                 <div className="member-grid">
                   {visibleMembers.map((member) => (
                     <article
@@ -735,12 +756,9 @@ export default function Chapters() {
                           .join("")
                           .slice(0, 2)}
                       </div>
-
                       <div>
                         <h3>{member.name}</h3>
-
                         <p>{member.major}</p>
-
                         <span>{member.year}</span>
                       </div>
                     </article>
@@ -748,7 +766,6 @@ export default function Chapters() {
                 </div>
               </>
             )}
-
             {activeTab === "Officers" && (
               <>
                 <div className="chapter-section-heading">
@@ -756,11 +773,9 @@ export default function Chapters() {
                     <span className="section-eyebrow">
                       LEADERSHIP
                     </span>
-
                     <h2>Chapter Officers</h2>
                   </div>
                 </div>
-
                 <div className="officer-grid">
                   {selectedChapter.officers.map((officer) => (
                     <article
@@ -774,12 +789,9 @@ export default function Chapters() {
                           .join("")
                           .slice(0, 2)}
                       </div>
-
                       <div>
                         <span>{officer.position}</span>
-
                         <h3>{officer.name}</h3>
-
                         <p>{officer.major}</p>
                       </div>
                     </article>
@@ -789,7 +801,6 @@ export default function Chapters() {
             )}
           </section>
         </section>
-
         {showCreateEvent && (
           <div
             className="chapter-modal-overlay"
@@ -806,19 +817,15 @@ export default function Chapters() {
               >
                 ×
               </button>
-
               <span className="section-eyebrow">
                 OFFICER TOOLS
               </span>
-
               <h2>Create Event</h2>
-
               <p>
                 This event will appear on your chapter page.
                 Next we'll connect this same event data to
                 Explore.
               </p>
-
               <form
                 className="chapter-form"
                 onSubmit={handleCreateEvent}
@@ -831,7 +838,6 @@ export default function Chapters() {
                     required
                   />
                 </label>
-
                 <div className="chapter-form-row">
                   <label>
                     Date
@@ -841,7 +847,6 @@ export default function Chapters() {
                       required
                     />
                   </label>
-
                   <label>
                     Time
                     <input
@@ -851,7 +856,6 @@ export default function Chapters() {
                     />
                   </label>
                 </div>
-
                 <label>
                   Location
                   <input
@@ -860,7 +864,6 @@ export default function Chapters() {
                     required
                   />
                 </label>
-
                 <label>
                   Event Type
                   <select
@@ -874,7 +877,6 @@ export default function Chapters() {
                     <option>Community</option>
                   </select>
                 </label>
-
                 <label>
                   Description
                   <textarea
@@ -884,7 +886,6 @@ export default function Chapters() {
                     required
                   />
                 </label>
-
                 <button
                   className="chapter-primary-button chapter-form-submit"
                   type="submit"
@@ -895,7 +896,6 @@ export default function Chapters() {
             </div>
           </div>
         )}
-
         {showNotification && (
           <div
             className="chapter-modal-overlay"
@@ -912,18 +912,14 @@ export default function Chapters() {
               >
                 ×
               </button>
-
               <span className="section-eyebrow">
                 OFFICER TOOLS
               </span>
-
               <h2>Send Notification</h2>
-
               <p>
                 Send an announcement to members of{" "}
                 {selectedChapter.shortName} SASE.
               </p>
-
               <form
                 className="chapter-form"
                 onSubmit={handleSendNotification}
@@ -942,22 +938,18 @@ export default function Chapters() {
                     required
                   />
                 </label>
-
                 <div className="notification-preview">
                   <span>🔔</span>
-
                   <div>
                     <strong>
                       {selectedChapter.shortName} SASE
                     </strong>
-
                     <p>
                       {notificationMessage ||
                         "Your notification preview will appear here."}
                     </p>
                   </div>
                 </div>
-
                 <button
                   className="chapter-primary-button chapter-form-submit"
                   type="submit"
@@ -971,24 +963,19 @@ export default function Chapters() {
       </main>
     );
   }
-
   return (
     <main className="chapters-page">
       <section className="chapters-hero">
         <span className="chapters-eyebrow">
           SASE CHAPTERS
         </span>
-
         <h1>Find your community.</h1>
-
         <p>
           Discover SASE chapters, meet members, find events,
           and connect with your local community.
         </p>
-
         <div className="chapters-search-wrapper">
           <span className="chapters-search-icon">⌕</span>
-
           <input
             className="chapters-search"
             value={search}
@@ -999,13 +986,11 @@ export default function Chapters() {
           />
         </div>
       </section>
-
       <section className="chapter-stats">
         <div>
           <strong>{chapters.length}</strong>
           <span>Chapters</span>
         </div>
-
         <div>
           <strong>
             {chapters.reduce(
@@ -1016,33 +1001,27 @@ export default function Chapters() {
           </strong>
           <span>Members</span>
         </div>
-
         <div>
           <strong>{events.length}</strong>
           <span>Upcoming Events</span>
         </div>
       </section>
-
       <section className="chapter-directory">
         <div className="chapter-section-heading">
           <div>
             <span className="section-eyebrow">
               CHAPTER DIRECTORY
             </span>
-
             <h2>Explore Chapters</h2>
           </div>
-
           <span className="chapter-result-count">
             {filteredChapters.length} result
             {filteredChapters.length === 1 ? "" : "s"}
           </span>
         </div>
-
         {filteredChapters.length === 0 ? (
           <div className="chapter-empty">
             <h3>No chapters found</h3>
-
             <p>
               Try searching for a different university,
               abbreviation, or location.
@@ -1054,7 +1033,6 @@ export default function Chapters() {
               const chapterEvents = getChapterEvents(
                 chapter.id
               );
-
               return (
                 <article
                   className="chapter-card"
@@ -1064,40 +1042,31 @@ export default function Chapters() {
                     <div className="chapter-logo">
                       {chapter.shortName}
                     </div>
-
                     <div>
                       <span className="chapter-region-badge">
                         {chapter.region}
                       </span>
-
                       <h3>{chapter.chapterName}</h3>
-
                       <p>{chapter.location}</p>
                     </div>
                   </div>
-
                   <p className="chapter-card-description">
                     {chapter.description}
                   </p>
-
                   <div className="chapter-card-stats">
                     <div>
                       <strong>
                         {chapter.memberCount}
                       </strong>
-
                       <span>Members</span>
                     </div>
-
                     <div>
                       <strong>
                         {chapterEvents.length}
                       </strong>
-
                       <span>Events</span>
                     </div>
                   </div>
-
                   <button
                     className="chapter-primary-button"
                     onClick={() => openChapter(chapter)}
