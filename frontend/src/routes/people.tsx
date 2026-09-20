@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import "../styles/people.css";
 import type { DirectoryProfile, Profile } from "../types";
 
@@ -154,7 +155,7 @@ function toDirectoryProfile(profile: Profile): DirectoryProfile {
     .join("")
     .slice(0, 2)
     .toUpperCase();
-  const interests = profile.interests
+  const interests = typeof profile.interests === "string"
     ? profile.interests.split(",").map((interest) => interest.trim()).filter(Boolean)
     : [];
 
@@ -178,14 +179,40 @@ function toDirectoryProfile(profile: Profile): DirectoryProfile {
 type FilterType = "All" | "Students" | "Alumni";
 
 export default function People({ profileData }: PeopleProps) {
-  const people = profileData.length > 0
-    ? profileData.map(toDirectoryProfile)
+  const savedProfile = (() => {
+    try {
+      const value = localStorage.getItem("sasebook-profile");
+      return value ? JSON.parse(value) as Profile : null;
+    } catch {
+      return null;
+    }
+  })();
+  const availableProfiles = savedProfile && profileData.every(
+    (profile) => profile.id !== savedProfile.id
+  )
+    ? [...profileData, savedProfile]
+    : profileData;
+  const people = availableProfiles.length > 0
+    ? availableProfiles.map(toDirectoryProfile)
     : demoPeople;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { profileId } = useParams<{ profileId: string }>();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FilterType>("All");
   const [chapterFilter, setChapterFilter] = useState("All Chapters");
-  const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [connectedIds, setConnectedIds] = useState<number[]>([]);
+  const selectedPerson = profileId
+    ? people.find((person) => person.id === Number(profileId)) ?? null
+    : null;
+  const isCurrentProfile = Boolean(
+    savedProfile?.id &&
+    profileId &&
+    savedProfile.id === Number(profileId)
+  );
+  const isProfileDataLoading = profileData.length === 0 && !savedProfile;
+  const requestedModalTop = (location.state as { modalTop?: number } | null)?.modalTop;
+  const modalTop = requestedModalTop ?? window.innerHeight / 2 - 260;
 
   /*
     Temporary demo user.
@@ -452,7 +479,14 @@ export default function People({ profileData }: PeopleProps) {
                   <div className="person-card-actions">
                     <button
                       className="person-view-button"
-                      onClick={() => setSelectedPerson(person)}
+                      onClick={(event) => {
+                        const cardTop = event.currentTarget.closest(".person-card")
+                          ?.getBoundingClientRect().top ?? 0;
+
+                        navigate(`/people/${person.id}`, {
+                          state: { modalTop: cardTop },
+                        });
+                      }}
                     >
                       View Profile
                     </button>
@@ -480,14 +514,17 @@ export default function People({ profileData }: PeopleProps) {
           className="people-modal-overlay"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
-              setSelectedPerson(null);
+              navigate("/people");
             }
           }}
         >
-          <div className="people-modal">
+          <div
+            className="people-modal"
+            style={{ "--people-modal-top": `${modalTop}px` } as CSSProperties}
+          >
             <button
               className="people-modal-close"
-              onClick={() => setSelectedPerson(null)}
+              onClick={() => navigate("/people")}
             >
               ×
             </button>
@@ -565,16 +602,40 @@ export default function People({ profileData }: PeopleProps) {
 
             <button
               className={
-                connectedIds.includes(selectedPerson.id)
+                isCurrentProfile || connectedIds.includes(selectedPerson.id)
                   ? "people-modal-connect connected"
                   : "people-modal-connect"
               }
-              onClick={() => toggleConnection(selectedPerson.id)}
+              disabled={isCurrentProfile}
+              onClick={
+                isCurrentProfile
+                  ? undefined
+                  : () => toggleConnection(selectedPerson.id)
+              }
             >
-              {connectedIds.includes(selectedPerson.id)
+              {isCurrentProfile
+                ? "This is your profile"
+                : connectedIds.includes(selectedPerson.id)
                 ? "Connected ✓"
                 : `Connect with ${selectedPerson.name.split(" ")[0]}`}
             </button>
+          </div>
+        </div>
+      )}
+
+      {profileId && !selectedPerson && !isProfileDataLoading && (
+        <div className="people-modal-overlay">
+          <div
+            className="people-modal"
+            style={{ "--people-modal-top": `${modalTop}px` } as CSSProperties}
+          >
+            <button
+              className="people-modal-close"
+              onClick={() => navigate("/people")}
+            >
+            </button>
+            <h2>Profile not found</h2>
+            <p>This profile is not available in the current directory.</p>
           </div>
         </div>
       )}

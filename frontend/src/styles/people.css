@@ -22,6 +22,8 @@
 /* PAGE */
 
 .people-page {
+  position: relative;
+
   width: 100%;
   min-height: 100vh;
 
@@ -58,7 +60,7 @@
 .people-hero {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 
   margin-bottom: 45px;
 
@@ -647,48 +649,78 @@
 /* MODAL */
 
 .people-modal-overlay {
-  position: fixed;
+  position: absolute;
 
-  inset: 0;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  min-height: 100%;
 
   z-index: 10000;
 
+  isolation: isolate;
+
   display: flex;
 
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 
   box-sizing: border-box;
 
   padding: 25px;
 
-  overflow-y: auto;
+  --people-modal-top: 25vh;
+
+  overflow: visible;
 
   background: rgba(5, 5, 9, 0.88);
 
   backdrop-filter: blur(5px);
 }
 
+/* Keep the fixed profile dialog tied to the viewport, not the page animation. */
+.page-transition > .people-page {
+  animation: peoplePageFade 0.55s ease both;
+}
+
+@keyframes peoplePageFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .people-modal {
   position: relative;
+
+  z-index: 1;
 
   width: 100%;
   max-width: 650px;
 
-  max-height: 90vh;
+  min-height: calc(100vh - 198px);
+
+  margin-top: 0;
 
   box-sizing: border-box;
 
   padding: 34px;
 
-  overflow-y: auto;
+  overflow: visible;
 
   border: 1px solid var(--people-border-light);
   border-radius: 18px;
 
-  background: var(--people-bg);
+  background: #0b0b10;
 
   color: var(--people-text);
+
+  opacity: 1;
+  visibility: visible;
 
   box-shadow:
     0 25px 70px

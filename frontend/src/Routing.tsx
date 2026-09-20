@@ -369,6 +369,10 @@ export default function Routing() {
             path="/people"
             element={<People profileData={profiles} />}
           />
+          <Route
+            path="/people/:profileId"
+            element={<People profileData={profiles} />}
+          />
 
           {/* CHAPTERS */}
           <Route
