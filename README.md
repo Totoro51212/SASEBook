@@ -346,7 +346,7 @@ Our goal is to create a functional prototype that addresses a real challenge wit
 
 ---
 
-# Team — The Rice Cookers 🍚
+# Team - The Rice Cookers 🍚
 
 ---
 
