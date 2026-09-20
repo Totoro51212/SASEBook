@@ -234,20 +234,20 @@ For regional leadership:
 
 # Project Stack 🛠️
 
-## Frontend
+**Frontend**
+*   **Framework:** React (TypeScript)
+*   **Build Tool:** Vite
+*   **Styling:** CSS
+*   **Routing:** React Router
 
-SASEBook frontend utilizes **TypeScript with the React framework**, compiled using **npm and Vite**.
+**Backend & Data**
+*   Supabase
 
-### Current Technologies
-
-- TypeScript
-- React
-- Vite
-- Node.js
-- npm
-- Git / GitHub
-
-Additional technologies will be documented here as they are added during development.
+**Tools & Workflow**
+*   **Version Control:** Git & GitHub
+*   **Package Manager:** npm
+*   **Design/Prototyping:** Adobe Photoshop, Whiteboard
+*   **Hosting/Deployment:** GitHub Pages
 
 ---
 
@@ -256,7 +256,6 @@ Additional technologies will be documented here as they are added during develop
 ## Prerequisites
 
 - [Node.js (version 18 or higher)](https://nodejs.org/en/download)
-- [Python 3.14](https://www.python.org/downloads/)
 - npm package manager
 - Git
 
@@ -347,6 +346,13 @@ Our goal is to create a functional prototype that addresses a real challenge wit
 ---
 
 # Team - The Rice Cookers 🍚
+
+| Name | Role | Links |
+| :--- | :--- | :--- |
+| **Dan Vo** | Backend Developer / Supabase | [GitHub](https://github.com/dvo3219) • [LinkedIn](https://www.linkedin.com/in/danvo342/) |
+| **Vincent Nguyen** | Frontend Developer / UI & UX Design) | [GitHub](https://github.com/vgkngu) • [LinkedIn](https://www.linkedin.com/in/vincent-nguyen-a66ba1332/) |
+| **Kristian Nguyen** | Frontend Developer / Feature Implementation | [GitHub](https://github.com/KristianNguyen) • [LinkedIn](https://www.linkedin.com/in/kristian-nguyen-065341384/) |
+| **Evan Chan** | Full Stack Developer | [GitHub](https://github.com/Totoro51212) • [LinkedIn](https://www.linkedin.com/in/evan-chan-9b1449386/) |
 
 ---
 
