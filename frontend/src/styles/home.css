@@ -8,19 +8,12 @@
   box-sizing: border-box;
 
   background:
-    radial-gradient(
-      circle at 50% -150px,
-      rgba(77, 111, 177, 0.08),
-      transparent 420px
-    ),
-    #15171c;
+    radial-gradient(circle at top left, rgba(68, 163, 219, 0.08), transparent 28%),
+    #0b0b10;
 
   color: #f4f6fa;
 
-  font-family:
-    "Montserrat",
-    system-ui,
-    sans-serif;
+  font-family: var(--sase-font);
 }
 
 .home-container {
@@ -67,13 +60,13 @@
 .home-eyebrow {
   margin: 0 0 10px;
 
-  color: #789ee2;
+  color: #44a3db;
 
-  font-size: 10px;
+  font-size: 13px;
 
   font-weight: 800;
 
-  letter-spacing: 2px;
+  letter-spacing: 0.2em;
 }
 
 .home-welcome h1 {
@@ -81,13 +74,13 @@
 
   color: #f5f6f8;
 
-  font-size: clamp(36px, 4vw, 52px);
+  font-size: clamp(40px, 4.4vw, 68px);
 
   font-weight: 700;
 
   line-height: 1.1;
 
-  letter-spacing: -1.6px;
+  letter-spacing: -0.035em;
 }
 
 .home-welcome-text {
@@ -95,9 +88,9 @@
 
   margin: 14px auto 0;
 
-  color: #8992a2;
+  color: #c1c1cc;
 
-  font-size: 14px;
+  font-size: 18px;
 
   line-height: 1.6;
 }
@@ -1341,6 +1334,30 @@ button, input, textarea, select {
   border: 1px solid #292D35 !important;
   border-radius: 18px !important;
   box-shadow: none !important;
+}
+
+.home-officer-panel,
+.home-post-card {
+  background: var(--sase-card) !important;
+  border-color: var(--sase-border) !important;
+}
+
+.home-officer-panel:hover,
+.home-post-card:hover {
+  background: var(--sase-card-hover) !important;
+  border-color: var(--sase-primary-border) !important;
+}
+
+.home-composer textarea,
+.home-image-preview {
+  background: var(--sase-surface) !important;
+  border-color: var(--sase-border) !important;
+}
+
+.home-image-button,
+.home-cancel-button {
+  background: var(--sase-surface-light) !important;
+  border-color: var(--sase-border) !important;
 }
 
 /* Home buttons use the official SASE cyan */

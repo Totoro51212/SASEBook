@@ -13,6 +13,7 @@ export default function Editprofile({
   profile,
   onChange,
   onSave,
+  onBack,
 }: AprofileProps) 
 
 {
@@ -70,14 +71,13 @@ export default function Editprofile({
 
   return (
     <>
-        <>
-          <div className="profile-header-row">
-            <div>
-              <p className="profile-label">Welcome</p>
-              <h1 className="profile-name">Customize your profile</h1>
-            </div>
-            <PfpButton />
-          </div>
+      <div className="profile-header-row">
+        <div>
+          <p className="profile-label">Welcome</p>
+          <h1 className="profile-name">Customize your profile</h1>
+        </div>
+        <PfpButton />
+      </div>
           
           <div className="profile-form-grid">
             <label className="profile-field">
@@ -212,13 +212,26 @@ export default function Editprofile({
           </div>
 
 
-          <button
-            className={`profile-primary-button ${showInvalidState ? "profile-primary-button-invalid" : ""}`}
-            onClick={handleSaveClick}
-          >
-            Save profile
-          </button>
-        </>
+          <div className="profile-button-row">
+            <button
+              type="button"
+              className={`profile-primary-button ${showInvalidState ? "profile-primary-button-invalid" : ""}`}
+              style={{ width: "200px" }}
+              onClick={handleSaveClick}
+            >
+              Save profile
+            </button>
+            {onBack && (
+              <button
+                type="button"
+                className="profile-secondary-button"
+                style={{ width: "200px" }}
+                onClick={onBack}
+              >
+                Back
+              </button>
+            )}
+          </div>
     </>
   );
 }

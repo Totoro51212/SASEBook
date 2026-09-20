@@ -1,3 +1,54 @@
+.page-transition {
+  animation: pageFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.page-transition > :is(
+  .home-page,
+  .people-page,
+  .chapters-page,
+  .explore-page,
+  .sponsors-page,
+  .profile-page
+) {
+  animation: pageContentReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes pageFadeUp {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pageContentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition,
+  .page-transition > :is(
+    .home-page,
+    .people-page,
+    .chapters-page,
+    .explore-page,
+    .sponsors-page,
+    .profile-page
+  ) {
+    animation: none;
+  }
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;

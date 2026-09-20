@@ -45,6 +45,10 @@ export default function Myprofile({ profileData }: MyprofileProps) {
   const [hasProfile, setHasProfile] = useState(false);
   const [saveError, setSaveError] = useState("");
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [choice]);
+
   //if profile is saved in browser, send them to their profile
   useEffect(() => {
     const savedProfile = localStorage.getItem("sasebook-profile");
@@ -173,8 +177,20 @@ export default function Myprofile({ profileData }: MyprofileProps) {
               <h1 className="profile-name">Login/Register</h1>
             </div>
           </div>
-          <button className="profile-primary-button" onClick={() => setChoice(2)}>Login</button>
-          <button className="profile-primary-button" onClick={() => setChoice(1)}>Create profile</button>
+          <button
+            className="profile-primary-button"
+            style={{ width: "200px" }}
+            onClick={() => setChoice(2)}
+          >
+            Login
+          </button>
+          <button
+            className="profile-primary-button"
+            style={{ width: "200px" }}
+            onClick={() => setChoice(1)}
+          >
+            Create profile
+          </button>
         </div>
       );
     }
@@ -187,13 +203,23 @@ export default function Myprofile({ profileData }: MyprofileProps) {
           onEdit={handleEdit}
           onChange={handleChange}
           onSave={handleSave}
+          onBack={() => {
+            window.scrollTo(0, 0);
+            setChoice(hasProfile ? 3 : 0);
+          }}
         />
       );
     }
 
     if (choice === 2) {
       return (
-        <Login onLogin={handleLogin} />
+        <Login
+          onLogin={handleLogin}
+          onBack={() => {
+            window.scrollTo(0, 0);
+            setChoice(0);
+          }}
+        />
       );
     }
 
