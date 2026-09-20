@@ -23,8 +23,8 @@ export default function Routing(){
         <Route path="/people" element={<People />} />
         <Route path="/chapters" element={<Chapters />} />
         <Route path="/explore" element={<Explore />} />
-        <Route path="/myprofile" element={<Myprofile />} />
         <Route path="/sponsors" element={<Sponsors />} />
+        <Route path="/myprofile" element={<Myprofile />} />
       </Routes>
     </>
   )

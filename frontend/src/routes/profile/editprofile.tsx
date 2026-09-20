@@ -15,7 +15,7 @@ type AprofileProps = {
   onSave: () => void;
 };
 
-export default function Aprofile({
+export default function Editprofile({
   profile,
   hasProfile,
   onEdit,

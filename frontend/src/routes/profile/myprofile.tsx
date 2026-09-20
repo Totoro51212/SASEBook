@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../../styles/profile.css";
-import Aprofile from "./aprofile";
+import Editprofile from "./editprofile";
 import { Navigate } from "react-router-dom";
+import Login from "./login";
 
 type Profile = {
   fullName: string;
@@ -31,7 +32,8 @@ export default function Myprofile() {
   const [profile, setProfile] = useState<Profile>(emptyProfile);
   const [hasProfile, setHasProfile] = useState(false);
 
-  useEffect(() => {
+  //if profile is save3d in browser, send them to their profile
+  /*useEffect(() => {
     const savedProfile = localStorage.getItem("sasebook-profile");
 
     if (savedProfile) {
@@ -40,7 +42,7 @@ export default function Myprofile() {
       setHasProfile(true);
       setChoice(3);
     }
-  }, []);
+  }, []);*/
 
   const handleChange = (field: keyof Profile, value: string) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
@@ -75,16 +77,21 @@ export default function Myprofile() {
     if (choice === 0) {
       return (
         <div className="auth-choice">
-          <h2>Welcome</h2>
-          <button className="profile-primary-button" onClick={() => setChoice(1)}>Create profile</button>
+          <div className="profile-header-row">
+            <div>
+              <p className="profile-label">Welcome</p>
+              <h1 className="profile-name">Login/Register</h1>
+            </div>
+          </div>
           <button className="profile-primary-button" onClick={() => setChoice(2)}>Login</button>
+          <button className="profile-primary-button" onClick={() => setChoice(1)}>Create profile</button>
         </div>
       );
     }
 
     if (choice === 1) {
       return (
-        <Aprofile
+        <Editprofile
           profile={profile}
           hasProfile={hasProfile}
           onEdit={handleEdit}
@@ -96,11 +103,7 @@ export default function Myprofile() {
 
     if (choice === 2) {
       return (
-        <div className="auth-choice">
-          <h2>Login</h2>
-          <p>Login page coming soon.</p>
-          <button onClick={() => setChoice(0)}>Back</button>
-        </div>
+        <Login />
       );
     }
 
