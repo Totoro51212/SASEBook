@@ -126,6 +126,23 @@ export default function Editprofile({
             </label>
           </div>
 
+          <div className="profile-checkbox-group">
+            <span className="profile-checkbox-label">I am a ...</span>
+            <div className="profile-checkbox-row" aria-label="Profile interests">
+              {[
+                "Student",
+                "Chapter",
+                "Sponsor/Recruiter",
+                "Miscellaneous"
+              ].map((tag) => (
+                <label key={tag} className="profile-checkbox-item">
+                  <input type="checkbox" />
+                  <span>{tag}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
           <button className="profile-primary-button" onClick={onSave}>
             Save profile
           </button>

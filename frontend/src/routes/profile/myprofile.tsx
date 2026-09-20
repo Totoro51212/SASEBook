@@ -4,6 +4,7 @@ import Editprofile from "./editprofile";
 import { Navigate } from "react-router-dom";
 import Login from "./login";
 
+//profile type declaration
 type Profile = {
   fullName: string;
   username: string;
@@ -13,6 +14,7 @@ type Profile = {
   interests: string;
 };
 
+//default
 const emptyProfile: Profile = {
   fullName: "",
   username: "",
@@ -22,6 +24,7 @@ const emptyProfile: Profile = {
   interests: "",
 };
 
+//conditional box component for different options
 export default function Myprofile() {
   const [choice, setChoice] = useState<number>(0);
   // 0 = login|register page
