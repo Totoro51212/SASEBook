@@ -7,6 +7,9 @@ export type MemberType = "Student" | "Alumni";
 export type ChapterVisibility = "officers" | "members" | "everyone";
 
 export type Profile<Interests = string> = {
+  graduation_year?: number | null;
+  chapter_id?: number | null;
+  created_at?: string;
   fullName?: string;
   firstName?: string;
   lastName?: string;

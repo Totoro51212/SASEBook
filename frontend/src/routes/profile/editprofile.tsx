@@ -2,18 +2,13 @@ import { useState, type ChangeEvent } from "react";
 import type { Profile } from "../../types";
 
 type AprofileProps = {
-  profile: EditableProfile;
+  profile: Profile<string>;
   hasProfile: boolean;
   onEdit: () => void;
-  onChange: (field: keyof Profile<string>, value: string) => void;
-  onSave: () => void;
   onBack?: () => void;
+  onChange: (field: keyof Profile<string>, value: string) => void;
+  onSave: (profile: Profile<string>) => void | Promise<void>;
 };
-
-type EditableProfile = Profile<string> & Required<Pick<Profile<string>,
-  "firstName" | "lastName" | "username" | "password" |
-  "affiliation" | "position" | "saseChapter"
->>;
 
 export default function Editprofile({
   profile,
@@ -27,13 +22,13 @@ export default function Editprofile({
 
   const isProfileComplete = () => {
     const requiredFields = [
-      profile.firstName.trim(),
-      profile.lastName.trim(),
-      profile.username.trim(),
-      profile.password.trim(),
+      profile.firstName?.trim() ?? "",
+      profile.lastName?.trim() ?? "",
+      profile.username?.trim() ?? "",
+      profile.password?.trim() ?? "",
       profile.major.trim(),
       profile.bio.trim(),
-      profile.affiliation.trim(),
+      (profile.affiliation ?? "").trim(),
       profile.interests.trim(),
     ];
 
@@ -42,11 +37,11 @@ export default function Editprofile({
     }
 
     if (profile.affiliation === "Officer") {
-      return Boolean(profile.position.trim() && profile.saseChapter.trim());
+      return Boolean(profile.position?.trim() && profile.saseChapter?.trim());
     }
 
     if (profile.affiliation === "Student" || profile.affiliation === "Chapter") {
-      return Boolean(profile.saseChapter.trim());
+      return Boolean(profile.saseChapter?.trim());
     }
 
     return true;
@@ -59,7 +54,20 @@ export default function Editprofile({
       return;
     }
 
-    onSave();
+    onSave({
+      ...profile,
+      fullName: `${profile.firstName} ${profile.lastName}`.trim(),
+      firstName: (profile.firstName ?? "").trim(),
+      lastName: (profile.lastName ?? "").trim(),
+      username: (profile.username ?? "").trim(),
+      password: (profile.password ?? "").trim(),
+      major: profile.major.trim(),
+      bio: profile.bio.trim(),
+      affiliation: (profile.affiliation ?? "").trim(),
+      interests: profile.interests.trim(),
+      position: (profile.position ?? "").trim(),
+      saseChapter: (profile.saseChapter ?? "").trim(),
+    });
   };
 
   return (

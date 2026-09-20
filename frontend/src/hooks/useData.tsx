@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase-client'
-import type { Chapter, DatabaseProfile, Sponsor } from '../types'
+import type { Chapter, Profile, Sponsor } from '../types'
 
 export function useGeneralData() {
     //set variables
-    const [profiles, setProfiles] = useState<DatabaseProfile[]>([])
+    const [profiles, setProfiles] = useState<Profile[]>([])
     const [chapters, setChapters] = useState<Chapter[]>([])
     const [sponsors, setSponsors] = useState<Sponsor[]>([])
     const [loading, setLoading] = useState(true)
@@ -32,7 +32,27 @@ export function useGeneralData() {
         } else {
             setProfiles(profilesResult.data ?? [])
             setChapters(chaptersResult.data ?? [])
-            setSponsors(sponsorsResult.data ?? [])
+            setSponsors(
+                (sponsorsResult.data ?? []).map((sponsor) => ({
+                    id: sponsor.id,
+                    name: sponsor.name,
+                    shortName: sponsor.name.slice(0, 3).toUpperCase(),
+                    industry:
+                        sponsor.industry === 'Engineering' ||
+                        sponsor.industry === 'Defense' ||
+                        sponsor.industry === 'Finance'
+                            ? sponsor.industry
+                            : 'Technology',
+                    description: `${sponsor.name} supports opportunities in the SASE community.`,
+                    location: [sponsor.city, sponsor.state].filter(Boolean).join(', ') || 'Location unavailable',
+                    featured: false,
+                    tags: sponsor.industry ? [sponsor.industry] : [],
+                    website: sponsor.website ?? '#',
+                    github: '#',
+                    careersUrl: sponsor.website ?? '#',
+                    opportunities: [],
+                }))
+            )
         }
 
         setLoading(false)
