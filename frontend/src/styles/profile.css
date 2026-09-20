@@ -112,6 +112,7 @@
 
 .profile-checkbox-group {
   margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .profile-checkbox-label {
@@ -173,8 +174,42 @@
   font-size: 1rem;
 }
 
+.profile-primary-button:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .profile-primary-button:hover {
   background: var(--sase-primary-hover);
+}
+
+.profile-primary-button-invalid {
+  background: #d9534f;
+  animation: profile-button-shake 0.38s ease-in-out 2;
+}
+
+.profile-primary-button-invalid:hover {
+  background: #d9534f;
+}
+
+@keyframes profile-button-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
 }
 
 .profile-secondary-button {
