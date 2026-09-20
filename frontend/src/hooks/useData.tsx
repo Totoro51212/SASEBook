@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase-client'
 import type { Chapter, Profile, Sponsor } from '../types'
 
 export function useGeneralData() {
+    const { pathname } = useLocation()
     //set variables
     const [profiles, setProfiles] = useState<Profile[]>([])
     const [chapters, setChapters] = useState<Chapter[]>([])
@@ -10,9 +12,7 @@ export function useGeneralData() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<Error | null>(null)
 
-    //update data when changes are made
-    useEffect(() => {
-        async function loadData() {
+    const loadData = useCallback(async () => {
         setLoading(true)
 
         const [profilesResult, chaptersResult, sponsorsResult] =
@@ -56,10 +56,38 @@ export function useGeneralData() {
         }
 
         setLoading(false)
-        }
-
-        loadData()
     }, [])
+
+    // Refresh when navigating between routes.
+    useEffect(() => {
+        loadData()
+    }, [loadData, pathname])
+
+    // Keep shared route data current when another client changes Supabase.
+    useEffect(() => {
+        const channel = supabase
+            .channel('general-data-refresh')
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'profiles' },
+                loadData
+            )
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'chapters' },
+                loadData
+            )
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'sponsors' },
+                loadData
+            )
+            .subscribe()
+
+        return () => {
+            void supabase.removeChannel(channel)
+        }
+    }, [loadData])
 
     return {
         profiles,

@@ -59,14 +59,9 @@ export default function Myprofile({ profileData }: MyprofileProps) {
 
     try {
       const parsed = JSON.parse(savedProfile) as Profile<string>;
-      const localName = (parsed.fullName || `${parsed.firstName} ${parsed.lastName}`).trim().toLowerCase();
       const localUsername = parsed.username?.trim().toLowerCase();
-      const localMajor = parsed.major.trim().toLowerCase();
       const matchingProfile = profileData.find((candidate) => {
-        const sameUsername = candidate.username?.trim().toLowerCase() === localUsername;
-        const sameName = candidate.name?.trim().toLowerCase() === localName;
-        const sameMajor = candidate.major?.trim().toLowerCase() === localMajor;
-        return Boolean(sameUsername || (sameName && sameMajor));
+        return candidate.username?.trim().toLowerCase() === localUsername;
       });
 
       if (matchingProfile) {
@@ -76,7 +71,6 @@ export default function Myprofile({ profileData }: MyprofileProps) {
           username: matchingProfile.username ?? parsed.username,
         });
         setHasProfile(true);
-        setChoice(3);
       }
     } catch {
       localStorage.removeItem("sasebook-profile");
@@ -87,7 +81,7 @@ export default function Myprofile({ profileData }: MyprofileProps) {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleLogin = (credentials: Credentials) => {
+  const handleLogin = async (credentials: Credentials) => {
     const savedProfileRaw = localStorage.getItem("sasebook-profile");
 
     if (!savedProfileRaw) {
@@ -102,13 +96,30 @@ export default function Myprofile({ profileData }: MyprofileProps) {
         normalizedUsername === savedUsername &&
         credentials.password === savedProfile.password;
 
-      // WIP: placeholder database verification
-      const matchesDatabase =
-        matchesSavedProfile &&
-        (savedUsername === "ricecooker123" || savedUsername === "saseleader");
+      const databaseProfile = profileData.find(
+        (candidate) =>
+          candidate.username?.trim().toLowerCase() === normalizedUsername
+      );
 
-      if (matchesDatabase) {
-        setProfile(savedProfile);
+      if (matchesSavedProfile && databaseProfile) {
+        const databaseBackedProfile: Profile<string> = {
+          ...savedProfile,
+          ...databaseProfile,
+          fullName: databaseProfile.name ?? savedProfile.fullName,
+          firstName: databaseProfile.name?.split(" ")[0] ?? savedProfile.firstName,
+          lastName: databaseProfile.name?.split(" ").slice(1).join(" ") ?? savedProfile.lastName,
+          major: databaseProfile.major ?? savedProfile.major,
+          interests: databaseProfile.interests ?? savedProfile.interests,
+          username: databaseProfile.username ?? savedProfile.username,
+          password: savedProfile.password,
+          id: databaseProfile.id,
+        };
+
+        localStorage.setItem(
+          "sasebook-profile",
+          JSON.stringify(databaseBackedProfile)
+        );
+        setProfile(databaseBackedProfile);
         setHasProfile(true);
         setChoice(3);
         return true;
@@ -149,6 +160,11 @@ export default function Myprofile({ profileData }: MyprofileProps) {
       return;
     }
 
+    if (!result.data) {
+      setSaveError("The profile was saved, but no profile record was returned.");
+      return;
+    }
+
     const savedProfile = {
       ...trimmedProfile,
       id: result.data.id,
@@ -177,6 +193,15 @@ export default function Myprofile({ profileData }: MyprofileProps) {
               <h1 className="profile-name">Login/Register</h1>
             </div>
           </div>
+          {hasProfile && (
+            <button
+              className="profile-primary-button"
+              style={{ width: "200px" }}
+              onClick={() => setChoice(3)}
+            >
+              My Profile
+            </button>
+          )}
           <button
             className="profile-primary-button"
             style={{ width: "200px" }}
@@ -225,7 +250,7 @@ export default function Myprofile({ profileData }: MyprofileProps) {
 
     if (choice === 3) {
       return (
-        <Navigate to="/people"/>
+        <Navigate to={profile.id ? `/people/${profile.id}` : "/people"}/>
       );
     }
 
