@@ -1,6 +1,6 @@
 import { useRef, useState, type ChangeEvent } from 'react'
 import '../styles/home.css'
-import type { FeedPost } from '../types'
+import type { FeedPost, Profile } from '../types'
 
 export type { FeedPost } from '../types'
 
@@ -20,6 +20,20 @@ export default function Home({
   const [postContent, setPostContent] = useState('')
   const [composerOpen, setComposerOpen] = useState(false)
   const [selectedImage, setSelectedImage] = useState<string | undefined>()
+  const [firstName] = useState(() => {
+    try {
+      const savedProfile = localStorage.getItem('sasebook-profile')
+
+      if (!savedProfile) {
+        return ''
+      }
+
+      const profile = JSON.parse(savedProfile) as Profile<string>
+      return profile.firstName?.trim() || profile.fullName?.trim().split(/\s+/)[0] || ''
+    } catch {
+      return ''
+    }
+  })
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -87,7 +101,7 @@ export default function Home({
           </p>
 
           <h1>
-            Welcome Back
+            {firstName ? `Welcome Back, ${firstName}` : 'Welcome Back'}
           </h1>
 
           <p className="home-welcome-text">

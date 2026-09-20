@@ -50,33 +50,63 @@ const starterPosts: FeedPost[] = [
 ]
 
 export default function Routing() {
-  const { profiles, chapters, sponsors } = useGeneralData()
+  const {
+    profiles,
+    chapters,
+    sponsors,
+  } = useGeneralData()
 
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [notificationsOpen, setNotificationsOpen] = useState(false)
-  const [posts, setPosts] = useState<FeedPost[]>(starterPosts)
-  const [dismissedNotificationIds, setDismissedNotificationIds] =
-    useState<number[]>([])
-  const [unreadNotificationIds, setUnreadNotificationIds] =
-    useState<number[]>(starterPosts.map((post) => post.id))
+  const [sidebarOpen, setSidebarOpen] =
+    useState(false)
+
+  const [
+    notificationsOpen,
+    setNotificationsOpen,
+  ] = useState(false)
+
+  const [posts, setPosts] =
+    useState<FeedPost[]>(starterPosts)
+
+  const [
+    dismissedNotificationIds,
+    setDismissedNotificationIds,
+  ] = useState<number[]>([])
+
+  const [
+    unreadNotificationIds,
+    setUnreadNotificationIds,
+  ] = useState<number[]>(
+    starterPosts.map((post) => post.id)
+  )
 
   const { pathname } = useLocation()
+
   const isOfficer = true
 
   const notifications = posts.filter(
-    (post) => !dismissedNotificationIds.includes(post.id)
+    (post) =>
+      !dismissedNotificationIds.includes(
+        post.id
+      )
   )
 
-  const unreadCount = unreadNotificationIds.filter((id) =>
-    notifications.some((notification) => notification.id === id)
-  ).length
+  const unreadCount =
+    unreadNotificationIds.filter((id) =>
+      notifications.some(
+        (notification) =>
+          notification.id === id
+      )
+    ).length
 
   useEffect(() => {
     window.scrollTo(0, 0)
     setNotificationsOpen(false)
   }, [pathname])
 
-  function handleCreatePost(content: string, imageUrl?: string) {
+  function handleCreatePost(
+    content: string,
+    imageUrl?: string
+  ) {
     const newPost: FeedPost = {
       id: Date.now(),
       author: 'Florida Poly SASE',
@@ -88,67 +118,133 @@ export default function Routing() {
       canDelete: true,
     }
 
-    setPosts((currentPosts) => [newPost, ...currentPosts])
-    setUnreadNotificationIds((currentIds) => [newPost.id, ...currentIds])
-    setDismissedNotificationIds((currentIds) =>
-      currentIds.filter((id) => id !== newPost.id)
-    )
-  }
-
-  function handleDeletePost(postId: number) {
-    setPosts((currentPosts) =>
-      currentPosts.filter((post) => post.id !== postId)
-    )
-    setUnreadNotificationIds((currentIds) =>
-      currentIds.filter((id) => id !== postId)
-    )
-    setDismissedNotificationIds((currentIds) =>
-      currentIds.filter((id) => id !== postId)
-    )
-  }
-
-  function handleDeleteNotification(notificationId: number) {
-    setDismissedNotificationIds((currentIds) => [
-      ...currentIds,
-      notificationId,
+    setPosts((currentPosts) => [
+      newPost,
+      ...currentPosts,
     ])
-    setUnreadNotificationIds((currentIds) =>
-      currentIds.filter((id) => id !== notificationId)
+
+    setUnreadNotificationIds(
+      (currentIds) => [
+        newPost.id,
+        ...currentIds,
+      ]
+    )
+
+    setDismissedNotificationIds(
+      (currentIds) =>
+        currentIds.filter(
+          (id) => id !== newPost.id
+        )
+    )
+  }
+
+  function handleDeletePost(
+    postId: number
+  ) {
+    setPosts((currentPosts) =>
+      currentPosts.filter(
+        (post) => post.id !== postId
+      )
+    )
+
+    setUnreadNotificationIds(
+      (currentIds) =>
+        currentIds.filter(
+          (id) => id !== postId
+        )
+    )
+
+    setDismissedNotificationIds(
+      (currentIds) =>
+        currentIds.filter(
+          (id) => id !== postId
+        )
+    )
+  }
+
+  function handleDeleteNotification(
+    notificationId: number
+  ) {
+    setDismissedNotificationIds(
+      (currentIds) => [
+        ...currentIds,
+        notificationId,
+      ]
+    )
+
+    setUnreadNotificationIds(
+      (currentIds) =>
+        currentIds.filter(
+          (id) =>
+            id !== notificationId
+        )
     )
   }
 
   function handleClearNotifications() {
-    const visibleNotificationIds = notifications.map(
-      (notification) => notification.id
+    const visibleNotificationIds =
+      notifications.map(
+        (notification) =>
+          notification.id
+      )
+
+    setDismissedNotificationIds(
+      (currentIds) => [
+        ...new Set([
+          ...currentIds,
+          ...visibleNotificationIds,
+        ]),
+      ]
     )
-    setDismissedNotificationIds((currentIds) => [
-      ...new Set([...currentIds, ...visibleNotificationIds]),
-    ])
+
     setUnreadNotificationIds([])
   }
 
   function handleNotificationsClick() {
-    setNotificationsOpen((current) => {
-      const nextState = !current
-      if (nextState) setUnreadNotificationIds([])
-      return nextState
-    })
+    setNotificationsOpen(
+      (current) => {
+        const nextState = !current
+
+        if (nextState) {
+          setUnreadNotificationIds([])
+        }
+
+        return nextState
+      }
+    )
   }
 
   return (
     <>
       <Topbar
         sidebarOpen={sidebarOpen}
-        onMenuClick={() => setSidebarOpen((previous) => !previous)}
+        onMenuClick={() =>
+          setSidebarOpen(
+            (previous) => !previous
+          )
+        }
         notifications={notifications}
-        notificationsOpen={notificationsOpen}
+        notificationsOpen={
+          notificationsOpen
+        }
         unreadCount={unreadCount}
-        onNotificationsClick={handleNotificationsClick}
-        onDeleteNotification={handleDeleteNotification}
-        onClearNotifications={handleClearNotifications}
+        onNotificationsClick={
+          handleNotificationsClick
+        }
+        onDeleteNotification={
+          handleDeleteNotification
+        }
+        onClearNotifications={
+          handleClearNotifications
+        }
       />
 
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        open={sidebarOpen}
+        onClose={() =>
+          setSidebarOpen(false)
+        }
+      />
 
       <main className="main-content">
         <div key={pathname} className="page-transition">
@@ -159,14 +255,22 @@ export default function Routing() {
                 <Home
                   posts={posts}
                   isOfficer={isOfficer}
-                  onCreatePost={handleCreatePost}
-                  onDeletePost={handleDeletePost}
+                  onCreatePost={
+                    handleCreatePost
+                  }
+                  onDeletePost={
+                    handleDeletePost
+                  }
                 />
               }
             />
 
             <Route
               path="/people"
+              element={<People profileData={profiles} />}
+            />
+            <Route
+              path="/people/:profileId"
               element={<People profileData={profiles} />}
             />
 
@@ -176,7 +280,9 @@ export default function Routing() {
                 <Chapters
                   chapterData={chapters}
                   posts={posts}
-                  onDeletePost={handleDeletePost}
+                  onDeletePost={
+                    handleDeletePost
+                  }
                 />
               }
             />

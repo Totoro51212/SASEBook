@@ -1,7 +1,7 @@
-# SASEBook 🌏
+# SASEBook
 The Rice Cookers' project for SASEHack 2026
 
-> **Connect. Discover. Build Together.**
+> **A Place for SASE.**
 
 # Purpose
 
@@ -19,7 +19,7 @@ Our goal is to make SASE easier to navigate not only for members, but also for t
 
 Different members of the SASE community have different needs.
 
-### 👤 Members
+### Members
 
 Members need an easy way to:
 
@@ -30,7 +30,7 @@ Members need an easy way to:
 - Find nearby chapters and sponsors
 - Stay updated with their chapter
 
-### 🏫 Chapter Officers
+### Chapter Officers
 
 Chapter officers need simple tools to:
 
@@ -45,7 +45,7 @@ Information can become spread across social media, messaging apps, calendars, sp
 
 SASEBook gives officers a central place to communicate with their chapter.
 
-### 🌎 Regional & National Leadership
+### Regional & National Leadership
 
 Regional and national SASE leaders may also need to understand what is happening across multiple chapters.
 
@@ -61,7 +61,7 @@ Instead of requiring officers to repeatedly report information they have already
 
 ---
 
-# Our Solution 🚀
+# Our Solution
 
 SASEBook creates one shared platform for the SASE community.
 
@@ -71,9 +71,9 @@ The platform is designed around three major groups:
 
 | User | SASEBook Experience |
 |------|---------------------|
-| 👤 Members | Discover people, chapters, events, sponsors, and opportunities |
-| 🏫 Chapter Officers | Create events, make announcements, notify members, and manage their chapter |
-| 🌎 Leadership | View chapter activity and aggregated regional information |
+| Members | Discover people, chapters, events, sponsors, and opportunities |
+| Chapter Officers | Create events, make announcements, notify members, and manage their chapter |
+| Leadership | View chapter activity and aggregated regional information |
 
 One of our main goals is to make information useful without creating more work.
 
@@ -85,9 +85,9 @@ One action can benefit multiple parts of the SASE community.
 
 ---
 
-# Core Features ✨
+# Core Features
 
-## 👤 Member Profiles
+## Member Profiles
 
 Members can create profiles that include information such as:
 
@@ -104,7 +104,7 @@ This allows members to discover people across SASE with similar academic, profes
 
 ---
 
-## 🔎 Member Discovery
+## Member Discovery
 
 Members can search the SASE network to find people with shared interests.
 
@@ -116,7 +116,7 @@ This allows networking to extend beyond the people someone already knows within 
 
 ---
 
-## 🏫 Chapter Pages
+## Chapter Pages
 
 Each SASE chapter can have its own page containing:
 
@@ -130,7 +130,7 @@ Chapter pages provide one central location for members to see what is happening 
 
 ---
 
-## 📅 Events
+## Events
 
 Chapter officers can create and publish events including:
 
@@ -146,7 +146,7 @@ Members can then discover upcoming events through SASEBook.
 
 ---
 
-## 🔔 Chapter Announcements & Notifications
+## Chapter Announcements & Notifications
 
 Officers can use SASEBook to communicate important information directly to their members.
 
@@ -162,15 +162,15 @@ The goal is to reduce repetitive work while making it easier for members to stay
 
 ---
 
-## 🗺️ Interactive SASE Map
+## Interactive SASE Map
 
 SASEBook makes the SASE network easier to explore geographically.
 
 The map can display:
 
-- 🏫 SASE chapters
-- 🏢 Sponsors and partner companies
-- 📅 Events
+-  SASE chapters
+-  Sponsors and partner companies
+-  Events
 
 Users can explore the map to discover chapters and opportunities outside of their own university.
 
@@ -178,7 +178,7 @@ Selecting a location can provide more information and connect the user to its SA
 
 ---
 
-## 📊 Regional Insights
+## Regional Insights
 
 Chapter activity can also provide useful information for SASE regional and national leadership.
 
@@ -210,11 +210,11 @@ Instead of creating another reporting task for officers, SASEBook can make infor
 
 ---
 
-# Why SASEBook? 🎯
+# Why SASEBook?
 
 SASE already has an incredible network.
 
-SASEBook is not trying to create that community — **the community already exists.**
+SASEBook is not trying to create that community, **the community already exists.**
 
 Our goal is to make that network easier to see, explore, manage, and connect with.
 
@@ -232,7 +232,7 @@ For regional leadership:
 
 ---
 
-# Project Stack 🛠️
+# Project Stack
 
 ## Frontend
 
@@ -251,7 +251,7 @@ Additional technologies will be documented here as they are added during develop
 
 ---
 
-# Installation and Development 💻
+# Installation and Development
 
 ## Prerequisites
 
@@ -288,7 +288,7 @@ Open that address in your browser to view SASEBook.
 
 ---
 
-# Team Development Workflow 🌿
+# Team Development Workflow
 
 Because multiple team members are working on SASEBook, new features should be developed on separate branches when possible.
 
@@ -316,7 +316,7 @@ Then create a Pull Request so the feature can be reviewed before being merged in
 
 ---
 
-# Future Ideas 🔮
+# Future Ideas
 
 Once the core SASEBook experience is complete, possible future features include:
 
@@ -336,7 +336,7 @@ These are stretch goals. Our priority during SASEHack is creating a functional c
 
 ---
 
-# SASEHack 2026 🏆
+# SASEHack 2026
 
 SASEBook was created by **The Rice Cookers** for **SASEHack 2026**.
 
@@ -346,11 +346,18 @@ Our goal is to create a functional prototype that addresses a real challenge wit
 
 ---
 
-# Team - The Rice Cookers 🍚
+# Team - The Rice Cookers
+
+| Name | Role | Links |
+| :--- | :--- | :--- |
+| **Dan Vo** | Backend Developer / Supabase | [GitHub](https://github.com/dvo3219) • [LinkedIn](https://www.linkedin.com/in/danvo342/) |
+| **Vincent Nguyen** | Frontend Developer / UI & UX Design) | [GitHub](https://github.com/vgkngu) • [LinkedIn](https://www.linkedin.com/in/vincent-nguyen-a66ba1332/) |
+| **Kristian Nguyen** | Frontend Developer / Feature Implementation | [GitHub](https://github.com/KristianNguyen) • [LinkedIn](https://www.linkedin.com/in/kristian-nguyen-065341384/) |
+| **Evan Chan** | Full Stack Developer | [GitHub](https://github.com/Totoro51212) • [LinkedIn](https://www.linkedin.com/in/evan-chan-9b1449386/) |
 
 ---
 
-# Our Vision ❤️
+# Our Vision
 
 SASE is more than individual university chapters.
 

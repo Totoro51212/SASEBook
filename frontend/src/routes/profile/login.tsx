@@ -6,7 +6,7 @@ type Credentials = {
 };
 
 type LoginProps = {
-  onLogin: (credentials: Credentials) => boolean;
+  onLogin: (credentials: Credentials) => boolean | Promise<boolean>;
   onBack?: () => void;
 };
 
@@ -15,9 +15,9 @@ export default function Login({ onLogin, onBack }: LoginProps) {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const credentials = { username, password };
-    const isValid = onLogin(credentials);
+    const isValid = await onLogin(credentials);
     setMessage(isValid ? "Login successful (WIP)" : "Incorrect username or password.");
   };
 
