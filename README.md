@@ -214,7 +214,7 @@ Instead of creating another reporting task for officers, SASEBook can make infor
 
 SASE already has an incredible network.
 
-SASEBook is not trying to create that community — **the community already exists.**
+SASEBook is not trying to create that community, **the community already exists.**
 
 Our goal is to make that network easier to see, explore, manage, and connect with.
 
