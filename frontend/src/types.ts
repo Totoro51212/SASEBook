@@ -5,7 +5,7 @@
 
 // ============================================
 
-
+//this file has many conflicting type parameters, due to consolidating the types too late
 
 export type MemberType = "Student" | "Alumni";
 
@@ -31,15 +31,6 @@ export type ChapterVisibility =
 
 
 export type Profile<Interests = string> = {
-
-  graduation_year?: number | null;
-
-  chapter_id?: number | null;
-
-  created_at?: string;
-
-  fullName?: string;
-
   firstName?: string;
 
   lastName?: string;
@@ -47,9 +38,14 @@ export type Profile<Interests = string> = {
   username?: string;
 
   password?: string;
-
-
-
+  email?: string;
+  graduation_year?: number | null;
+  created_at?: string | null;
+  role?: string | null;
+  chapter_visibility?: string | null;
+  profile_image_url?: string | null;
+  linkedin_url?: string | null;
+  
   major: string;
 
   bio: string;
@@ -59,272 +55,21 @@ export type Profile<Interests = string> = {
   interests: Interests;
 
   skills: string[];
-
-
-
+  
   affiliation?: string;
-
-  position?: string;
-
-  saseChapter?: string;
-
-
-
-  id?: number;
-
-  name?: string;
-
-  initials?: string;
-
-
-
-  type?: MemberType;
-
-
-
-  chapter?: string;
-
-  chapterShort?: string;
-
-
-
-  year?: string;
-
-  location?: string;
-
-
-
-
-  chapterVisibility?: ChapterVisibility;
-
-};
-
-
-
-
-
-// ============================================
-
-// Supabase Database Types
-
-// ============================================
-
-
-
-
-export type DatabaseProfile = {
-
+  chapter_id?: number | null;
+  saseChapter: string;
+  position?: string | null;
+  
   id: number;
 
   name: string;
-
-  email: string;
-
-
-
-  major: string | null;
-
-  graduation_year: number | null;
-
-  interests: string | null;
-
-
-
-  chapter_id: number | null;
-
-
-
-
-  created_at: string | null;
-
-
-
-  role: string | null;
-
-  chapter_visibility: string | null;
-
-  bio: string | null;
-
-  profile_image_url: string | null;
-
-  linkedin_url: string | null;
-
-  officer_position: string | null;
-
-};
-
-
-
-export type DatabaseChapter = {
-
-  id: number;
-
-  name: string;
-
-
-
-  university: string | null;
-
-  city: string | null;
-
-  state: string | null;
-
-  region: string | null;
-
-
-
-  description: string | null;
-
-  logo_url: string | null;
-
-  website_url: string | null;
-
-  instagram_url: string | null;
-
-  discord_url: string | null;
-
-};
-
-
-
-export type DatabaseEvent = {
-
-  id: number;
-
-  chapter_id: number;
-
-  name: string;
-
-
-
-  description: string | null;
-
-  event_type: string | null;
-
-
-
-  // Supabase timestamptz comes back as an ISO string
-
-  event_date: string;
-
-
-
-  location: string | null;
-
-  rsvp_count: number | null;
-
-  attendance: number | null;
-
-
-
-  created_at: string | null;
-
-
-
-  image_url: string | null;
-
-  registration_url: string | null;
-
-  is_virtual: boolean | null;
-
-};
-
-
-
-export type DatabasePost = {
-
-  id: number;
-
-  profile_id: number;
-
-  content: string;
-
-
-
-  created_at: string | null;
-
-
-
-  chapter_id: number | null;
-
-  image_url: string | null;
-
-  post_type: string | null;
-
-};
-
-
-
-export type DatabaseEventRSVP = {
-
-  profile_id: number;
-
-  event_id: number;
-
-
-
-  created_at: string | null;
-
-  attended: boolean | null;
-
-};
-
-
-
-export type DatabaseNotification = {
-
-  id: number;
-
-  created_at: string;
-
-
-
-  profile_id: number | null;
-
-
-
-  title: string | null;
-
-  message: string | null;
-
-  notification_type: string | null;
-
-  is_read: boolean | null;
-
-};
-
-
-
-export type DatabaseSponsor = {
-
-  id: number;
-
-  name: string;
-
-
-
-  industry: string | null;
-
-  city: string | null;
-
-  state: string | null;
-
-
-
-  website_url: string | null;
-
-  created_at: string | null;
-
-
-
-  description: string | null;
-
-  logo_url: string | null;
-
-  careers_url: string | null;
-
-  sponsor_level: string | null;
-
+  initials: string;
+  type: MemberType;
+  chapterShort: string;
+  year: string;
+  location: string;
+  chapterVisibility: ChapterVisibility;
 };
 
 
@@ -355,11 +100,14 @@ export type FeedPost = {
   isOfficerPost: boolean;
 
 
-
   imageUrl?: string;
 
   canDelete?: boolean;
-
+  profile_id?: number;
+  created_at?: string | null;
+  chapter_id?: number | null;
+  image_url?: string | null;
+  post_type?: string | null;
 };
 
 
@@ -435,7 +183,16 @@ export type ChapterEvent = {
 
 
   description: string;
-
+  chapter_id?: number;
+  name?: string;
+  event_type?: string | null;
+  event_date?: string;
+  rsvp_count?: number | null;
+  attendance?: number | null;
+  created_at?: string | null;
+  image_url?: string | null;
+  registration_url?: string | null;
+  is_virtual?: boolean | null;
 };
 
 
@@ -535,54 +292,15 @@ export type Chapter = {
 
 
   officers: Officer[];
-
+  name?: string;
+  city?: string | null;
+  state?: string | null;
+  logo_url?: string | null;
+  website_url?: string | null;
+  instagram_url?: string | null;
+  discord_url?: string | null;
+  created_at?: string | null;
 };
-
-
-
-
-
-
-// ============================================
-
-// Directory
-
-// ============================================
-
-
-
-
-export type DirectoryProfile =
-
-  Profile<string[]> &
-
-    Required<
-
-      Pick<
-
-        Profile<string[]>,
-
-        | "id"
-
-        | "name"
-
-        | "initials"
-
-        | "type"
-
-        | "chapter"
-
-        | "chapterShort"
-
-        | "year"
-
-        | "location"
-
-        | "chapterVisibility"
-
-      >
-
-    >;
 
 
 
@@ -679,7 +397,30 @@ export type Sponsor = {
     location: string;
 
   }[];
+  city?: string | null;
+  state?: string | null;
+  website_url?: string | null;
+  created_at?: string | null;
+  logo_url?: string | null;
+  careers_url?: string | null;
+  sponsor_level?: string | null;
+};
 
+export type EventRSVP = {
+  profile_id: number;
+  event_id: number;
+  created_at: string | null;
+  attended: boolean | null;
+};
+
+export type Notification = {
+  id: number;
+  created_at: string;
+  profile_id: number | null;
+  title: string | null;
+  message: string | null;
+  notification_type: string | null;
+  is_read: boolean | null;
 };
 
 
@@ -737,6 +478,8 @@ export type ExploreItem = {
 
 
   chapterId?: number;
+
+  route?: string;
 
 };
 

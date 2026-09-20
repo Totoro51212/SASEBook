@@ -7,11 +7,17 @@ import {
   useState,
 } from 'react'
 import type { FeedPost } from '../routes/home'
+import { useNavigate } from 'react-router-dom'
+import type { Chapter, ExploreItem, Profile, Sponsor } from '../types'
+import { createExploreItems, searchExploreItems } from '../lib/explore-search'
 
 interface TopbarProps {
   sidebarOpen?: boolean
   onMenuClick?: () => void
   onSearch?: (query: string) => void
+  profiles?: Profile[]
+  chapters?: Chapter[]
+  sponsors?: Sponsor[]
   onNotificationsClick?: () => void
   onProfileClick?: () => void
 
@@ -30,6 +36,9 @@ export default function Topbar({
   sidebarOpen = false,
   onMenuClick,
   onSearch,
+  profiles = [],
+  chapters = [],
+  sponsors = [],
   onNotificationsClick,
   onProfileClick,
   notifications = [],
@@ -38,6 +47,9 @@ export default function Topbar({
   onDeleteNotification,
   onClearNotifications,
 }: TopbarProps) {
+  const navigate = useNavigate()
+  const [search, setSearch] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
   const [bellRinging, setBellRinging] =
     useState(false)
 
@@ -52,6 +64,14 @@ export default function Topbar({
 
   const notificationMenuRef =
     useRef<HTMLDivElement | null>(null)
+
+  const searchMenuRef = useRef<HTMLDivElement | null>(null)
+
+  const searchResults = searchExploreItems(
+    createExploreItems(profiles, chapters, sponsors),
+    search,
+    5,
+  )
 
   /*
    * Plays the bell animation.
@@ -153,6 +173,20 @@ export default function Topbar({
     }
   }, [notificationsOpen, onNotificationsClick])
 
+  useEffect(() => {
+    function handlePointerDown(event: MouseEvent) {
+      if (
+        event.target instanceof Node &&
+        !searchMenuRef.current?.contains(event.target)
+      ) {
+        setSearchFocused(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handlePointerDown)
+    return () => document.removeEventListener('mousedown', handlePointerDown)
+  }, [])
+
   function handleMenuClick() {
     if (onMenuClick) {
       onMenuClick()
@@ -173,8 +207,29 @@ export default function Topbar({
 
     const query = input.value.trim()
 
-    if (query && onSearch) {
+    if (!query) {
+      return
+    }
+
+    if (onSearch) {
       onSearch(query)
+    } else {
+      navigate(`/explore?search=${encodeURIComponent(query)}`)
+    }
+
+    setSearchFocused(false)
+  }
+
+  function handleSearchResultClick(item: ExploreItem) {
+    setSearch(item.title)
+    setSearchFocused(false)
+
+    if (item.type === 'People') {
+      navigate(`/people/${item.id}`)
+    } else if (item.type === 'Chapters') {
+      navigate(item.route ?? '/chapters')
+    } else {
+      navigate(`/sponsors?company=${encodeURIComponent(item.title)}`)
     }
   }
 
@@ -245,7 +300,7 @@ export default function Topbar({
 
 
       {/* SEARCH */}
-      <div className="topbar__search">
+      <div className="topbar__search" ref={searchMenuRef}>
 
         <form
           role="search"
@@ -264,8 +319,34 @@ export default function Topbar({
             name="search"
             placeholder="Search SASEBook"
             autoComplete="off"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            onFocus={() => setSearchFocused(true)}
           />
         </form>
+
+        {searchFocused && search.trim() && (
+          <div className="topbar__search-results" role="listbox">
+            {searchResults.length > 0 ? (
+              searchResults.map((item) => (
+                <button
+                  className="topbar__search-result"
+                  key={`${item.type}-${item.id}`}
+                  type="button"
+                  onClick={() => handleSearchResultClick(item)}
+                >
+                  <span className="topbar__search-result-type">
+                    {item.type}
+                  </span>
+                  <strong>{item.title}</strong>
+                  <span>{item.subtitle || item.description}</span>
+                </button>
+              ))
+            ) : (
+              <div className="topbar__search-empty">No matching results</div>
+            )}
+          </div>
+        )}
 
       </div>
 

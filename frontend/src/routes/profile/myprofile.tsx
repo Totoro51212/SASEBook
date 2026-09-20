@@ -15,7 +15,7 @@ export type Credentials = {
 
 //default
 const emptyProfile: Profile<string> = {
-  fullName: "",
+  name: "",
   firstName: "",
   lastName: "",
   username: "",
@@ -27,6 +27,13 @@ const emptyProfile: Profile<string> = {
   position: "",
   saseChapter: "",
   skills: [],
+  id: 0,
+  initials: "",
+  type: "Student",
+  chapterShort: "",
+  year: "",
+  location: "",
+  chapterVisibility: "everyone",
 };
 
 type MyprofileProps = {
@@ -96,30 +103,30 @@ export default function Myprofile({ profileData }: MyprofileProps) {
         normalizedUsername === savedUsername &&
         credentials.password === savedProfile.password;
 
-      const databaseProfile = profileData.find(
+      const matchedProfile = profileData.find(
         (candidate) =>
           candidate.username?.trim().toLowerCase() === normalizedUsername
       );
 
-      if (matchesSavedProfile && databaseProfile) {
-        const databaseBackedProfile: Profile<string> = {
+      if (matchesSavedProfile && matchedProfile) {
+        const matchedProfileData: Profile<string> = {
           ...savedProfile,
-          ...databaseProfile,
-          fullName: databaseProfile.name ?? savedProfile.fullName,
-          firstName: databaseProfile.name?.split(" ")[0] ?? savedProfile.firstName,
-          lastName: databaseProfile.name?.split(" ").slice(1).join(" ") ?? savedProfile.lastName,
-          major: databaseProfile.major ?? savedProfile.major,
-          interests: databaseProfile.interests ?? savedProfile.interests,
-          username: databaseProfile.username ?? savedProfile.username,
+          ...matchedProfile,
+          name: matchedProfile.name ?? savedProfile.name,
+          firstName: matchedProfile.name?.split(" ")[0] ?? savedProfile.firstName,
+          lastName: matchedProfile.name?.split(" ").slice(1).join(" ") ?? savedProfile.lastName,
+          major: matchedProfile.major ?? savedProfile.major,
+          interests: matchedProfile.interests ?? savedProfile.interests,
+          username: matchedProfile.username ?? savedProfile.username,
           password: savedProfile.password,
-          id: databaseProfile.id,
+          id: matchedProfile.id,
         };
 
         localStorage.setItem(
           "sasebook-profile",
-          JSON.stringify(databaseBackedProfile)
+          JSON.stringify(matchedProfileData)
         );
-        setProfile(databaseBackedProfile);
+        setProfile(matchedProfileData);
         setHasProfile(true);
         setChoice(3);
         return true;
@@ -143,7 +150,7 @@ export default function Myprofile({ profileData }: MyprofileProps) {
     });
 
     const profileRow = {
-      name: trimmedProfile.fullName ?? "",
+      name: trimmedProfile.name ?? `${trimmedProfile.firstName ?? ""} ${trimmedProfile.lastName ?? ""}`.trim(),
       username: trimmedProfile.username ?? "",
       major: trimmedProfile.major,
       graduation_year: trimmedProfile.graduation_year ?? null,

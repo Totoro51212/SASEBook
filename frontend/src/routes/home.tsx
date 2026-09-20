@@ -29,7 +29,7 @@ export default function Home({
       }
 
       const profile = JSON.parse(savedProfile) as Profile<string>
-      return profile.firstName?.trim() || profile.fullName?.trim().split(/\s+/)[0] || ''
+      return profile.firstName?.trim() || profile.name?.trim().split(/\s+/)[0] || ''
     } catch {
       return ''
     }

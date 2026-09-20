@@ -3,12 +3,7 @@ import { useMemo, useState, type CSSProperties } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import "../styles/people.css";
-
-import type { Chapter, DirectoryProfile, Profile } from "../types";
-
-
-
-type Person = DirectoryProfile;
+import type { Chapter, Profile } from "../types";
 
 
 
@@ -17,10 +12,7 @@ type PeopleProps = {
   chapterData: Chapter[];
 };
 
-
-
-const demoPeople: DirectoryProfile[] = [
-
+const demoPeople: Profile<string[]>[] = [
   {
 
     id: 1,
@@ -30,9 +22,7 @@ const demoPeople: DirectoryProfile[] = [
     initials: "KN",
 
     type: "Student",
-
-    chapter: "Florida Polytechnic University",
-
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
 
     major: "Computer Engineering",
@@ -60,9 +50,7 @@ const demoPeople: DirectoryProfile[] = [
     initials: "JL",
 
     type: "Student",
-
-    chapter: "Florida Polytechnic University",
-
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
 
     major: "Computer Science",
@@ -90,9 +78,7 @@ const demoPeople: DirectoryProfile[] = [
     initials: "JP",
 
     type: "Student",
-
-    chapter: "Florida Polytechnic University",
-
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
 
     major: "Mechanical Engineering",
@@ -120,9 +106,7 @@ const demoPeople: DirectoryProfile[] = [
     initials: "MC",
 
     type: "Student",
-
-    chapter: "Florida Polytechnic University",
-
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
 
     major: "Electrical Engineering",
@@ -150,9 +134,7 @@ const demoPeople: DirectoryProfile[] = [
     initials: "ET",
 
     type: "Student",
-
-    chapter: "University of Central Florida",
-
+    saseChapter: "University of Central Florida",
     chapterShort: "UCF",
 
     major: "Aerospace Engineering",
@@ -180,9 +162,7 @@ const demoPeople: DirectoryProfile[] = [
     initials: "RL",
 
     type: "Student",
-
-    chapter: "University of Central Florida",
-
+    saseChapter: "University of Central Florida",
     chapterShort: "UCF",
 
     major: "Computer Engineering",
@@ -210,9 +190,7 @@ const demoPeople: DirectoryProfile[] = [
     initials: "KH",
 
     type: "Student",
-
-    chapter: "University of South Florida",
-
+    saseChapter: "University of South Florida",
     chapterShort: "USF",
 
     major: "Biomedical Engineering",
@@ -240,9 +218,7 @@ const demoPeople: DirectoryProfile[] = [
     initials: "SN",
 
     type: "Student",
-
-    chapter: "University of South Florida",
-
+    saseChapter: "University of South Florida",
     chapterShort: "USF",
 
     major: "Computer Science",
@@ -270,9 +246,7 @@ const demoPeople: DirectoryProfile[] = [
     initials: "DK",
 
     type: "Alumni",
-
-    chapter: "Florida Polytechnic University",
-
+    saseChapter: "Florida Polytechnic University",
     chapterShort: "FPU",
 
     major: "Mechanical Engineering",
@@ -293,12 +267,10 @@ const demoPeople: DirectoryProfile[] = [
 
 ];
 
-
-
-function toDirectoryProfile(
+function toProfileRecord(
   profile: Profile,
-  chapterData: Chapter[]
-): DirectoryProfile {
+  chapterData: Chapter[],
+): Profile<string[]> {
   const name = profile.name?.trim() || "SASE Member";
   const nameParts = name.split(/\s+/);
   const initials = nameParts
@@ -324,8 +296,11 @@ function toDirectoryProfile(
     name,
     initials,
     type: "Student",
-    chapter: chapter?.university ?? "SASE Chapter",
-    chapterShort: chapter?.shortName ?? "SASE",
+    saseChapter:
+      profile.saseChapter ??
+      chapter?.chapterName ??
+      (profile.chapter_id ? `Chapter ${profile.chapter_id}` : "SASE Chapter"),
+    chapterShort: chapter?.shortName ?? (profile.chapter_id ? `CH${profile.chapter_id}` : "SASE"),
     major: profile.major ?? "Undeclared",
     year: profile.graduation_year
       ? `Class of ${profile.graduation_year}`
@@ -374,11 +349,9 @@ export default function People({
     : profileData;
 
   const people = availableProfiles.length > 0
-
     ? availableProfiles.map((profile) =>
-        toDirectoryProfile(profile, chapterData)
+        toProfileRecord(profile, chapterData)
       )
-
     : demoPeople;
 
   const navigate = useNavigate();
@@ -430,26 +403,19 @@ export default function People({
   */
 
   const currentUser = {
-
-    chapter: "Florida Polytechnic University",
-
+    saseChapter: "Florida Polytechnic University",
     role: "officer",
 
   };
 
-
-
-  const canViewChapter = (person: Person) => {
-
+  const canViewChapter = (person: Profile<string[]>) => {
     if (person.chapterVisibility === "everyone") {
 
       return true;
 
     }
 
-
-
-    const sameChapter = currentUser.chapter === person.chapter;
+    const sameChapter = currentUser.saseChapter === person.saseChapter;
 
 
 
@@ -508,9 +474,7 @@ export default function People({
         person.name.toLowerCase().includes(query) ||
 
         person.major.toLowerCase().includes(query) ||
-
-        person.chapter.toLowerCase().includes(query) ||
-
+        (person.saseChapter ?? "").toLowerCase().includes(query) ||
         person.chapterShort.toLowerCase().includes(query) ||
 
         person.location.toLowerCase().includes(query) ||

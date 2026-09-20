@@ -56,7 +56,7 @@ export default function Editprofile({
 
     onSave({
       ...profile,
-      fullName: `${profile.firstName} ${profile.lastName}`.trim(),
+      name: `${profile.firstName} ${profile.lastName}`.trim(),
       firstName: (profile.firstName ?? "").trim(),
       lastName: (profile.lastName ?? "").trim(),
       username: (profile.username ?? "").trim(),
@@ -201,7 +201,7 @@ export default function Editprofile({
                 <span>Position</span>
                 <input
                   type="text"
-                  value={profile.position}
+                  value={profile.position ?? ""}
                   onChange={(e) => onChange("position", e.target.value)}
                   placeholder="Position"
                   className="profile-input"
