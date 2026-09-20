@@ -1,0 +1,223 @@
+/* ── SASEBook Top Bar ─────────────────────────────────────────────── */
+
+/*
+ * Every design-pixel value is multiplied by --design-scale.
+ * Default 0.5 → a 1920-wide artboard renders at ~960 logical pixels.
+ * Change this one variable to resize the entire bar.
+ */
+:root {
+  --design-scale: 0.5;
+}
+
+/* ── Bar ──────────────────────────────────────────────────────────── */
+
+.topbar {
+  width: 100%;
+  height: calc(148px * var(--design-scale));
+  background: #0c1015;
+  border-bottom: 1px solid #090c10;
+  display: flex;
+  align-items: center;
+  padding: 0 calc(30px * var(--design-scale));
+  box-sizing: border-box;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  flex-shrink: 0;
+}
+
+/* ── Left cluster ─────────────────────────────────────────────────── */
+
+.topbar__left {
+  display: flex;
+  align-items: center;
+  gap: calc(16px * var(--design-scale));
+  flex-shrink: 0;
+}
+
+/* Hamburger */
+.topbar__hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: calc(12px * var(--design-scale));
+  border-radius: calc(10px * var(--design-scale));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.topbar__hamburger-img,
+.topbar__hamburger svg {
+  width: calc(65px * var(--design-scale));
+  height: calc(40px * var(--design-scale));
+  display: block;
+  object-fit: contain;
+}
+
+.topbar__hamburger:hover,
+.topbar__hamburger--active {
+  background-color: #25292e;
+}
+
+.topbar__hamburger:focus-visible {
+  outline: 2px solid #4a9eff;
+  outline-offset: 2px;
+}
+
+/* Logo link (icon + wordmark) */
+.topbar__logo-link {
+  display: flex;
+  align-items: center;
+  gap: calc(16px * var(--design-scale));
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.topbar__logo-icon {
+  width: calc(92px * var(--design-scale));
+  height: calc(92px * var(--design-scale));
+  display: block;
+  border-radius: calc(8px * var(--design-scale));
+  object-fit: contain;
+}
+
+.topbar__logo-wordmark {
+  width: calc(481px * var(--design-scale));
+  height: calc(70px * var(--design-scale));
+  display: block;
+  object-fit: contain;
+}
+
+/* ── Search bar ───────────────────────────────────────────────────── */
+
+.topbar__search {
+  flex: 1;
+  max-width: calc(841px * var(--design-scale));
+  margin: 0 calc(58px * var(--design-scale));
+  display: flex;
+  align-items: center;
+}
+
+.topbar__search-form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: #25292e;
+  border-radius: calc(28px * var(--design-scale));
+  height: calc(94px * var(--design-scale));
+  padding: 0 calc(26px * var(--design-scale));
+  box-sizing: border-box;
+  transition: background-color 0.15s ease;
+}
+
+.topbar__search-form:focus-within {
+  background: #2d3238;
+}
+
+.topbar__search-icon {
+  width: calc(58px * var(--design-scale));
+  height: calc(59px * var(--design-scale));
+  flex-shrink: 0;
+  color: #66676b;
+}
+
+.topbar__search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: calc(50px * var(--design-scale));
+  color: #f0f2f5;
+  margin-left: calc(20px * var(--design-scale));
+  padding: 0;
+  line-height: 1;
+}
+
+.topbar__search-input::placeholder {
+  color: #66686c;
+  opacity: 1;
+}
+
+/* Hide browser default search clear button */
+.topbar__search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ── Right cluster ────────────────────────────────────────────────── */
+
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: calc(46px * var(--design-scale));
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.topbar__icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: calc(10px * var(--design-scale));
+  border-radius: calc(10px * var(--design-scale));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.topbar__icon-btn:hover {
+  background-color: #25292e;
+}
+
+.topbar__icon-btn:focus-visible {
+  outline: 2px solid #4a9eff;
+  outline-offset: 2px;
+}
+
+.topbar__bell-icon {
+  width: calc(64px * var(--design-scale));
+  height: calc(78px * var(--design-scale));
+  display: block;
+}
+
+.topbar__profile-icon {
+  width: calc(78px * var(--design-scale));
+  height: calc(78px * var(--design-scale));
+  display: block;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .topbar__logo-wordmark {
+    display: none;
+  }
+
+  .topbar__search {
+    margin: 0 calc(20px * var(--design-scale));
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    padding: 0 calc(16px * var(--design-scale));
+  }
+
+  .topbar__search {
+    margin: 0 calc(12px * var(--design-scale));
+    max-width: none;
+  }
+
+  .topbar__right {
+    gap: calc(20px * var(--design-scale));
+  }
+}
