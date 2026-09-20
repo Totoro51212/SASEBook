@@ -9,11 +9,11 @@
 
   background:
     radial-gradient(
-      circle at 50% -150px,
-      rgba(77, 111, 177, 0.08),
-      transparent 420px
+      circle at top left,
+      rgba(68, 163, 219, 0.08),
+      transparent 28%
     ),
-    #15171c;
+    #0b0b10;
 
   color: #f4f6fa;
 

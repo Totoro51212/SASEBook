@@ -120,6 +120,7 @@ export default function Routing() {
    */
   useEffect(() => {
     window.scrollTo(0, 0)
+    setNotificationsOpen(false)
   }, [pathname])
 
   /*

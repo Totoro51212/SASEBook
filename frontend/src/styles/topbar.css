@@ -144,11 +144,14 @@
    ============================== */
 
 .topbar__search {
-  flex: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 
-  max-width: calc(841px * var(--design-scale));
-
-  margin: 0 calc(58px * var(--design-scale));
+  width: min(
+    calc(841px * var(--design-scale)),
+    calc(100% - 180px)
+  );
 
   display: flex;
   align-items: center;
@@ -163,32 +166,34 @@
   display: flex;
   align-items: center;
 
-  background: #25292e;
+  background: var(--sase-card);
 
-  border-radius: calc(28px * var(--design-scale));
+  border: 1px solid var(--sase-border);
 
-  padding: 0 calc(26px * var(--design-scale));
+  border-radius: 13px;
+
+  padding: 0 22px;
 
   box-sizing: border-box;
 
   transition:
-    background-color 0.15s ease,
-    box-shadow 0.15s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 
 .topbar__search-form:focus-within {
-  background: #2d3238;
+  border-color: var(--sase-primary);
 
   box-shadow:
-    0 0 0 2px
-    rgba(74, 158, 255, 0.08);
+    0 0 0 3px
+    rgba(68, 163, 219, 0.13);
 }
 
 
 .topbar__search-icon {
-  width: calc(58px * var(--design-scale));
-  height: calc(59px * var(--design-scale));
+  width: 22px;
+  height: 22px;
 
   display: block;
 
@@ -207,16 +212,16 @@
 
   outline: none;
 
-  color: #f0f2f5;
+  color: var(--sase-text);
 
   font-family:
     "Montserrat",
     system-ui,
     sans-serif;
 
-  font-size: calc(50px * var(--design-scale));
+  font-size: 18px;
 
-  margin-left: calc(20px * var(--design-scale));
+  margin-left: 16px;
 
   padding: 0;
 
@@ -225,7 +230,7 @@
 
 
 .topbar__search-input::placeholder {
-  color: #66686c;
+  color: var(--sase-text-muted);
 
   opacity: 1;
 }
@@ -1066,12 +1071,10 @@
   }
 
   .topbar__search {
-    margin:
-      0
-      calc(
-        20px *
-        var(--design-scale)
-      );
+    width: min(
+      calc(841px * var(--design-scale)),
+      calc(100% - 160px)
+    );
   }
 }
 
@@ -1087,14 +1090,7 @@
   }
 
   .topbar__search {
-    margin:
-      0
-      calc(
-        12px *
-        var(--design-scale)
-      );
-
-    max-width: none;
+    width: calc(100% - 160px);
   }
 
   .topbar__right {

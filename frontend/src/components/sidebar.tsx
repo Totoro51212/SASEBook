@@ -8,11 +8,11 @@ interface SidebarProps {
 }
 
 const NAV_ITEMS = [
-  { to: '/',         label: 'Home',     icon: '/topbar/home-icon.png'     },
-  { to: '/people',   label: 'People',   icon: '/topbar/people-icon.png'   },
-  { to: '/chapters', label: 'Chapters', icon: '/topbar/chapters-icon.png' },
-  { to: '/sponsors', label: 'Sponsors', icon: '/topbar/sponsors-icon.png' },
-  { to: '/explore',  label: 'Explore',  icon: '/topbar/explore-icon.png'  },
+  { to: '/',         label: 'Home',     icon: '/topbar/home-icon.svg'     },
+  { to: '/people',   label: 'People',   icon: '/topbar/people-icon.svg'   },
+  { to: '/chapters', label: 'Chapters', icon: '/topbar/chapters-icon.svg' },
+  { to: '/sponsors', label: 'Sponsors', icon: '/topbar/sponsors-icon.svg' },
+  { to: '/explore',  label: 'Explore',  icon: '/topbar/explore-icon.svg'  },
 ]
 
 export default function Sidebar({ open, onClose }: SidebarProps) {

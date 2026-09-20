@@ -47,6 +47,12 @@ export default function Topbar({
   const ringTimeout =
     useRef<number | null>(null)
 
+  const bellButtonRef =
+    useRef<HTMLButtonElement | null>(null)
+
+  const notificationMenuRef =
+    useRef<HTMLDivElement | null>(null)
+
   /*
    * Plays the bell animation.
    *
@@ -102,6 +108,50 @@ export default function Topbar({
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (!notificationsOpen) {
+      return
+    }
+
+    function handlePointerDown(
+      event: MouseEvent
+    ) {
+      const target = event.target
+
+      if (
+        !(target instanceof Node)
+      ) {
+        return
+      }
+
+      const clickedBell =
+        bellButtonRef.current?.contains(
+          target
+        )
+
+      const clickedMenu =
+        notificationMenuRef.current?.contains(
+          target
+        )
+
+      if (!clickedBell && !clickedMenu) {
+        onNotificationsClick?.()
+      }
+    }
+
+    document.addEventListener(
+      'mousedown',
+      handlePointerDown
+    )
+
+    return () => {
+      document.removeEventListener(
+        'mousedown',
+        handlePointerDown
+      )
+    }
+  }, [notificationsOpen, onNotificationsClick])
 
   function handleMenuClick() {
     if (onMenuClick) {
@@ -168,7 +218,7 @@ export default function Topbar({
           type="button"
         >
           <img
-            src="/topbar/hamburger.png"
+            src="/topbar/hamburger.svg"
             alt=""
             className="topbar__hamburger-img"
           />
@@ -204,7 +254,7 @@ export default function Topbar({
         >
           <img
             className="topbar__search-icon"
-            src="/topbar/search-icon.png"
+            src="/topbar/search-icon.svg"
             alt=""
           />
 
@@ -227,6 +277,7 @@ export default function Topbar({
 
           {/* BELL */}
           <button
+            ref={bellButtonRef}
             className={`topbar__icon-btn topbar__bell-button ${
               bellRinging
                 ? 'topbar__bell-button--ringing'
@@ -246,7 +297,7 @@ export default function Topbar({
 
             <img
               className="topbar__bell-icon"
-              src="/topbar/bell.png"
+              src="/topbar/bell.svg"
               alt=""
             />
 
@@ -263,7 +314,10 @@ export default function Topbar({
 
           {/* DROPDOWN */}
           {notificationsOpen && (
-            <div className="topbar__notification-menu">
+            <div
+              ref={notificationMenuRef}
+              className="topbar__notification-menu"
+            >
 
               {/* HEADER */}
               <div className="topbar__notification-header">
@@ -422,7 +476,7 @@ export default function Topbar({
         >
           <img
             className="topbar__profile-icon"
-            src="/topbar/profile.png"
+            src="/topbar/profile.svg"
             alt=""
           />
         </Link>

@@ -978,10 +978,6 @@ button, input, textarea, select {
 /* =========================================================
    PEOPLE — BALANCED TITLE SCALE
    ========================================================= */
-.people-hero {
-  padding-top: 72px !important;
-}
-
 .people-hero h1 {
   max-width: 1000px !important;
   margin-left: auto !important;
