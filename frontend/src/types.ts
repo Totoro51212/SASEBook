@@ -100,7 +100,6 @@ export type FeedPost = {
   isOfficerPost: boolean;
 
 
-
   imageUrl?: string;
 
   canDelete?: boolean;
@@ -479,6 +478,8 @@ export type ExploreItem = {
 
 
   chapterId?: number;
+
+  route?: string;
 
 };
 

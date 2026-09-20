@@ -143,6 +143,9 @@ export default function Routing() {
         sidebarOpen={sidebarOpen}
         onMenuClick={() => setSidebarOpen((previous) => !previous)}
         notifications={notifications}
+        profiles={profiles}
+        chapters={chapters}
+        sponsors={sponsors}
         notificationsOpen={notificationsOpen}
         unreadCount={unreadCount}
         onNotificationsClick={handleNotificationsClick}

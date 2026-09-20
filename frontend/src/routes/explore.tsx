@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import {
 
@@ -21,6 +21,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 import "../styles/explore.css";
+
+import { createExploreItems, searchExploreItems } from "../lib/explore-search";
 
 
 
@@ -173,10 +175,12 @@ export default function Explore({
 }: ExploreProps) {
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
 
-
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(
+    () => searchParams.get("search") ?? "",
+  );
 
   const [filter, setFilter] = useState<ExploreFilter>("All");
 
@@ -190,106 +194,26 @@ export default function Explore({
 
     useState<ExploreItem | null>(null);
 
-
-
-  const exploreItems = useMemo<ExploreItem[]>(() => {
-
-    const peopleItems: ExploreItem[] = profiles
-      .filter(
-        (profile): profile is Profile & { id: number; name: string } =>
-          profile.id !== undefined && profile.name !== undefined
-      )
-      .map((profile) => ({
-        id: profile.id,
-        type: "People",
-        title: profile.name,
-        subtitle: [
-          profile.major,
-          profile.graduation_year
-            ? `Class of ${profile.graduation_year}`
-            : null,
-        ]
-          .filter(Boolean)
-          .join(" • "),
-        description: profile.bio ?? profile.interests ?? "SASE member",
-        chapterId: profile.chapter_id ?? undefined,
-      }));
-
-    const chapterItems: ExploreItem[] = chapters.map((chapter) => ({
-
-      id: chapter.id,
-
-      type: "Chapters",
-
-      title: chapter.chapterName,
-
-      subtitle: `${chapter.university} • ${chapter.location}`,
-
-      description:
-
-        chapter.description || `${chapter.chapterName} chapter`,
-
-      chapterId: chapter.id,
-
-    }));
+  useEffect(() => {
+    setSearch(searchParams.get("search") ?? "");
+  }, [searchParams]);
 
 
 
-    const sponsorItems: ExploreItem[] = sponsors.map((sponsor) => ({
-
-      id: sponsor.id,
-
-      type: "Sponsors",
-
-      title: sponsor.name,
-
-      subtitle: `${sponsor.industry} • ${sponsor.location}`,
-
-      description:
-
-        sponsor.description || `${sponsor.name} is a SASE sponsor.`,
-
-    }));
+  const exploreItems = useMemo(
+    () => createExploreItems(profiles, chapters, sponsors),
+    [profiles, chapters, sponsors],
+  );
 
 
 
-    return [...peopleItems, ...chapterItems, ...sponsorItems];
-
-  }, [profiles, chapters, sponsors]);
-
-
-
-  const filteredItems = useMemo(() => {
-
-    const query = search.trim().toLowerCase();
-
-
-
-    return exploreItems.filter((item) => {
-
-      const matchesFilter =
-
-        filter === "All" || item.type === filter;
-
-
-
-      const matchesSearch =
-
-        query === "" ||
-
-        item.title.toLowerCase().includes(query) ||
-
-        item.subtitle.toLowerCase().includes(query) ||
-
-        item.description.toLowerCase().includes(query);
-
-
-
-      return matchesFilter && matchesSearch;
-
-    });
-
-  }, [exploreItems, search, filter]);
+  const filteredItems = useMemo(
+    () =>
+      searchExploreItems(exploreItems, search).filter(
+        (item) => filter === "All" || item.type === filter,
+      ),
+    [exploreItems, search, filter],
+  );
 
 
 
