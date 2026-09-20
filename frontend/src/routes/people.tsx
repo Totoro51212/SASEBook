@@ -1,25 +1,14 @@
 import { useMemo, useState } from "react";
 import "../styles/people.css";
+import type { DatabaseProfile, DirectoryProfile } from "../types";
 
-type MemberType = "Student" | "Alumni";
+type Person = DirectoryProfile;
 
-type Person = {
-  id: number;
-  name: string;
-  initials: string;
-  type: MemberType;
-  chapter: string;
-  chapterShort: string;
-  major: string;
-  year: string;
-  location: string;
-  bio: string;
-  skills: string[];
-  interests: string[];
-  chapterVisibility: "officers" | "members" | "everyone";
+type PeopleProps = {
+  profileData: DatabaseProfile[];
 };
 
-const people: Person[] = [
+const demoPeople: DirectoryProfile[] = [
   {
     id: 1,
     name: "Kristian Nguyen",
@@ -157,9 +146,40 @@ const people: Person[] = [
   },
 ];
 
+function toDirectoryProfile(profile: DatabaseProfile): DirectoryProfile {
+  const nameParts = profile.name.trim().split(/\s+/);
+  const initials = nameParts
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  const interests = profile.interests
+    ? profile.interests.split(",").map((interest) => interest.trim()).filter(Boolean)
+    : [];
+
+  return {
+    id: profile.id,
+    name: profile.name,
+    initials,
+    type: "Student",
+    chapter: profile.chapter_id ? `Chapter ${profile.chapter_id}` : "SASE Chapter",
+    chapterShort: profile.chapter_id ? `CH${profile.chapter_id}` : "SASE",
+    major: profile.major ?? "Undeclared",
+    year: profile.graduation_year ? `Class of ${profile.graduation_year}` : "Student",
+    location: "Florida",
+    bio: "SASE community member.",
+    skills: [],
+    interests,
+    chapterVisibility: "everyone",
+  };
+}
+
 type FilterType = "All" | "Students" | "Alumni";
 
-export default function People() {
+export default function People({ profileData }: PeopleProps) {
+  const people = profileData.length > 0
+    ? profileData.map(toDirectoryProfile)
+    : demoPeople;
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FilterType>("All");
   const [chapterFilter, setChapterFilter] = useState("All Chapters");

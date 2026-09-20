@@ -6,49 +6,14 @@ import {
 
 import {useSearchParams} from "react-router-dom";
 import "../styles/Sponsors.css";
-
-
-type Industry =
-  | "All"
-  | "Technology"
-  | "Engineering"
-  | "Defense"
-  | "Finance";
-
-
-type Sponsor = {
-  id: number;
-
-  name: string;
-  shortName: string;
-
-  industry:
-    Exclude<Industry, "All">;
-
-  description: string;
-  location: string;
-
-  featured: boolean;
-
-  tags: string[];
-
-  website: string;
-  github: string;
-  careersUrl: string;
-
-  opportunities: {
-    title: string;
-    type: string;
-    location: string;
-  }[];
-};
+import type { Industry, Sponsor } from "../types";
 
 
 /* =========================================================
    SPONSOR DATA
    ========================================================= */
 
-const sponsors: Sponsor[] = [
+const demoSponsors: Sponsor[] = [
 
   {
     id: 1,
@@ -402,7 +367,12 @@ const industries: Industry[] = [
    MAIN COMPONENT
    ========================================================= */
 
-export default function Sponsors() {
+type SponsorsProps = {
+  sponsorData: Sponsor[];
+};
+
+export default function Sponsors({ sponsorData }: SponsorsProps) {
+  const sponsors = sponsorData.length > 0 ? sponsorData : demoSponsors;
 
   /*
     Read URL values such as:
