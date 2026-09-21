@@ -7,6 +7,8 @@ import Myprofile from './routes/profile/myprofile'
 import Topbar from './components/topbar'
 import Sidebar from './components/sidebar'
 import Sponsors from './routes/sponsors'
+import TermsOfService from './routes/terms-of-service.tsx'
+import './styles/terms-of-service.css'
 
 import { useGeneralData } from './hooks/useData'
 
@@ -232,6 +234,11 @@ export default function Routing() {
             <Route
               path="/sponsors"
               element={<Sponsors sponsorData={sponsors} />}
+            />
+
+            <Route
+              path="/terms-of-service"
+              element={<TermsOfService />}
             />
           </Routes>
         </div>
