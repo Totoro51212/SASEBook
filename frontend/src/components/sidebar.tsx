@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import '../styles/sidebar.css'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 interface SidebarProps {
   open: boolean
@@ -87,17 +87,17 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         </ul>
 
         <div className="sidebar__footer">
-          <a
-            href="#tos"
+          <Link
+            to="/terms-of-service"
             className="sidebar__tos"
             tabIndex={open ? 0 : -1}
-            onClick={(e) => {
-              e.preventDefault()
-              console.log('[Sidebar] Terms of Service clicked')
+            onClick={() => {
+              window.scrollTo(0, 0)
+              if (open) onClose()
             }}
           >
             Terms of Service
-          </a>
+          </Link>
         </div>
       </nav>
     </>
